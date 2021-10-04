@@ -2,15 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static Cavitation.Core.Utils;
 
 namespace Cavitation.Core.Rule
 {
-    public abstract class CacheModel
+    public class RulesModel
     {
         public List<Rule> Rules { get; protected set; }
-        public long Size { get; protected set; }
-        public int Count { get; protected set; }
+        public double CleanupSize { get; protected set; }
+        public int CleanupCount { get; protected set; }
+        public string Source { get; protected set; }
+        public int RulesCount => Rules.Count;
 
+        public RulesModel(List<Rule> rules, string source)
+        {
+            Rules = rules;
+            Source = source;
+        }
+
+        public override string ToString()
+        {
+            return $"[RuleGroup] Source: {Source} \nRules: {Rules}";
+        }
 
         private static bool Check(Rule rule)
         {
@@ -31,11 +44,13 @@ namespace Cavitation.Core.Rule
 
         public void Clear()
         {
+            CleanupCount = 0;
+            CleanupSize = 0L;
             foreach (Rule rule in Rules.Where(Check))
             {
                 if (!Directory.Exists(rule.Path))
                 {
-                    File.Delete(rule.Path);
+                    TryDelFile(rule.Path);
                     continue;
                 }
 
@@ -44,49 +59,46 @@ namespace Cavitation.Core.Rule
                 {
                     case Rule.ModeEnum.All:
                     {
-                        root.Delete(true);
+                        TryDelDir(root, true);
                         break;
                     }
                     case Rule.ModeEnum.Folders:
                     {
                         if (rule.Feature[0] == "*")
                             foreach (DirectoryInfo dir in root.GetDirectories())
-                                dir.Delete(true);
+                                TryDelDir(dir, true);
                         else
                             foreach (DirectoryInfo dir in root.GetDirectories())
                                 if (rule.Feature.Any(feature =>
                                     dir.Name == feature || dir.GetFileSystemInfos().Length == 0))
-                                    dir.Delete(true);
-                        // dir.Delete(dir.GetFileSystemInfos().Length != 0);
-
+                                    TryDelDir(dir, true);
                         break;
                     }
                     case Rule.ModeEnum.FilesOnDir:
                     {
                         if (rule.Feature[0] == "*")
                             foreach (FileInfo file in root.GetFiles())
-                                file.Delete();
+                                TryDelFile(file);
                         else
                             foreach (FileInfo file in root.GetFiles())
                                 if (rule.Feature.Any(feature => file.Extension == feature))
-                                    file.Delete();
-
+                                    TryDelFile(file);
                         break;
                     }
                     case Rule.ModeEnum.RecursionAllFiles:
                     {
-                        if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
+                        bool universal = rule.Feature[0] == "*";
+                        // if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
 
                         void Recursion(DirectoryInfo fileSystemInfo)
                         {
                             foreach (FileInfo file in fileSystemInfo.GetFiles())
-                                if (rule.Feature.Any(feature => file.Extension == feature))
-                                    file.Delete();
+                                if (rule.Feature.Any(feature => file.Extension == feature)||universal)
+                                    TryDelFile(file);
                             foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
-                                if (dir.GetFileSystemInfos().Length == 0) dir.Delete();
+                                if (dir.GetFileSystemInfos().Length == 0) TryDelDir(dir);
                                 else Recursion(dir);
                         }
-
                         Recursion(root);
 
                         break;
@@ -99,15 +111,14 @@ namespace Cavitation.Core.Rule
                         {
                             foreach (FileInfo file in fileSystemInfo.GetFiles())
                                 if (rule.Feature.Any(feature => file.Extension == feature))
-                                    file.Delete();
+                                    TryDelFile(file);
                             foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
                                 if (rule.Feature.Any(feature =>
                                     dir.Name == feature || dir.GetFileSystemInfos().Length == 0))
-                                    dir.Delete(dir.GetFileSystemInfos().Length != 0);
+                                    TryDelDir(dir, dir.GetFileSystemInfos().Length != 0);
                                 else
                                     Recursion(dir);
                         }
-
                         Recursion(root);
 
                         break;
@@ -117,5 +128,63 @@ namespace Cavitation.Core.Rule
                 }
             }
         }
+
+
+        private static string TryDelFile(string path)
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                return Log(e.Message);
+            }
+
+            return Log($"Successfully deleted: {path}");
+        }
+
+        private static string TryDelFile(FileInfo file)
+        {
+            try
+            {
+                file.Delete();
+            }
+            catch (Exception e)
+            {
+                return Log(e.Message);
+            }
+
+            return Log($"Successfully deleted: {file.FullName}");
+        }
+
+        private static string TryDelDir(DirectoryInfo dir)
+        {
+            try
+            {
+                dir.Delete();
+            }
+            catch (Exception e)
+            {
+                return Log(e.Message);
+            }
+
+            return Log($"Successfully deleted: {dir.FullName}");
+        }
+
+        private static string TryDelDir(DirectoryInfo dir, bool recursive)
+        {
+            try
+            {
+                Log($"Deleted: {dir.FullName}");
+                dir.Delete(recursive);
+            }
+            catch (Exception e)
+            {
+                return Log(e.Message);
+            }
+
+            return Log($"Successfully deleted: {dir.FullName}");
+        }        
     }
 }

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Cavitation.Core.Rules;
+using Cavitation.Core.Rule;
 
 namespace Cavitation.Views.Pages
 {
@@ -49,12 +49,14 @@ namespace Cavitation.Views.Pages
         public Test()
         {
             InitializeComponent();
+            RulesGroups rulesGroups = new RulesGroups();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("确认清理", "确认清理", MessageBoxButton.YesNo) == MessageBoxResult.Yes) Clear();
-            new SystemCache().Clear();
+            if (MessageBox.Show("确认清理", "确认清理", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            // new SystemRules().Clear();
+            RulesGroups.GetRulesGroup("Internal-SystemCache").Clear();
             MessageBox.Show("done.", "done.");
         }
 

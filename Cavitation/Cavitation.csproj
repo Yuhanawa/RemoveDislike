@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -47,29 +47,37 @@
             <HintPath>..\packages\Panuon.UI.Silver.2.2.12-alpha\lib\net472\Panuon.UI.Silver.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
         </Reference>
-        <Reference Include="WindowsBase"/>
-        <Reference Include="PresentationCore"/>
-        <Reference Include="PresentationFramework"/>
+        <Reference Include="WindowsBase" />
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Src\App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Include="Src\Core\Rules\SystemCache.cs"/>
-        <Compile Include="Src\Core\Rule\RuleModel.cs"/>
-        <Compile Include="Src\Core\Rule\Rule.cs"/>
-        <Compile Include="Src\Core\Rule\RuleParser.cs"/>
-        <Compile Include="Src\Core\Utils.cs"/>
+        <Compile Include="Src\Core\InternalRules\SystemCache.cs" />
+        <Compile Include="Src\Core\Rule\InternalRules.cs" />
+        <Compile Include="Src\Core\Rule\RulesGroups.cs" />
+        <Compile Include="Src\Core\Rule\RulesModel.cs" />
+        <Compile Include="Src\Core\Rule\Rule.cs" />
+        <Compile Include="Src\Core\Rule\RuleParser.cs" />
+        <Compile Include="Src\Core\Utils.cs" />
         <Compile Include="Src\Views\MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Models\InfoTab.xaml.cs">
+          <DependentUpon>InfoTab.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Pages\ClearFile.xaml.cs">
+          <DependentUpon>ClearFile.xaml</DependentUpon>
         </Compile>
         <Compile Include="Src\Views\Pages\Test.xaml.cs">
             <DependentUpon>Test.xaml</DependentUpon>
@@ -90,20 +98,22 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="lib"/>
+        <Folder Include="lib" />
     </ItemGroup>
     <ItemGroup>
-        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf" />
     </ItemGroup>
     <ItemGroup>
         <Page Include="Src\Views\MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
         </Page>
-        <Page Include="Src\Views\Pages\Test.xaml"/>
+        <Page Include="Src\Views\Models\InfoTab.xaml" />
+        <Page Include="Src\Views\Pages\ClearFile.xaml" />
+        <Page Include="Src\Views\Pages\Test.xaml" />
     </ItemGroup>
     <ItemGroup>
         <ApplicationDefinition Include="Src\App.xaml">
@@ -111,5 +121,8 @@
             <SubType>Designer</SubType>
         </ApplicationDefinition>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <ItemGroup>
+      <Content Include="Src\Core\InternalRules\system.cr" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

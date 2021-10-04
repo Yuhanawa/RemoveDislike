@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -74,10 +75,21 @@ namespace Cavitation.Core
 
         public static string GetEnvironmentVar(string name)
         {
+            if (name.StartsWith("%")&&name.EndsWith("%"))
+            {
+                name = name.TrimStart('%').TrimEnd('%');
+            }
             if (!EnvironmentVar.ContainsKey(name))
                 EnvironmentVar.Add(name, Environment.GetEnvironmentVariable(name));
 
             return EnvironmentVar[name];
+        }
+
+        public static string Log(string m)
+        {
+            var output = $"[{DateTime.Now}] {m}";
+            Debug.WriteLine(output);
+            return output;
         }
     }
 }

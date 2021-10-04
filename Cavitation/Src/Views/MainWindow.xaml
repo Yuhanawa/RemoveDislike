@@ -5,6 +5,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
+            Initialized="MainWindow_OnInitialized"
             Title="Cavitation -- A computer garbage removal tool"
             Height="614"
             Width="1024"
@@ -143,7 +144,7 @@
                 </TreeView>
             </Grid>
         </Border>
-        <Frame Grid.Column="1" Source="Pages/Test.xaml" />
+        <Frame Grid.Column="1" Source="Pages/ClearFile.xaml" />
 
     </Grid>
 </pu:WindowX>

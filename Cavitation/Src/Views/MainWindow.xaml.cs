@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
+using Cavitation.Core.Rule;
 
 namespace Cavitation.Views
 {
@@ -24,6 +26,14 @@ namespace Cavitation.Views
             Pin.Foreground = Topmost
                 ? new SolidColorBrush(Colors.MintCream)
                 : new SolidColorBrush(Color.FromRgb(140, 140, 140));
+        }
+
+        private void MainWindow_OnInitialized(object sender, EventArgs e)
+        {
+            if (RulesGroups.Interface == null)
+            {
+                RulesGroups rulesGroups = new();
+            }
         }
     }
 }

@@ -60,8 +60,11 @@ namespace Cavitation.Core.Rule
                     case 1:
                         rules.Add(new Rule(split[0].Trim()));
                         break;
-                    case 2 when split[1].Trim() == "." || split[1].Trim() == "*":
+                    case 2 when split[1].Trim() == ".":
                         rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.FilesOnDir, "*"));
+                        break;
+                    case 2 when split[1].Trim() == "*":
+                        rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.RecursionAllFiles, "*"));
                         break;
                     case 2:
                         rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.FilesOnDir, split.Skip(1).ToList()));
