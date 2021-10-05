@@ -6,6 +6,7 @@
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
             Initialized="MainWindow_OnInitialized"
+            SizeChanged="MainWindow_OnSizeChanged"
             Title="Cavitation -- A computer garbage removal tool"
             Height="614"
             Width="1024"
@@ -129,13 +130,13 @@
                     <TreeViewItem Header="注册表清理"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="浏览器清理"
+                    <TreeViewItem Header="软件清理"
                                   pu:TreeViewItemHelper.Icon="&#xf268;"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="软件清理"
+                    <TreeViewItem Header="右键管理"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="暴力清理"
+                    <TreeViewItem Header="杂项"
                                   pu:TreeViewItemHelper.Icon="&#xf014;"
                                   Style="{StaticResource MainMenuItemStyle}" />
                     <TreeViewItem Header="关于"
@@ -144,7 +145,15 @@
                 </TreeView>
             </Grid>
         </Border>
-        <Frame Grid.Column="1" Source="Pages/ClearFile.xaml" />
+        <Frame Grid.Column="1"
+               Name="MainFrame"
+               Margin="4"
+               Source="Pages/Cleaner.xaml"
+               VerticalContentAlignment="Top"
+               HorizontalContentAlignment="Left"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"/>
+
 
     </Grid>
 </pu:WindowX>

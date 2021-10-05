@@ -75,10 +75,7 @@ namespace Cavitation.Core
 
         public static string GetEnvironmentVar(string name)
         {
-            if (name.StartsWith("%")&&name.EndsWith("%"))
-            {
-                name = name.TrimStart('%').TrimEnd('%');
-            }
+            if (name.StartsWith("%") && name.EndsWith("%")) name = name.TrimStart('%').TrimEnd('%');
             if (!EnvironmentVar.ContainsKey(name))
                 EnvironmentVar.Add(name, Environment.GetEnvironmentVariable(name));
 

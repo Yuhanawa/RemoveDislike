@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Cavitation.Core.Rule
+namespace Cavitation.Core.Cleaner.Rule
 {
     public class Rule
     {

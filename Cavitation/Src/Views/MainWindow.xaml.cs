@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
-using Cavitation.Core.Rule;
+using Cavitation.Core.Cleaner.Rule;
 
 namespace Cavitation.Views
 {
@@ -16,7 +17,8 @@ namespace Cavitation.Views
         {
             InitializeComponent();
             Interface = this;
-            // Thread.CurrentThread.Name = "MainThread";
+            
+            Thread.CurrentThread.Name = "MainThread";
         }
 
         private void PinButtonOnClick(object sender, RoutedEventArgs e)
@@ -34,6 +36,12 @@ namespace Cavitation.Views
             {
                 RulesGroups rulesGroups = new();
             }
+        }
+
+        private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            MainFrame.Width = e.NewSize.Width - 255;
+            MainFrame.Height = e.NewSize.Height - 8;
         }
     }
 }

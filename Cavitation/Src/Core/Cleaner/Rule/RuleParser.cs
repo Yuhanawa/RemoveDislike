@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using static Cavitation.Core.Utils;
 
-namespace Cavitation.Core.Rule
+namespace Cavitation.Core.Cleaner.Rule
 {
     /// <summary>
     ///     File					//del this file
@@ -21,7 +21,7 @@ namespace Cavitation.Core.Rule
     /// </summary>
     public static class RuleParser
     {
-        public static List<Rule> AutoRead<T>(T any)
+        public static List<Cleaner.Rule.Rule> AutoRead<T>(T any)
         {
             if (typeof(T) == typeof(string))
             {
@@ -29,8 +29,8 @@ namespace Cavitation.Core.Rule
 
                 if (Directory.Exists(any.ToString()))
                 {
-                    List<Rule> rules = new();
-                    foreach (KeyValuePair<string, List<Rule>> keyValuePair in from_folder(any.ToString()))
+                    List<Cleaner.Rule.Rule> rules = new();
+                    foreach (KeyValuePair<string, List<Cleaner.Rule.Rule>> keyValuePair in from_folder(any.ToString()))
                         rules.AddRange(keyValuePair.Value);
 
                     return rules;
@@ -46,45 +46,45 @@ namespace Cavitation.Core.Rule
             throw new ArgumentException();
         }
 
-        public static List<Rule> from_string(string ruleString)
+        public static List<Cleaner.Rule.Rule> from_string(string ruleString)
         {
             return from_List(Legalize(ruleString).Split('\n'));
         }
 
-        public static List<Rule> from_List(IEnumerable<string> list)
+        public static List<Cleaner.Rule.Rule> from_List(IEnumerable<string> list)
         {
-            List<Rule> rules = new();
+            List<Cleaner.Rule.Rule> rules = new();
             foreach (string[] split in list.Select(rule => rule.Trim().Split('|')))
                 switch (split.Length)
                 {
                     case 1:
-                        rules.Add(new Rule(split[0].Trim()));
+                        rules.Add(new Cleaner.Rule.Rule(split[0].Trim()));
                         break;
                     case 2 when split[1].Trim() == ".":
-                        rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.FilesOnDir, "*"));
+                        rules.Add(new Cleaner.Rule.Rule(split[0].Trim(), Cleaner.Rule.Rule.ModeEnum.FilesOnDir, "*"));
                         break;
                     case 2 when split[1].Trim() == "*":
-                        rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.RecursionAllFiles, "*"));
+                        rules.Add(new Cleaner.Rule.Rule(split[0].Trim(), Cleaner.Rule.Rule.ModeEnum.RecursionAllFiles, "*"));
                         break;
                     case 2:
-                        rules.Add(new Rule(split[0].Trim(), Rule.ModeEnum.FilesOnDir, split.Skip(1).ToList()));
+                        rules.Add(new Cleaner.Rule.Rule(split[0].Trim(), Cleaner.Rule.Rule.ModeEnum.FilesOnDir, split.Skip(1).ToList()));
                         break;
                     case >= 3:
                         rules.Add(split[1].Trim() == "*"
-                            ? new Rule(split[0].Trim(), Rule.ModeEnum.RecursionAllFiles, split.Skip(2).ToList())
-                            : new Rule(split[0].Trim(), Rule.ModeEnum.FilesOnDir, split.Skip(1).ToList()));
+                            ? new Cleaner.Rule.Rule(split[0].Trim(), Cleaner.Rule.Rule.ModeEnum.RecursionAllFiles, split.Skip(2).ToList())
+                            : new Cleaner.Rule.Rule(split[0].Trim(), Cleaner.Rule.Rule.ModeEnum.FilesOnDir, split.Skip(1).ToList()));
                         break;
                 }
 
             return rules;
         }
 
-        public static List<Rule> from_file(string path)
+        public static List<Cleaner.Rule.Rule> from_file(string path)
         {
             return from_string(File.ReadAllText(path));
         }
 
-        public static Dictionary<string, List<Rule>> from_folder(string path)
+        public static Dictionary<string, List<Cleaner.Rule.Rule>> from_folder(string path)
         {
             return new DirectoryInfo(path).GetFiles("*.cr")
                 .ToDictionary(

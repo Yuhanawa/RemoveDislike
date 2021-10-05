@@ -4,50 +4,61 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Cavitation.Views.Models"
+             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
              mc:Ignorable="d"
-             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                Path=Width}"
-             Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                Path=Height}"             
              d:DesignHeight="52" d:DesignWidth="780">
- 
- <Border BorderThickness="1" BorderBrush="Gray">
-  <Grid>
-        <Grid.ColumnDefinitions> 
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="1.6*" />
-            <ColumnDefinition Width="1.6*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                    Path=RuleName}" 
-                   Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                    Path=Height}"
-                   FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                   Path=FontSize}"
-                   Foreground="Azure"/>
-        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                    Path=Source}" 
-                   Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                    Path=Height}"    
-                   FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                   Path=FontSize}"
-                   Foreground="Azure"/>
-        <TextBlock Grid.Column="2" Text="{TemplateBinding local:InfoTab.Size}" 
-                   Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                    Path=Height}" 
-                   FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                   Path=FontSize}"
-                   Foreground="Azure"/>
-        <Button Grid.Column="3"
-                Content="GO!"
-                Margin="10"
-                FontSize="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                   Path=FontSize}"
-                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                 Path=Height}"                
-                Click="ButtonBase_OnClick"/>
 
-    </Grid>
- </Border>
+    <UserControl.Resources>
+        <Style x:Key="LittleButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
+            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
+            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
+            <Setter Property="Foreground" Value="#57FFFFFF" />
+        </Style>
+    </UserControl.Resources>
+
+
+    <Border BorderThickness="1"
+            BorderBrush="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                                                         Path=BorderBrush}">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=RuleName}" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=Source}" />
+            <TextBlock Grid.Column="2"
+                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=Size}" />
+
+            <Button Grid.Column="4"
+                    Name="Del" Content="&#xf014;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Del_OnClick" />
+            <Button Grid.Column="5" Name="Play" Content="&#xf04b;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="ButtonBase_OnClick" />
+            <Button Grid.Column="6"
+                    Name="More" Content="&#xf142;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="More_OnClick" />
+
+        </Grid>
+    </Border>
 </UserControl>

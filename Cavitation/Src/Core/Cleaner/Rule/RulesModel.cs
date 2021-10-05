@@ -8,24 +8,24 @@ namespace Cavitation.Core.Rule
 {
     public class RulesModel
     {
-        public List<Rule> Rules { get; protected set; }
-        public double CleanupSize { get; protected set; }
-        public int CleanupCount { get; protected set; }
-        public string Source { get; protected set; }
-        public int RulesCount => Rules.Count;
-
-        public RulesModel(List<Rule> rules, string source)
+        public RulesModel(List<Cleaner.Rule.Rule> rules, string source)
         {
             Rules = rules;
             Source = source;
         }
+
+        public List<Cleaner.Rule.Rule> Rules { get; protected set; }
+        public double CleanupSize { get; protected set; }
+        public int CleanupCount { get; protected set; }
+        public string Source { get; protected set; }
+        public int RulesCount => Rules.Count;
 
         public override string ToString()
         {
             return $"[RuleGroup] Source: {Source} \nRules: {Rules}";
         }
 
-        private static bool Check(Rule rule)
+        private static bool Check(Cleaner.Rule.Rule rule)
         {
             if (!File.Exists(rule.Path) && !Directory.Exists(rule.Path)) return false;
 
@@ -46,7 +46,7 @@ namespace Cavitation.Core.Rule
         {
             CleanupCount = 0;
             CleanupSize = 0L;
-            foreach (Rule rule in Rules.Where(Check))
+            foreach (Cleaner.Rule.Rule rule in Rules.Where(Check))
             {
                 if (!Directory.Exists(rule.Path))
                 {
@@ -57,12 +57,12 @@ namespace Cavitation.Core.Rule
                 var root = new DirectoryInfo(rule.Path);
                 switch (rule.Mode)
                 {
-                    case Rule.ModeEnum.All:
+                    case Cleaner.Rule.Rule.ModeEnum.All:
                     {
                         TryDelDir(root, true);
                         break;
                     }
-                    case Rule.ModeEnum.Folders:
+                    case Cleaner.Rule.Rule.ModeEnum.Folders:
                     {
                         if (rule.Feature[0] == "*")
                             foreach (DirectoryInfo dir in root.GetDirectories())
@@ -74,7 +74,7 @@ namespace Cavitation.Core.Rule
                                     TryDelDir(dir, true);
                         break;
                     }
-                    case Rule.ModeEnum.FilesOnDir:
+                    case Cleaner.Rule.Rule.ModeEnum.FilesOnDir:
                     {
                         if (rule.Feature[0] == "*")
                             foreach (FileInfo file in root.GetFiles())
@@ -85,7 +85,7 @@ namespace Cavitation.Core.Rule
                                     TryDelFile(file);
                         break;
                     }
-                    case Rule.ModeEnum.RecursionAllFiles:
+                    case Cleaner.Rule.Rule.ModeEnum.RecursionAllFiles:
                     {
                         bool universal = rule.Feature[0] == "*";
                         // if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
@@ -93,17 +93,18 @@ namespace Cavitation.Core.Rule
                         void Recursion(DirectoryInfo fileSystemInfo)
                         {
                             foreach (FileInfo file in fileSystemInfo.GetFiles())
-                                if (rule.Feature.Any(feature => file.Extension == feature)||universal)
+                                if (rule.Feature.Any(feature => file.Extension == feature) || universal)
                                     TryDelFile(file);
                             foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
                                 if (dir.GetFileSystemInfos().Length == 0) TryDelDir(dir);
                                 else Recursion(dir);
                         }
+
                         Recursion(root);
 
                         break;
                     }
-                    case Rule.ModeEnum.DirsAndFiles:
+                    case Cleaner.Rule.Rule.ModeEnum.DirsAndFiles:
                     {
                         if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
 
@@ -119,6 +120,7 @@ namespace Cavitation.Core.Rule
                                 else
                                     Recursion(dir);
                         }
+
                         Recursion(root);
 
                         break;
@@ -185,6 +187,6 @@ namespace Cavitation.Core.Rule
             }
 
             return Log($"Successfully deleted: {dir.FullName}");
-        }        
+        }
     }
 }
