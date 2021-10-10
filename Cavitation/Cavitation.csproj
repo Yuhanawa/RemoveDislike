@@ -85,8 +85,8 @@
         <Compile Include="Src\Views\Pages\ClearPage.cs">
             <DependentUpon>ClearPage.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Src\Views\Pages\ContextMenuManager.cs">
-          <DependentUpon>ContextMenuManager.xaml</DependentUpon>
+        <Compile Include="Src\Views\Pages\ContextMenuManagerPage.cs">
+          <DependentUpon>ContextMenuManagerPage.xaml</DependentUpon>
         </Compile>
         <Compile Include="Src\Views\Utils\CommonUtils.cs" />
     </ItemGroup>
@@ -120,7 +120,7 @@
         </Page>
         <Page Include="Src\Views\Models\InfoTab.xaml" />
         <Page Include="Src\Views\Pages\ClearPage.xaml" />
-        <Page Include="Src\Views\Pages\ContextMenuManager.xaml" />
+        <Page Include="Src\Views\Pages\ContextMenuManagerPage.xaml" />
     </ItemGroup>
     <ItemGroup>
         <ApplicationDefinition Include="Src\App.xaml">
