@@ -71,6 +71,7 @@
         <Compile Include="Src\Core\Clean\Rule.cs" />
         <Compile Include="Src\Core\Config.cs" />
         <Compile Include="Src\Core\Entrance.cs" />
+        <Compile Include="Src\Core\Regedit\ContextMenu.cs" />
         <Compile Include="Src\Core\Utils\CommonUtils.cs" />
         <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
         <Compile Include="Src\Core\Utils\RegistryUtils.cs" />
@@ -83,6 +84,9 @@
         </Compile>
         <Compile Include="Src\Views\Pages\ClearPage.cs">
             <DependentUpon>ClearPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Pages\ContextMenuManager.cs">
+          <DependentUpon>ContextMenuManager.xaml</DependentUpon>
         </Compile>
         <Compile Include="Src\Views\Utils\CommonUtils.cs" />
     </ItemGroup>
@@ -116,6 +120,7 @@
         </Page>
         <Page Include="Src\Views\Models\InfoTab.xaml" />
         <Page Include="Src\Views\Pages\ClearPage.xaml" />
+        <Page Include="Src\Views\Pages\ContextMenuManager.xaml" />
     </ItemGroup>
     <ItemGroup>
         <ApplicationDefinition Include="Src\App.xaml">
