@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -35,6 +35,10 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
+          <HintPath>..\packages\fastJSON.2.4.0.4\lib\net40\fastJSON.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="JetBrains.Annotations, Version=2021.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
             <HintPath>..\packages\JetBrains.Annotations.2021.3.0-eap3\lib\net20\JetBrains.Annotations.dll</HintPath>
             <Private>True</Private>
@@ -47,37 +51,40 @@
             <HintPath>..\packages\Panuon.UI.Silver.2.2.12-alpha\lib\net472\Panuon.UI.Silver.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
         </Reference>
-        <Reference Include="WindowsBase"/>
-        <Reference Include="PresentationCore"/>
-        <Reference Include="PresentationFramework"/>
+        <Reference Include="WindowsBase" />
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Src\App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Include="Src\Core\Cleaner\Rule\Rule.cs"/>
-        <Compile Include="Src\Core\Cleaner\Rule\RuleParser.cs"/>
-        <Compile Include="Src\Core\Cleaner\Rule\RulesGroups.cs"/>
-        <Compile Include="Src\Core\Cleaner\Rule\RulesModel.cs"/>
-        <Compile Include="Src\Core\RegistryUtils.cs"/>
-        <Compile Include="Src\Core\Utils.cs"/>
+        <Compile Include="Src\Core\Clean\Cleaner.cs" />
+        <Compile Include="Src\Core\Clean\Rule.cs" />
+        <Compile Include="Src\Core\Config.cs" />
+        <Compile Include="Src\Core\Entrance.cs" />
+        <Compile Include="Src\Core\Utils\CommonUtils.cs" />
+        <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
+        <Compile Include="Src\Core\Utils\RegistryUtils.cs" />
+        <Compile Include="Src\Core\Utils\FileUtils.cs" />
         <Compile Include="Src\Views\MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Src\Views\Models\InfoTab.xaml.cs">
             <DependentUpon>InfoTab.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Src\Views\Pages\Cleaner.xaml.cs">
-            <DependentUpon>Cleaner.xaml</DependentUpon>
+        <Compile Include="Src\Views\Pages\ClearPage.cs">
+            <DependentUpon>ClearPage.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Src\Views\Utils\CommonUtils.cs" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
@@ -94,22 +101,21 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="lib"/>
-        <Folder Include="Src\Core\Cleaner"/>
+        <Folder Include="lib" />
     </ItemGroup>
     <ItemGroup>
-        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf" />
     </ItemGroup>
     <ItemGroup>
         <Page Include="Src\Views\MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
         </Page>
-        <Page Include="Src\Views\Models\InfoTab.xaml"/>
-        <Page Include="Src\Views\Pages\Cleaner.xaml"/>
+        <Page Include="Src\Views\Models\InfoTab.xaml" />
+        <Page Include="Src\Views\Pages\ClearPage.xaml" />
     </ItemGroup>
     <ItemGroup>
         <ApplicationDefinition Include="Src\App.xaml">
@@ -117,5 +123,5 @@
             <SubType>Designer</SubType>
         </ApplicationDefinition>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

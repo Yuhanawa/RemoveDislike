@@ -1,30 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Cavitation.Core
+namespace Cavitation.Core.Utils
 {
-    public class Utils
+    public static class FileUtils
     {
-        private static readonly Dictionary<string, string> EnvironmentVar = new()
-        {
-            { "SystemRoot", Environment.GetEnvironmentVariable("SystemRoot") },
-            { "Windir", Environment.GetEnvironmentVariable("windir") },
-            { "HomeDrive", Environment.GetEnvironmentVariable("HomeDrive") },
-            { "SystemDrive", Environment.GetEnvironmentVariable("SystemDrive") },
-            { "ProgramFiles", Environment.GetEnvironmentVariable("ProgramFiles") },
-            { "ProgramFiles(x86)", Environment.GetEnvironmentVariable("ProgramFiles(x86)") },
-            { "CommonProgramFiles", Environment.GetEnvironmentVariable("CommonProgramFiles") },
-            { "UserProFile", Environment.GetEnvironmentVariable("UserProFile") },
-            { "HomePath", Environment.GetEnvironmentVariable("HomePath") },
-            { "Appdata", Environment.GetEnvironmentVariable("Appdata") },
-            { "Temp", Environment.GetEnvironmentVariable("Temp") }
-        };
-
         //删除文件
-        public bool WipeFile(string filename, int timesToWrite)
+        public static bool WipeFile(string filename, int timesToWrite)
         {
             try
             {
@@ -71,22 +54,6 @@ namespace Cavitation.Core
             {
                 return false;
             }
-        }
-
-        public static string GetEnvironmentVar(string name)
-        {
-            if (name.StartsWith("%") && name.EndsWith("%")) name = name.TrimStart('%').TrimEnd('%');
-            if (!EnvironmentVar.ContainsKey(name))
-                EnvironmentVar.Add(name, Environment.GetEnvironmentVariable(name));
-
-            return EnvironmentVar[name];
-        }
-
-        public static string Log(string m)
-        {
-            var output = $"[{DateTime.Now}] {m}";
-            Debug.WriteLine(output);
-            return output;
         }
     }
 }

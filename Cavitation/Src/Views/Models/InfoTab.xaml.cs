@@ -1,11 +1,36 @@
-using System;
 using System.Windows;
-using Cavitation.Core.Cleaner.Rule;
+using Cavitation.Core.Clean;
+using Cavitation.Views.Pages;
 
 namespace Cavitation.Views.Models
 {
     public partial class InfoTab
     {
+        public InfoTab()
+        {
+            InitializeComponent();
+        }
+
+        private void Play_OnClick(object sender, RoutedEventArgs e)
+        {
+            Cleaner.CleanerGroup[RuleName].Run();
+            ClearPage.Interface.ReLoad();
+        }
+
+        private void Del_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("你确认要删除这个文件吗", "此功能不可逆！", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                Cleaner.CleanerGroup[RuleName].SelfDestruct();
+
+            ClearPage.Interface.ReLoad();
+        }
+
+        private void More_OnClick(object sender, RoutedEventArgs e) =>
+            // TODO add Secondary menu
+            ClearPage.Interface.ReLoad();
+
+        #region Property
+
         public static readonly DependencyProperty RuleNameProperty =
             DependencyProperty.Register("RuleName", typeof(string),
                 typeof(InfoTab), new PropertyMetadata("Unknown"));
@@ -17,11 +42,6 @@ namespace Cavitation.Views.Models
         public static readonly DependencyProperty SizeProperty =
             DependencyProperty.Register("Size", typeof(double),
                 typeof(InfoTab), new PropertyMetadata(-1d));
-
-        public InfoTab()
-        {
-            InitializeComponent();
-        }
 
         public string RuleName
         {
@@ -42,20 +62,6 @@ namespace Cavitation.Views.Models
             set => SetValue(SizeProperty, value);
         }
 
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            RulesGroups.GetRulesGroup(RuleName).Clear();
-        }
-
-        private void Del_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void More_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

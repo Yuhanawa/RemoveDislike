@@ -29,10 +29,10 @@
                                                          Path=BorderBrush}">
         <Grid Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="28" />
                 <ColumnDefinition Width="28" />
                 <ColumnDefinition Width="28" />
@@ -46,14 +46,16 @@
             <TextBlock Grid.Column="2"
                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                     Path=Size}" />
-
+            <TextBlock Grid.Column="3" Text=" MB" />
+            
+            
             <Button Grid.Column="4"
                     Name="Del" Content="&#xf014;"
                     Style="{StaticResource LittleButtonStyle}"
                     Click="Del_OnClick" />
             <Button Grid.Column="5" Name="Play" Content="&#xf04b;"
                     Style="{StaticResource LittleButtonStyle}"
-                    Click="ButtonBase_OnClick" />
+                    Click="Play_OnClick" />
             <Button Grid.Column="6"
                     Name="More" Content="&#xf142;"
                     Style="{StaticResource LittleButtonStyle}"

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
-using Cavitation.Core.Cleaner.Rule;
+using Cavitation.Core;
 
 namespace Cavitation.Views
 {
@@ -15,9 +15,10 @@ namespace Cavitation.Views
 
         public MainWindow()
         {
+            Entrance.Init();
             InitializeComponent();
             Interface = this;
-            
+
             Thread.CurrentThread.Name = "MainThread";
         }
 
@@ -30,18 +31,19 @@ namespace Cavitation.Views
                 : new SolidColorBrush(Color.FromRgb(140, 140, 140));
         }
 
-        private void MainWindow_OnInitialized(object sender, EventArgs e)
-        {
-            if (RulesGroups.Interface == null)
-            {
-                RulesGroups rulesGroups = new();
-            }
-        }
-
         private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             MainFrame.Width = e.NewSize.Width - 255;
             MainFrame.Height = e.NewSize.Height - 8;
+        }
+
+        private void CommonClear_OnSelected(object sender, RoutedEventArgs e){
+            if (MainFrame == null)return;
+            MainFrame.Source = new Uri("pack://application:,,,/Views/Pages/ClearPage.xaml", UriKind.Absolute);
+        }
+        private void ContextMenuManager_OnSelected(object sender, RoutedEventArgs e){
+            if (MainFrame == null)return;
+            MainFrame.Source = new Uri("pack://application:,,,/Views/Pages/ClearPage.xaml", UriKind.Absolute);
         }
     }
 }
