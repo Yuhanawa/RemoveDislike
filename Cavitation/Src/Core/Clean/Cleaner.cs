@@ -182,7 +182,7 @@ namespace Cavitation.Core.Clean
             private void AddCleanupData(double size, int count)
             {
                 CleanupCount += count;
-                CleanupSize += size/1024;
+                CleanupSize += size/1024/1024;
             }
 
             private void TryDel(string path, bool isDir)
