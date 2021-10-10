@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Cavitation.Core;
+using Cavitation.Views.Pages;
 
 namespace Cavitation.Views
 {
@@ -36,14 +38,21 @@ namespace Cavitation.Views
             MainFrame.Width = e.NewSize.Width - 255;
             MainFrame.Height = e.NewSize.Height - 8;
         }
+        private Page _clearPage;
+        private Page _contextMenuManagerPage;
 
-        private void CommonClear_OnSelected(object sender, RoutedEventArgs e){
-            if (MainFrame == null)return;
-            MainFrame.Source = new Uri("pack://application:,,,/Views/Pages/ClearPage.xaml", UriKind.Absolute);
-        }
-        private void ContextMenuManager_OnSelected(object sender, RoutedEventArgs e){
-            if (MainFrame == null)return;
-            MainFrame.Source = new Uri("pack://application:,,,/Views/Pages/ClearPage.xaml", UriKind.Absolute);
+        private void CommonClear_OnSelected(object sender, RoutedEventArgs e) =>
+            MainFrame.Content = _clearPage;
+
+        private void ContextMenuManager_OnSelected(object sender, RoutedEventArgs e) =>
+            MainFrame.Content = _contextMenuManagerPage;
+
+        private void MainFrame_OnInitialized(object sender, EventArgs e)
+        {
+            _clearPage = new ClearPage();
+            _contextMenuManagerPage = new ContextMenuManagerPage();
+
+            CommonClear.IsSelected = true;
         }
     }
 }

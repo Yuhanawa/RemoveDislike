@@ -125,8 +125,7 @@
                     <TreeViewItem Header="常规清理" Name="CommonClear"
                                   pu:TreeViewItemHelper.Icon="&#xf039;"
                                   Style="{StaticResource MainMenuItemStyle}"
-                                  Selected="CommonClear_OnSelected"
-                                  IsSelected="True" />
+                                  Selected="CommonClear_OnSelected"/>
                     <TreeViewItem Header="注册表清理" Name="ContextMenuClear"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
                                   Style="{StaticResource MainMenuItemStyle}" />
@@ -148,12 +147,13 @@
         </Border>
         <Frame Grid.Column="1"
                Name="MainFrame"
+               NavigationUIVisibility="Hidden"
                Margin="4"
-               Source="Pages/ClearPage.xaml"
                VerticalContentAlignment="Top"
                HorizontalContentAlignment="Left"
                VerticalAlignment="Top"
-               HorizontalAlignment="Left" />
+               HorizontalAlignment="Left" 
+               Initialized="MainFrame_OnInitialized"/>
 
 
     </Grid>
