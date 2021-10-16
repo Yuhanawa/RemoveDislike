@@ -74,16 +74,18 @@
         <Compile Include="Src\Core\Regedit\ContextMenu.cs" />
         <Compile Include="Src\Core\Utils\CommonUtils.cs" />
         <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
-        <Compile Include="Src\Core\Utils\RegistryUtils.cs" />
         <Compile Include="Src\Core\Utils\FileUtils.cs" />
         <Compile Include="Src\Views\MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Src\Views\Models\InfoTab.xaml.cs">
-            <DependentUpon>InfoTab.xaml</DependentUpon>
+        <Compile Include="Src\Views\Models\CleanInfoTab.xaml.cs">
+            <DependentUpon>CleanInfoTab.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Src\Views\Pages\ClearPage.cs">
-            <DependentUpon>ClearPage.xaml</DependentUpon>
+        <Compile Include="Src\Views\Models\ContextMenuInfoTab.xaml.cs">
+          <DependentUpon>ContextMenuInfoTab.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Pages\CleanPage.cs">
+            <DependentUpon>CleanPage.xaml</DependentUpon>
         </Compile>
         <Compile Include="Src\Views\Pages\ContextMenuManagerPage.cs">
           <DependentUpon>ContextMenuManagerPage.xaml</DependentUpon>
@@ -118,8 +120,9 @@
         <Page Include="Src\Views\MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
         </Page>
-        <Page Include="Src\Views\Models\InfoTab.xaml" />
-        <Page Include="Src\Views\Pages\ClearPage.xaml" />
+        <Page Include="Src\Views\Models\CleanInfoTab.xaml" />
+        <Page Include="Src\Views\Models\ContextMenuInfoTab.xaml" />
+        <Page Include="Src\Views\Pages\CleanPage.xaml" />
         <Page Include="Src\Views\Pages\ContextMenuManagerPage.xaml" />
     </ItemGroup>
     <ItemGroup>
