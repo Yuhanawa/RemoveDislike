@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Cavitation.Core;
 using Cavitation.Core.Clean;
 using Cavitation.Views.Models;
@@ -11,11 +12,11 @@ using static Cavitation.Views.Utils.CommonUtils;
 
 namespace Cavitation.Views.Pages
 {
-    public partial class ClearPage
+    public partial class CleanPage
     {
-        public static ClearPage Interface;
+        public static CleanPage Interface;
 
-        public ClearPage()
+        public CleanPage()
         {
             InitializeComponent();
             
@@ -38,7 +39,7 @@ namespace Cavitation.Views.Pages
         private void LoadRuleItem()
         {
             foreach (string key in Cleaner.CleanerGroup.Keys)
-                RuleList.Children.Add(new InfoTab
+                RuleList.Children.Add(new CleanInfoTab
                 {
                     RuleName = key,
                     Source = Cleaner.CleanerGroup[key].Source == "Internal" ? "Internal" : "External",
@@ -95,5 +96,33 @@ namespace Cavitation.Views.Pages
         private void More_OnClick(object sender, RoutedEventArgs e) =>
             // TODO add Secondary menu
             ReLoad();
+
+        private void CleanPage_OnPreviewDragEnter(object sender, DragEventArgs e)
+        {
+            //仅支持文件的拖放
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+
+            //获取拖拽的文件
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files == null || files.Length == 0)
+                return;
+
+            foreach (string file in files)
+            {
+                FileInfo fileInfo = new(file);
+                if (!File.Exists($@"{Config.RulesGroupsPath}/{fileInfo.Name}"))
+                {
+                    fileInfo.CopyTo($@"{Config.RulesGroupsPath}/{fileInfo.Name}");
+                }
+                else
+                {
+                    MessageBox.Show($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                    Log($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                }
+            }
+            ReLoad();
+        }
     }
 }
