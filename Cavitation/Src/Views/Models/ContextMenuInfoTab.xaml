@@ -1,0 +1,62 @@
+<UserControl x:Class="Cavitation.Views.Models.ContextMenuInfoTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Cavitation.Views.Models"
+             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+             mc:Ignorable="d"
+             Loaded="ContextMenuInfoTab_OnLoaded"
+             d:DesignHeight="50" d:DesignWidth="420">
+    
+    <UserControl.Resources>
+        <Style x:Key="LittleButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
+            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
+            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
+            <Setter Property="Foreground" Value="#57FFFFFF" />
+        </Style>
+    </UserControl.Resources>
+    
+    
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="28" />
+            <ColumnDefinition Width="28" />
+            <ColumnDefinition Width="28" />
+            <ColumnDefinition Width="28" />
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" Name="EIcon" Source=
+               "{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
+                Path=Icon}"
+               PreviewDragEnter="EIcon_OnPreviewDragEnter"
+               PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp"/>
+        <TextBlock Grid.Column="1" Name="EText" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
+                 Path=Text}"
+                   PreviewMouseRightButtonUp="EText_OnPreviewMouseRightButtonUp"/>
+        <Button Grid.Column="2" Name="ESub" 
+                Content="&#xf2b0;"
+                Click="ESub_OnClick"
+                Style="{StaticResource LittleButtonStyle}"/>
+        <Button Grid.Column="3" Name="EVisibility"
+                Content="?"
+                Click="EVisibility_OnClick"
+                Style="{StaticResource LittleButtonStyle}"/>
+        <Button Grid.Column="4" Name="EDel"
+                Content="&#xf00d;"
+                Click="EDel_OnClick"
+                Style="{StaticResource LittleButtonStyle}"/>
+        <Button Grid.Column="5" Name="EMore"
+                Click="EMore_OnClick"
+                Content="&#xf013;"
+                Style="{StaticResource LittleButtonStyle}"/>
+    </Grid>
+</UserControl>
