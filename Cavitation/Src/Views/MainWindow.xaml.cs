@@ -49,7 +49,7 @@ namespace Cavitation.Views
 
         private void MainFrame_OnInitialized(object sender, EventArgs e)
         {
-            _clearPage = new ClearPage();
+            _clearPage = new CleanPage();
             _contextMenuManagerPage = new ContextMenuManagerPage();
 
             CommonClear.IsSelected = true;
