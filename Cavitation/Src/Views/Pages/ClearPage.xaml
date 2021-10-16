@@ -32,7 +32,7 @@
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="240" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="28" />
                 <ColumnDefinition Width="28" />
@@ -41,6 +41,7 @@
                 <ColumnDefinition Width="6" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
+                       Name="State"
                        Text="状态: 未清理"
                        TextAlignment="Left"
                        VerticalAlignment="Center"

@@ -88,6 +88,7 @@ namespace Cavitation.Views.Pages
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {
             Cleaner.Run();
+            State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
             ReLoad();
         }
 

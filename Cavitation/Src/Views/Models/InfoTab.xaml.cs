@@ -14,6 +14,7 @@ namespace Cavitation.Views.Models
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {
             Cleaner.CleanerGroup[RuleName].Run();
+            ClearPage.Interface.State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
             ClearPage.Interface.ReLoad();
         }
 

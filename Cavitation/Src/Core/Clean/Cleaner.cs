@@ -55,6 +55,8 @@ namespace Cavitation.Core.Clean
 
             _isInit = true;
         }
+        
+        public static double AllCleanupSize => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanupSize);
 
 
         public class Model
@@ -92,8 +94,9 @@ namespace Cavitation.Core.Clean
 
             public void Run()
             {
-                CleanupCount = 0;
-                CleanupSize = 0;
+                // Data clear
+                // CleanupCount = 0;
+                // CleanupSize = 0;
 
                 foreach (Rule rule in Rules.Where(Check))
                 {
@@ -213,7 +216,7 @@ namespace Cavitation.Core.Clean
                         }
                         catch (Exception e)
                         {
-                            Log(@$"[File] {e.Message} Path: {dir.FullName}");
+                            Log(@$"[File] {e.Message.Trim()} Path: {dir.FullName}");
                         }
 
                         break;
