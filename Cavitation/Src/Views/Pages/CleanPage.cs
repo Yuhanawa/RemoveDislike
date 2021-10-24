@@ -1,9 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Cavitation.Core;
 using Cavitation.Core.Clean;
 using Cavitation.Views.Models;
@@ -88,9 +89,32 @@ namespace Cavitation.Views.Pages
 
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {
-            Cleaner.Run();
-            State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
-            ReLoad();
+            State.Text = "清理中... 可能时间较长... 请稍等...";
+            MainWindow.DelegateList.Add(ClearAll);
+        }
+
+        private async void ClearAll()
+        {
+            var i = 0;
+            foreach (string key in Cleaner.CleanerGroup.Keys)
+            {
+                i++;
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    Cleaner.CleanerGroup[key].Run();
+                    MainWindow.Interface.Dispatcher.Invoke(() =>
+                        State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanupSize} MB");
+                    i--;
+                });
+            }
+
+            do { await Task.Delay(5000); } while (i != 0);
+
+            MainWindow.Interface.Dispatcher.Invoke(() =>
+            {
+                State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
+                ReLoad();
+            });
         }
 
         private void More_OnClick(object sender, RoutedEventArgs e) =>

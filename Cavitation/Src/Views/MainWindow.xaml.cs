@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +16,12 @@ namespace Cavitation.Views
     public partial class MainWindow
     {
         public static MainWindow Interface;
+        
+        public static Thread MainThread;
+        public static Thread I0Thread;
+        
+        public delegate void Delegate();
+        public static List<Delegate> DelegateList;
 
         public MainWindow()
         {
@@ -21,7 +29,26 @@ namespace Cavitation.Views
             InitializeComponent();
             Interface = this;
 
+            MainThread = Thread.CurrentThread;
             Thread.CurrentThread.Name = "MainThread";
+            
+            DelegateList = new List<Delegate>();
+
+            I0Thread = new Thread(
+                start: () => {
+                    while (true) {
+                        if (DelegateList.Count == 0)
+                        {
+                            Thread.Sleep(1000);
+                            continue;
+                        }
+
+                        DelegateList[0]();
+                        DelegateList.RemoveAt(0);
+
+                    }}){ Name = "I0Thread" };
+            
+            I0Thread.Start();
         }
 
         private void PinButtonOnClick(object sender, RoutedEventArgs e)

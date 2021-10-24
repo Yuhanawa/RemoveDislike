@@ -100,6 +100,7 @@ namespace Cavitation.Views.Models
 
         private void ContextMenuInfoTab_OnLoaded(object sender, RoutedEventArgs e)
         {
+            // Maybe you can't see it 
             EVisibility.Content = TabVisibility ? "" : "";
         }
     }

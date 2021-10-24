@@ -126,7 +126,7 @@
                        <ScrollViewer.Content>
                            <StackPanel />
                        </ScrollViewer.Content>
-                   </ScrollViewer>                   
+                   </ScrollViewer>
                </TabItem>
            </TabControl>
         </Border>

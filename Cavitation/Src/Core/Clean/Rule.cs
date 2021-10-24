@@ -13,10 +13,11 @@ namespace Cavitation.Core.Clean
         public enum ModeEnum
         {
             All,
+            Files,
             Folders,
-            RecursionAllFiles,
-            FilesOnDir,
-            DirsAndFiles
+            RecursionAll,            
+            RecursionFiles,
+            RecursionFolders,
         }
 
         public List<string> Feature;
@@ -87,21 +88,21 @@ namespace Cavitation.Core.Clean
                             rules.Add(new Rule(split[0].Trim()));
                             break;
                         case 2 when split[1].Trim() == ".":
-                            rules.Add(new Rule(split[0].Trim(), ModeEnum.FilesOnDir, "*"));
+                            rules.Add(new Rule(split[0].Trim(), ModeEnum.Files, "*"));
                             break;
                         case 2 when split[1].Trim() == "*":
-                            rules.Add(new Rule(split[0].Trim(), ModeEnum.RecursionAllFiles,
+                            rules.Add(new Rule(split[0].Trim(), ModeEnum.RecursionFiles,
                                 "*"));
                             break;
                         case 2:
-                            rules.Add(new Rule(split[0].Trim(), ModeEnum.FilesOnDir,
+                            rules.Add(new Rule(split[0].Trim(), ModeEnum.Files,
                                 split.Skip(1).ToList()));
                             break;
                         case >= 3:
                             rules.Add(split[1].Trim() == "*"
-                                ? new Rule(split[0].Trim(), ModeEnum.RecursionAllFiles,
+                                ? new Rule(split[0].Trim(), ModeEnum.RecursionFiles,
                                     split.Skip(2).ToList())
-                                : new Rule(split[0].Trim(), ModeEnum.FilesOnDir,
+                                : new Rule(split[0].Trim(), ModeEnum.Files,
                                     split.Skip(1).ToList()));
                             break;
                     }

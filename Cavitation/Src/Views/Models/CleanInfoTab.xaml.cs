@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Cavitation.Core.Clean;
 using Cavitation.Views.Pages;
@@ -13,9 +15,29 @@ namespace Cavitation.Views.Models
 
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {
-            Cleaner.CleanerGroup[RuleName].Run();
-            CleanPage.Interface.State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
-            CleanPage.Interface.ReLoad();
+            CleanPage.Interface.State.Text = "清理中... 可能时间较长... 请稍等...";
+            string key = RuleName.ToString();
+            MainWindow.DelegateList.Add( () => Clear(key));
+        }
+        
+        private static async void Clear(string key)
+        {
+            var flag = false;
+            ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    Cleaner.CleanerGroup[key].Run();
+                    MainWindow.Interface.Dispatcher.Invoke(() =>
+                        CleanPage.Interface.State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanupSize} MB");
+                    flag = true;
+                });
+
+                do { await Task.Delay(2000); } while (!flag);
+
+            MainWindow.Interface.Dispatcher.Invoke(() =>
+            {
+                CleanPage.Interface.State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
+                CleanPage.Interface.ReLoad();
+            });
         }
 
         private void Del_OnClick(object sender, RoutedEventArgs e)
