@@ -40,7 +40,7 @@ namespace Cavitation.Core.Clean
         private static void AddExternalRules()
         {
             foreach (FileInfo file in new DirectoryInfo(Config.RulesGroupsPath).GetFiles("*.cr"))
-                CleanerGroup.Add(file.Name, new Model(from_file(file.FullName), file.FullName));
+                CleanerGroup.Add(file.Name.Remove(file.Name.Length-3), new Model(from_file(file.FullName), file.FullName));
         }
 
         private static void AddInternalRules()
@@ -103,7 +103,7 @@ namespace Cavitation.Core.Clean
         public static void Run(string key) => CleanerGroup[key].Run();
 
 
-        private class Model
+        public class Model
         {
             public Model(List<Rule> rules, string source)
             {
