@@ -39,12 +39,12 @@ namespace Cavitation.Views.Pages
 
         private void LoadRuleItem()
         {
-            foreach (string key in Cleaner.CleanerGroup.Keys)
+            foreach (string key in Cleaner.Keys)
                 RuleList.Children.Add(new CleanInfoTab
                 {
                     RuleName = key,
-                    Source = Cleaner.CleanerGroup[key].Source == "Internal" ? "Internal" : "External",
-                    Size = Cleaner.CleanerGroup[key].CleanupSize,
+                    Source = Cleaner.GetSource(key) == "Internal" ? "Internal" : "External",
+                    Size = Cleaner.GetCleanedSize(key),
                     FontSize = 18,
                     // Margin = new Thickness(0),
                     Margin = new Thickness(4, 2, 4, 2),
@@ -95,24 +95,26 @@ namespace Cavitation.Views.Pages
 
         private async void ClearAll()
         {
-            var i = 0;
-            foreach (string key in Cleaner.CleanerGroup.Keys)
+            int i = Cleaner.Keys.Count;
+            foreach (string key in Cleaner.Keys)
             {
-                i++;
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    Cleaner.CleanerGroup[key].Run();
-                    MainWindow.Interface.Dispatcher.Invoke(() =>
-                        State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanupSize} MB");
+                    Cleaner.Run(key);
                     i--;
                 });
             }
 
-            do { await Task.Delay(5000); } while (i != 0);
+            do
+            {
+                MainWindow.Interface.Dispatcher.Invoke(() =>
+                    State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanedSize} MB");
+                await Task.Delay(5000);
+            } while (i != 0);
 
             MainWindow.Interface.Dispatcher.Invoke(() =>
             {
-                State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
+                State.Text = $"已清理： {Cleaner.AllCleanedSize} MB";
                 ReLoad();
             });
         }

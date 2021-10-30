@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Cavitation.Core.Utils;
@@ -12,10 +11,7 @@ namespace Cavitation.Core.Clean
 {
     public class Cleaner
     {
-        private static readonly Dictionary<string, string> Internal = new()
-        {
-            // { "test", @"" },
-        };
+        private static readonly Dictionary<string, Model> CleanerGroup = new();
 
         private bool _isInit;
 
@@ -24,16 +20,9 @@ namespace Cavitation.Core.Clean
             Load();
         }
 
-        public static Dictionary<string, Model> CleanerGroup { get; private set; }
-
-        public static void Run()
-        {
-            foreach (string key in CleanerGroup.Keys) CleanerGroup[key].Run();
-        }
-
         public void ReLoad()
         {
-            CleanerGroup = null;
+            CleanerGroup.Clear();
             _isInit = false;
             Load();
         }
@@ -41,41 +30,80 @@ namespace Cavitation.Core.Clean
         public void Load()
         {
             if (_isInit) return;
-            CleanerGroup = new Dictionary<string, Model>
-            { { "C盘缓存日志", new Model(new List<Rule>
+
+            AddInternalRules();
+            AddExternalRules();
+
+            _isInit = true;
+        }
+
+        private static void AddExternalRules()
+        {
+            foreach (FileInfo file in new DirectoryInfo(Config.RulesGroupsPath).GetFiles("*.cr"))
+                CleanerGroup.Add(file.Name, new Model(from_file(file.FullName), file.FullName));
+        }
+
+        private static void AddInternalRules()
+        {
+            var rules = new List<Rule>();
+            foreach (string drive in Directory.GetLogicalDrives())
             {
-                // new(@"C:\\",ModeEnum.RecursionFolders,new List<string>()
-                // {
-                //     "Temp","Tmp","Log","Logs",".logs",".log",".temp","Cache","Caches","$WinREAgent",
-                // }),
-                new(@"C:\\",ModeEnum.RecursionFiles,new List<string>
+                rules.Add(new Rule(drive, ModeEnum.RecursionFolders, new List<string>
                 {
-                    ".temp",".tmp",".log",".logs",".cache",".caches",".old",".bak",".back"
-                }),
+                    "Temp", "Tmp", ".temp",
+                    "Log", "Logs", ".logs", ".log",
+                    "Cache", "Caches", "$WinREAgent"
+                }));
+                rules.Add(new Rule(@"C:\\", ModeEnum.RecursionFiles, new List<string>
+                {
+                    ".temp", ".tmp", ".log", ".logs",
+                    ".cache", ".caches", ".old", ".bak", ".back"
+                }));
+            }
+
+            CleanerGroup.Add("全盘缓存日志", new Model(rules));
+
+            CleanerGroup.Add("固定缓存日志", new Model(new List<Rule>
+            {
                 new(@$"{EnvironmentUtils.WinData}\Explorer\"),
                 new(@$"{EnvironmentUtils.WinData}\Fonts\Deleted\"),
                 new(@$"{EnvironmentUtils.WinData}\History\"),
                 new(@$"{EnvironmentUtils.WinData}\ActionCenterCache\"),
                 new(@$"{EnvironmentUtils.WinData}\ActionCenterCache\"),
-                new(@$"{EnvironmentUtils.WinData}\..\..\",ModeEnum.Folders,new List<string>
+                new(@$"{EnvironmentUtils.WinData}\..\..\", ModeEnum.Folders, new List<string>
                 {
-                    "Cache","GrShaderCache","ShaderCache","CacheStorage","Font Cache",
-                }),
-            },"Internal") } };
+                    "Cache", "GrShaderCache", "ShaderCache", "CacheStorage", "Font Cache"
+                })
+            }));
 
-            foreach (string key in Internal.Keys)
-                CleanerGroup.Add(key, new Model(from_string(Internal[key]), "Internal"));
-
-            foreach (FileInfo file in new DirectoryInfo(Config.RulesGroupsPath).GetFiles("*.cr"))
-                CleanerGroup.Add(file.Name, new Model(from_file(file.FullName), file.FullName));
-
-            _isInit = true;
+            Dictionary<string, string> textRules = new()
+            {
+                { "test", @"" }
+            };
+            foreach (string key in textRules.Keys)
+                CleanerGroup.Add(key, new Model(from_string(textRules[key])));
         }
         
-        public static double AllCleanupSize => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanupSize);
+        public static double AllCleanedSize => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedSize);
+        public static double AllCleanedCount => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedCount);
+        public static double GetCleanedSize(string key) => CleanerGroup[key].CleanedSize;
+        public static double GetCleanedCount(string key) => CleanerGroup[key].CleanedCount;
+
+        public static void Delete(string key) => CleanerGroup[key].Delete();
+        public static Dictionary<string, Model>.KeyCollection Keys => CleanerGroup.Keys;
+        public static Dictionary<string, Model>.ValueCollection Values => CleanerGroup.Values;
+        public static int Count => CleanerGroup.Count;
+        public static string GetSource(string key) => CleanerGroup[key].Source;
+
+        public static void RunAll()
+        {
+            foreach (string key in CleanerGroup.Keys) Run(key);
+        }
+
+        public static void Run(string key) => CleanerGroup[key].Run();
 
 
-        public class Model
+        private class Model
         {
             public Model(List<Rule> rules, string source)
             {
@@ -83,9 +111,15 @@ namespace Cavitation.Core.Clean
                 Source = source;
             }
 
+            public Model(List<Rule> rules)
+            {
+                Rules = rules;
+                Source = "Internal";
+            }
+
             public List<Rule> Rules { get; protected set; }
-            public double CleanupSize { get; protected set; }
-            public int CleanupCount { get; protected set; }
+            public double CleanedSize { get; protected set; }
+            public int CleanedCount { get; protected set; }
             public string Source { get; protected set; }
             public int RulesCount => Rules.Count;
 
@@ -108,16 +142,19 @@ namespace Cavitation.Core.Clean
                         (File.GetAttributes(rule.Path) & FileAttributes.ReadOnly) != 0)
                         return false;
                 }
-                else return false;
-                
+                else
+                {
+                    return false;
+                }
+
                 return true;
             }
 
             public void Run()
             {
                 // Data clear
-                // CleanupCount = 0;
-                // CleanupSize = 0;
+                // CleanedCount = 0;
+                // CleanedSize = 0;
 
                 foreach (Rule rule in Rules.Where(Check))
                 {
@@ -211,22 +248,22 @@ namespace Cavitation.Core.Clean
                                         }
 
                                     foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
-                                    {
                                         try
-                                        { 
-                                            if (dir.GetFileSystemInfos().Length == 0) TryDel(dir);
+                                        {
+                                            if (dir.GetFileSystemInfos().Length == 0)
+                                            {
+                                                TryDel(dir);
+                                            }
                                             else
                                             {
                                                 TryRecursion(dir);
                                                 if (dir.GetFileSystemInfos().Length == 0) TryDel(dir);
                                             }
-                                            
                                         }
                                         catch (Exception e)
                                         {
                                             Log(@$"[File] {e.Message}");
                                         }
-                                    }
                                 }
 
                                 TryRecursion(root);
@@ -335,8 +372,8 @@ namespace Cavitation.Core.Clean
 
             private void AddCleanupData(double size, int count)
             {
-                CleanupCount += count;
-                CleanupSize += size/1024/1024;
+                CleanedCount += count;
+                CleanedSize += size / 1024 / 1024;
             }
 
             private void TryDel(string path, bool isDir)
@@ -397,7 +434,7 @@ namespace Cavitation.Core.Clean
                 }
             }
 
-            public void SelfDestruct() => TryDel(Source, false);
+            public void Delete() => TryDel(Source, false);
 
             private static void Log(string m) => CommonUtils.Log(m);
         }

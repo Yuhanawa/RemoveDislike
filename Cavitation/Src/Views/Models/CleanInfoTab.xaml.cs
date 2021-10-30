@@ -25,9 +25,9 @@ namespace Cavitation.Views.Models
             var flag = false;
             ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    Cleaner.CleanerGroup[key].Run();
+                    Cleaner.Run(key);
                     MainWindow.Interface.Dispatcher.Invoke(() =>
-                        CleanPage.Interface.State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanupSize} MB");
+                        CleanPage.Interface.State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanedSize} MB");
                     flag = true;
                 });
 
@@ -35,7 +35,7 @@ namespace Cavitation.Views.Models
 
             MainWindow.Interface.Dispatcher.Invoke(() =>
             {
-                CleanPage.Interface.State.Text = $"已清理： {Cleaner.AllCleanupSize} MB";
+                CleanPage.Interface.State.Text = $"已清理： {Cleaner.AllCleanedSize} MB";
                 CleanPage.Interface.ReLoad();
             });
         }
@@ -43,7 +43,7 @@ namespace Cavitation.Views.Models
         private void Del_OnClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("你确认要删除这个文件吗", "此功能不可逆！", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                Cleaner.CleanerGroup[RuleName].SelfDestruct();
+                Cleaner.Delete(RuleName);
 
             CleanPage.Interface.ReLoad();
         }
