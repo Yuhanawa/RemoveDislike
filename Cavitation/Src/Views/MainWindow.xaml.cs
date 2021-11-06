@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,6 +48,8 @@ namespace Cavitation.Views
                     }}){ Name = "I0Thread" };
             
             I0Thread.Start();
+
+            Application.Current.Exit += (sender, args) => I0Thread.Abort();
         }
 
         private void PinButtonOnClick(object sender, RoutedEventArgs e)
