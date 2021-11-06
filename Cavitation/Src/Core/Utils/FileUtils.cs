@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
+using static Cavitation.Core.Utils.CommonUtils;
 
 namespace Cavitation.Core.Utils
 {
@@ -54,6 +56,160 @@ namespace Cavitation.Core.Utils
             {
                 return false;
             }
+        }
+
+        public static void DelDir(DirectoryInfo dir)
+        {
+            foreach (FileInfo file in dir.GetFiles())
+                TryDelFile(file);
+
+            foreach (DirectoryInfo info in dir.GetDirectories())
+                DelDir(info);
+
+            dir.Delete();
+        }
+
+        public static DelInfo TryDelFile(string path, bool output) => TryDelFile(new FileInfo(path), output);
+
+        public static DelInfo TryDelFile(FileInfo file, bool output)
+        {
+            DelInfo info = TryDelFile(file);
+            if (output)
+                Log(info.ToString());
+
+            return info;
+        }
+
+        public static DelInfo TryDelFile(FileInfo file)
+        {
+            try
+            {
+                file.Delete();
+                return new DelInfo(true, file.FullName, file.Length);
+            }
+            catch (Exception e)
+            {
+                return new DelInfo(false, file.FullName, file.Length, e);
+            }
+        }
+
+        public static DelInfo TryExDelDir(DirectoryInfo dir, bool output)
+        {
+            var size = 0L;
+            try
+            {
+                size += dir.GetFiles().Sum(file => TryDelFile(file.ToString(), true).Size);
+            }
+            catch (Exception e)
+            {
+                return new DelInfo(false, dir.FullName, size, e);
+            }
+
+            try
+            {
+                foreach (DirectoryInfo info in dir.GetDirectories())
+                    TryExDelDir(info, output);
+            }
+            catch (Exception e)
+            {
+                return new DelInfo(false, dir.FullName, size, e);
+            }
+
+            try
+            {
+                dir.Delete();
+            }
+            catch (Exception e)
+            {
+                return new DelInfo(true, dir.FullName, size, e);
+            }
+
+            return new DelInfo(true, dir.FullName, size);
+        }
+
+        public static DelInfo TryDelDir(DirectoryInfo dir)
+        {
+            try
+            {
+                dir.Delete();
+                return new DelInfo(true, dir.FullName, 0);
+            }
+            catch (Exception e)
+            {
+                return new DelInfo(true, dir.FullName, 0, e);
+            }
+        }
+
+        private static void Del(FileSystemInfo fileSystemInfo, bool output)
+        {
+            switch (fileSystemInfo)
+            {
+                case DirectoryInfo dir:
+                {
+                    TryExDelDir(dir, output);
+                    break;
+                }
+                case FileInfo file:
+                {
+                    if (output) Log(TryDelFile(file).ToString());
+                    else TryDelFile(file);
+                    break;
+                }
+            }
+        }
+
+        public class DelInfo
+        {
+            public Exception Exception;
+            public bool IsSuccess;
+            public long Size;
+            public string Source;
+
+            public DelInfo()
+            {
+            }
+
+            public DelInfo(bool isSuccess, string source)
+            {
+                IsSuccess = isSuccess;
+                Source = source;
+            }
+
+            public DelInfo(bool isSuccess, string source, long size)
+            {
+                IsSuccess = isSuccess;
+                Source = source;
+                Size = size;
+            }
+
+            public DelInfo(bool isSuccess, string source, Exception exception)
+            {
+                IsSuccess = isSuccess;
+                Source = source;
+                Exception = exception;
+            }
+
+            public DelInfo(bool isSuccess, string source, long size, Exception exception)
+            {
+                IsSuccess = isSuccess;
+                Source = source;
+                Size = size;
+                Exception = exception;
+            }
+
+            public string ToString(bool isSentence)
+            {
+                if (isSentence)
+                    return IsSuccess
+                        ? $"File deleted successfully: {Source} ; Size: {Size}. "
+                        : $"File deleted fail: {Source} ; Size: {Size} ; Exception: {Exception}. ";
+
+                return ToString();
+            }
+
+            public override string ToString() => IsSuccess
+                ? $"[File] [{(int)(Size / 1024)} MB] {Source} ; Size: {Size} KB. "
+                : $"[File] [Warn] {Exception} ; Source: {Source} ; Size: {Size} KB. ";
         }
     }
 }

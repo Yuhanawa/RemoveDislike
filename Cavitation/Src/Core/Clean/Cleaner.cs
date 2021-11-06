@@ -40,7 +40,8 @@ namespace Cavitation.Core.Clean
         private static void AddExternalRules()
         {
             foreach (FileInfo file in new DirectoryInfo(Config.RulesGroupsPath).GetFiles("*.cr"))
-                CleanerGroup.Add(file.Name.Remove(file.Name.Length-3), new Model(from_file(file.FullName), file.FullName));
+                CleanerGroup.Add(file.Name.Remove(file.Name.Length - 3),
+                    new Model(from_file(file.FullName), file.FullName));
         }
 
         private static void AddInternalRules()
@@ -83,7 +84,7 @@ namespace Cavitation.Core.Clean
             foreach (string key in textRules.Keys)
                 CleanerGroup.Add(key, new Model(from_string(textRules[key])));
         }
-        
+
         public static double AllCleanedSize => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedSize);
         public static double AllCleanedCount => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedCount);
         public static double GetCleanedSize(string key) => CleanerGroup[key].CleanedSize;
@@ -100,7 +101,7 @@ namespace Cavitation.Core.Clean
             foreach (string key in CleanerGroup.Keys) Run(key);
         }
 
-        public static void Run(string key) => CleanerGroup[key].Run();
+        public static void Run(string key) => CleanerGroup[key].Start();
 
 
         public class Model
@@ -150,7 +151,10 @@ namespace Cavitation.Core.Clean
                 return true;
             }
 
-            public void Run()
+            private static bool StrEq(string a, string b) =>
+                a == b || string.Equals(a.Trim(), b.Trim(), StringComparison.InvariantCultureIgnoreCase);
+
+            public void Start()
             {
                 // Data clear
                 // CleanedCount = 0;
@@ -158,210 +162,15 @@ namespace Cavitation.Core.Clean
 
                 foreach (Rule rule in Rules.Where(Check))
                 {
-                    if (!Directory.Exists(rule.Path))
+                    if (File.Exists(rule.Path))
                     {
-                        TryDel(rule.Path, false);
+                        FileUtils.TryDelFile(rule.Path, true);
                         continue;
                     }
 
                     try
                     {
-                        var root = new DirectoryInfo(rule.Path);
-                        switch (rule.Mode)
-                        {
-                            case ModeEnum.All:
-                            {
-                                TryDel(root, true);
-                                break;
-                            }
-                            case ModeEnum.Folders:
-                            {
-                                if (rule.Feature[0] == "*")
-                                    foreach (DirectoryInfo dir in root.GetDirectories())
-                                        TryDel(dir, true);
-                                else
-                                    foreach (DirectoryInfo dir in root.GetDirectories())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature =>
-                                                string.Equals(dir.Name, feature,
-                                                    StringComparison.CurrentCultureIgnoreCase) ||
-                                                dir.GetFileSystemInfos().Length == 0))
-                                                TryDel(dir, true);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-
-                                break;
-                            }
-                            case ModeEnum.Files:
-                            {
-                                if (rule.Feature[0] == "*")
-                                    foreach (FileInfo file in root.GetFiles())
-                                        TryDel(file);
-                                else
-                                    foreach (FileInfo file in root.GetFiles())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature => string.Equals(file.Extension, feature,
-                                                StringComparison.CurrentCultureIgnoreCase)))
-                                                TryDel(file);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-
-                                break;
-                            }
-                            case ModeEnum.RecursionFiles:
-                            {
-                                bool universal = rule.Feature[0] == "*";
-
-                                void TryRecursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    try
-                                    {
-                                        Recursion(fileSystemInfo);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log(@$"[File] {e.Message}");
-                                    }
-                                }
-
-                                void Recursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    foreach (FileInfo file in fileSystemInfo.GetFiles())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature =>
-                                                string.Equals(file.Extension, feature,
-                                                    StringComparison.CurrentCultureIgnoreCase)) || universal)
-                                                TryDel(file);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-
-                                    foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
-                                        try
-                                        {
-                                            if (dir.GetFileSystemInfos().Length == 0)
-                                            {
-                                                TryDel(dir);
-                                            }
-                                            else
-                                            {
-                                                TryRecursion(dir);
-                                                if (dir.GetFileSystemInfos().Length == 0) TryDel(dir);
-                                            }
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-                                }
-
-                                TryRecursion(root);
-
-                                break;
-                            }
-                            case ModeEnum.RecursionFolders:
-                            {
-                                if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
-
-                                void TryRecursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    try
-                                    {
-                                        Recursion(fileSystemInfo);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log(@$"[File] {e.Message}");
-                                    }
-                                }
-
-                                void Recursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature =>
-                                                string.Equals(dir.Name, feature,
-                                                    StringComparison.CurrentCultureIgnoreCase) ||
-                                                dir.GetFileSystemInfos().Length == 0))
-                                                TryDel(dir, dir.GetFileSystemInfos().Length != 0);
-                                            else TryRecursion(dir);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-                                }
-
-                                TryRecursion(root);
-
-                                break;
-                            }
-                            case ModeEnum.RecursionAll:
-                            {
-                                if (rule.Feature[0] == "*") throw new ArgumentException(" 无效的Feature[0]==\"*\"");
-
-                                void TryRecursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    try
-                                    {
-                                        Recursion(fileSystemInfo);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log(@$"[File] {e.Message}");
-                                    }
-                                }
-
-                                void Recursion(DirectoryInfo fileSystemInfo)
-                                {
-                                    foreach (FileInfo file in fileSystemInfo.GetFiles())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature =>
-                                                string.Equals(file.Extension, feature,
-                                                    StringComparison.CurrentCultureIgnoreCase)))
-                                                TryDel(file);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-
-                                    foreach (DirectoryInfo dir in fileSystemInfo.GetDirectories())
-                                        try
-                                        {
-                                            if (rule.Feature.Any(feature =>
-                                                string.Equals(dir.Name, feature,
-                                                    StringComparison.CurrentCultureIgnoreCase) ||
-                                                dir.GetFileSystemInfos().Length == 0))
-                                                TryDel(dir, dir.GetFileSystemInfos().Length != 0);
-                                            else TryRecursion(dir);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log(@$"[File] {e.Message}");
-                                        }
-                                }
-
-                                TryRecursion(root);
-
-                                break;
-                            }
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        Run(rule);
                     }
                     catch (Exception e)
                     {
@@ -370,71 +179,170 @@ namespace Cavitation.Core.Clean
                 }
             }
 
-            private void AddCleanupData(double size, int count)
+            private void Run(Rule rule)
+            {
+                var root = new DirectoryInfo(rule.Path);
+                switch (rule.Mode)
+                {
+                    case ModeEnum.All:
+                    {
+                        TryDel(root);
+                        break;
+                    }
+                    case ModeEnum.Folders:
+                    {
+                        if (rule.Feature[0] == "*" || StrEq(rule.Feature[0], "all"))
+                        {
+                            foreach (DirectoryInfo dir in root.GetDirectories())
+                                TryDel(dir);
+                            break;
+                        }
+
+                        foreach (DirectoryInfo dir in root.GetDirectories())
+                            try
+                            {
+                                if (rule.Feature.Any(feature =>
+                                    StrEq(feature, dir.Name)) || dir.GetFileSystemInfos().Length == 0)
+                                    TryDel(dir);
+                            }
+                            catch (Exception e)
+                            {
+                                // ignored
+                            }
+
+                        break;
+                    }
+                    case ModeEnum.Files:
+                    {
+                        if (rule.Feature[0] == "*")
+                        {
+                            foreach (FileInfo file in root.GetFiles())
+                                TryDel(file);
+                            break;
+                        }
+
+                        FeatureTryDelFile(root, rule);
+
+                        break;
+                    }
+                    case ModeEnum.RecursionFiles:
+                    {
+                        void TryRecursion(DirectoryInfo dir)
+                        {
+                            try
+                            {
+                                FeatureTryDelFile(dir, rule);
+
+                                foreach (DirectoryInfo sub in dir.GetDirectories())
+                                    if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
+                                    else TryRecursion(sub);
+                            }
+                            catch (Exception e)
+                            {
+                                // ignored
+                            }
+                        }
+
+                        TryRecursion(root);
+
+                        break;
+                    }
+                    case ModeEnum.RecursionFolders:
+                    {
+                        void TryRecursion(DirectoryInfo fileSystemInfo)
+                        {
+                            try
+                            {
+                                foreach (DirectoryInfo sub in fileSystemInfo.GetDirectories())
+                                    try
+                                    {
+                                        if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
+                                        else if (rule.Feature.Any(feature => StrEq(sub.Name, feature))) TryDel(sub);
+                                        else TryRecursion(sub);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log(@$"[File] {e.Message}");
+                                    }
+                            }
+                            catch (Exception e)
+                            {
+                                // ignored
+                            }
+                        }
+
+                        TryRecursion(root);
+
+                        break;
+                    }
+                    case ModeEnum.RecursionAll:
+                    {
+                        void TryRecursion(DirectoryInfo dir)
+                        {
+                            try
+                            {
+                                FeatureTryDelFile(dir, rule);
+
+                                foreach (DirectoryInfo sub in dir.GetDirectories())
+                                    try
+                                    {
+                                        if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
+                                        else if (rule.Feature.Any(feature => StrEq(sub.Name, feature))) TryDel(sub);
+                                        else TryRecursion(sub);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        // ignored
+                                    }
+                            }
+                            catch (Exception e)
+                            {
+                                // ignored
+                            }
+                        }
+
+                        TryRecursion(root);
+
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            private void UpData(double size) => UpData(size, 1);
+
+            private void UpData(double size, int count)
             {
                 CleanedCount += count;
                 CleanedSize += size / 1024 / 1024;
             }
 
-            private void TryDel(string path, bool isDir)
+            private void TryDel(FileSystemInfo fileSystemInfo)
             {
-                if (isDir)
-                    TryDel(new DirectoryInfo(path));
-                else
-                    TryDel(new FileInfo(path));
-            }
-
-            private void TryDel(FileSystemInfo dir) => TryDel(dir, false);
-
-            private void TryDel(FileSystemInfo fileSystemInfo, bool recursive)
-            {
-                try
+                switch (fileSystemInfo)
                 {
-                    switch (fileSystemInfo)
+                    case DirectoryInfo dir:
                     {
-                        case DirectoryInfo dir:
-                        {
-                            if (recursive)
-                                foreach (FileSystemInfo info in dir.GetFileSystemInfos())
-                                    TryDel(info, true);
-
-                            try
-                            {
-                                dir.Delete();
-                                AddCleanupData(0.0, 1);
-                                Log($"[File] Successfully Deleted Folder : {dir.FullName}");
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message.Trim()} Path: {dir.FullName}");
-                            }
-
-                            break;
-                        }
-                        case FileInfo file:
-                        {
-                            try
-                            {
-                                file.Delete();
-                                AddCleanupData(file.Length, 1);
-                                Log($"[File] Successfully Deleted File : {file.FullName}");
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message} Path: {file.FullName}");
-                            }
-
-                            break;
-                        }
+                        UpData(FileUtils.TryExDelDir(dir, true).Size);
+                        break;
+                    }
+                    case FileInfo file:
+                    {
+                        UpData(FileUtils.TryDelFile(file, true).Size);
+                        break;
                     }
                 }
-                catch (Exception e)
-                {
-                    Log(@$"[File] {e.Message.Trim()} Path: {fileSystemInfo.FullName}");
-                }
             }
 
-            public void Delete() => TryDel(Source, false);
+            private void FeatureTryDelFile(DirectoryInfo dir, Rule rule)
+            {
+                foreach (FileInfo file in dir.GetFiles())
+                    if (rule.Feature.Any(feature => StrEq(file.Extension, feature)))
+                        TryDel(file);
+            }
+
+            public void Delete() => Log(FileUtils.TryDelFile(new FileInfo(Source)).ToString());
 
             private static void Log(string m) => CommonUtils.Log(m);
         }
