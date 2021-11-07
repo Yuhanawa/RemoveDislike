@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using static Cavitation.Core.Utils.CommonUtils;
 
 namespace Cavitation.Core.Utils
@@ -84,12 +87,21 @@ namespace Cavitation.Core.Utils
         {
             try
             {
+                var info = new DelInfo(true, file.FullName, file.Length);
                 file.Delete();
-                return new DelInfo(true, file.FullName, file.Length);
+                return info;
             }
             catch (Exception e)
             {
-                return new DelInfo(false, file.FullName, file.Length, e);
+                try
+                {
+                    return new DelInfo(false, file.FullName, file.Length, e);
+                }
+                catch
+                {
+                    return new DelInfo(false, file.FullName, -1, e);
+                }
+
             }
         }
 
@@ -209,7 +221,34 @@ namespace Cavitation.Core.Utils
 
             public override string ToString() => IsSuccess
                 ? $"[File] [{(int)(Size / 1024)} MB] {Source} ; Size: {Size} KB. "
-                : $"[File] [Warn] {Exception} ; Source: {Source} ; Size: {Size} KB. ";
+                : $"[File] [Warn] {Exception.Message} ; Source: {Source} ; Size: {Size} KB. ";
         }
+
+        /// <summary>
+        /// 检查当前用户是否拥有此文件夹的操作权限
+        /// Check whether the current user has operation permissions for this file or folder
+        /// </summary>
+        /// <param name="path">File or Folder Path</param>
+        /// <param name="isFolder"></param>
+        /// <see>
+        ///     <cref>https://blog.csdn.net/weixin_34391445/article/details/86017021</cref>
+        /// </see>
+        /// <returns></returns>
+        public static bool HasOperationPermission(string path, bool isFolder) =>
+            isFolder
+                ? File.GetAccessControl(path)
+                    .GetAccessRules(true, true, typeof(NTAccount))
+                    .OfType<FileSystemAccessRule>()
+                    .Where(i =>
+                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
+                    .ToList()
+                    .Any(i => i.AccessControlType == AccessControlType.Deny)
+                : File.GetAccessControl(path)
+                    .GetAccessRules(true, true, typeof(NTAccount))
+                    .OfType<FileSystemAccessRule>()
+                    .Where(i =>
+                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
+                    .ToList()
+                    .Any(i => i.AccessControlType == AccessControlType.Deny);
     }
 }

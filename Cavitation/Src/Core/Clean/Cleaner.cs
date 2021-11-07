@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using Cavitation.Core.Utils;
 using static Cavitation.Core.Clean.Rule.Parser;
 using static Cavitation.Core.Clean.Rule;
@@ -66,6 +68,10 @@ namespace Cavitation.Core.Clean
 
             CleanerGroup.Add("固定缓存日志", new Model(new List<Rule>
             {
+                new(@$"D:\Users\yuhan\Desktop\1.txt"),
+                new(@$"{EnvironmentUtils.Get("Windir")}\SoftwareDistribution\"),
+                new(@$"{EnvironmentUtils.Get("Windir")}\Prefetch\"),
+                new(@$"{EnvironmentUtils.Get("Windir")}\ServiceProfiles\LocalService\AppData\Local\FontCache\"),
                 new(@$"{EnvironmentUtils.WinData}\Explorer\"),
                 new(@$"{EnvironmentUtils.WinData}\Fonts\Deleted\"),
                 new(@$"{EnvironmentUtils.WinData}\History\"),
@@ -73,7 +79,7 @@ namespace Cavitation.Core.Clean
                 new(@$"{EnvironmentUtils.WinData}\ActionCenterCache\"),
                 new(@$"{EnvironmentUtils.WinData}\..\..\", ModeEnum.Folders, new List<string>
                 {
-                    "Cache", "GrShaderCache", "ShaderCache", "CacheStorage", "Font Cache"
+                    "Cache", "GrShaderCache", "ShaderCache", "CacheStorage", "Font Cache", "CryptnetUrlCache"
                 })
             }));
 
@@ -126,29 +132,54 @@ namespace Cavitation.Core.Clean
 
             public override string ToString() => $"[RuleGroup] Source: {Source} \nRules: {Rules}";
 
-            private static bool Check(Rule rule)
+            public static IEnumerable<string> BlackList = new List<string>()
             {
-                if (Directory.Exists(rule.Path))
+                EnvironmentUtils.Get("ProgramFiles"),
+                EnvironmentUtils.Get("ProgramFiles(x86)"),
+                EnvironmentUtils.Get("Windir"),
+            };
+
+            private static bool Check(string path)
+            {
+                try
                 {
-                    // ReSharper disable once InvertIf
-                    if (new DirectoryInfo(rule.Path).GetFileSystemInfos().Length == 0)
+                    if (Directory.Exists(path))
                     {
-                        Directory.Delete(rule.Path);
-                        return false;
+                        if (new DirectoryInfo(path).GetFileSystemInfos().Length == 0)
+                        {
+                            Directory.Delete(path);
+                            return false;
+                        }
+                        
+                        if (BlackList.Any(any => any == path))
+                            return false;
+                        
+                        // 检查当前用户是否拥有此文件夹的操作权限
+                        // Check whether the current user has operation permissions for this folder
+                        return new WindowsPrincipal(WindowsIdentity.GetCurrent())
+                                   .IsInRole(WindowsBuiltInRole.Administrator) 
+                               || FileUtils.HasOperationPermission(path, true);
+                    }
+
+                    // ReSharper disable once InvertIf
+                    if (File.Exists(path))
+                    {
+                        if ((File.GetAttributes(path) & FileAttributes.System) != 0 ||
+                            (File.GetAttributes(path) & FileAttributes.ReadOnly) != 0)
+                            return false;
+                        
+                        // 检查当前用户是否拥有此文件的操作权限
+                        return new WindowsPrincipal(WindowsIdentity.GetCurrent())
+                            .IsInRole(WindowsBuiltInRole.Administrator) 
+                               || FileUtils.HasOperationPermission(path, false);
                     }
                 }
-                else if (File.Exists(rule.Path))
+                catch (Exception e)
                 {
-                    if ((File.GetAttributes(rule.Path) & FileAttributes.System) != 0 ||
-                        (File.GetAttributes(rule.Path) & FileAttributes.ReadOnly) != 0)
-                        return false;
+                    Log(@$"[File] {e.Message}");
                 }
-                else
-                {
-                    return false;
-                }
-
-                return true;
+                
+                return false;
             }
 
             private static bool StrEq(string a, string b) =>
@@ -160,7 +191,7 @@ namespace Cavitation.Core.Clean
                 // CleanedCount = 0;
                 // CleanedSize = 0;
 
-                foreach (Rule rule in Rules.Where(Check))
+                foreach (Rule rule in Rules.Where(rule => Check(rule.Path)))
                 {
                     if (File.Exists(rule.Path))
                     {
@@ -174,7 +205,7 @@ namespace Cavitation.Core.Clean
                     }
                     catch (Exception e)
                     {
-                        Log(@$"[File] {e}");
+                        Log(@$"[File] {e.Message}");
                     }
                 }
             }
@@ -193,12 +224,12 @@ namespace Cavitation.Core.Clean
                     {
                         if (rule.Feature[0] == "*" || StrEq(rule.Feature[0], "all"))
                         {
-                            foreach (DirectoryInfo dir in root.GetDirectories())
+                            foreach (DirectoryInfo dir in root.GetDirectories().Where(dir => Check(dir.FullName)))
                                 TryDel(dir);
                             break;
                         }
 
-                        foreach (DirectoryInfo dir in root.GetDirectories())
+                        foreach (DirectoryInfo dir in root.GetDirectories().Where(dir => Check(dir.FullName)))
                             try
                             {
                                 if (rule.Feature.Any(feature =>
@@ -207,7 +238,7 @@ namespace Cavitation.Core.Clean
                             }
                             catch (Exception e)
                             {
-                                // ignored
+                                Log(@$"[File] {e.Message}");
                             }
 
                         break;
@@ -216,7 +247,7 @@ namespace Cavitation.Core.Clean
                     {
                         if (rule.Feature[0] == "*")
                         {
-                            foreach (FileInfo file in root.GetFiles())
+                            foreach (FileInfo file in root.GetFiles().Where(dir => Check(dir.FullName)))
                                 TryDel(file);
                             break;
                         }
@@ -233,13 +264,13 @@ namespace Cavitation.Core.Clean
                             {
                                 FeatureTryDelFile(dir, rule);
 
-                                foreach (DirectoryInfo sub in dir.GetDirectories())
+                                foreach (DirectoryInfo sub in dir.GetDirectories().Where(dir2 => Check(dir2.FullName)))
                                     if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
                                     else TryRecursion(sub);
                             }
                             catch (Exception e)
                             {
-                                // ignored
+                                Log(@$"[File] {e.Message}");
                             }
                         }
 
@@ -253,7 +284,7 @@ namespace Cavitation.Core.Clean
                         {
                             try
                             {
-                                foreach (DirectoryInfo sub in fileSystemInfo.GetDirectories())
+                                foreach (DirectoryInfo sub in fileSystemInfo.GetDirectories().Where(dir => Check(dir.FullName)))
                                     try
                                     {
                                         if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
@@ -267,7 +298,7 @@ namespace Cavitation.Core.Clean
                             }
                             catch (Exception e)
                             {
-                                // ignored
+                                Log(@$"[File] {e.Message}");
                             }
                         }
 
@@ -283,7 +314,7 @@ namespace Cavitation.Core.Clean
                             {
                                 FeatureTryDelFile(dir, rule);
 
-                                foreach (DirectoryInfo sub in dir.GetDirectories())
+                                foreach (DirectoryInfo sub in dir.GetDirectories().Where(dir2 => Check(dir2.FullName)))
                                     try
                                     {
                                         if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
@@ -292,12 +323,12 @@ namespace Cavitation.Core.Clean
                                     }
                                     catch (Exception e)
                                     {
-                                        // ignored
+                                        Log(@$"[File] {e.Message}");
                                     }
                             }
                             catch (Exception e)
                             {
-                                // ignored
+                                Log(@$"[File] {e.Message}");
                             }
                         }
 
@@ -314,8 +345,11 @@ namespace Cavitation.Core.Clean
 
             private void UpData(double size, int count)
             {
-                CleanedCount += count;
-                CleanedSize += size / 1024 / 1024;
+                if (size>0)
+                    CleanedSize += size / 1024 / 1024;
+                if (size>=0)
+                    CleanedCount += count;
+                
             }
 
             private void TryDel(FileSystemInfo fileSystemInfo)
@@ -337,12 +371,12 @@ namespace Cavitation.Core.Clean
 
             private void FeatureTryDelFile(DirectoryInfo dir, Rule rule)
             {
-                foreach (FileInfo file in dir.GetFiles())
+                foreach (FileInfo file in dir.GetFiles().Where(file => Check(file.FullName)))
                     if (rule.Feature.Any(feature => StrEq(file.Extension, feature)))
                         TryDel(file);
             }
 
-            public void Delete() => Log(FileUtils.TryDelFile(new FileInfo(Source)).ToString());
+            public void Delete() => FileUtils.TryDelFile(Source,true);
 
             private static void Log(string m) => CommonUtils.Log(m);
         }
