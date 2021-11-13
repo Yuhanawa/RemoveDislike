@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GrepConsole">
+    <option name="pinnedGrepConsolesState">
+      <PinnedGrepConsolesState>
+        <option name="map">
+          <map>
+            <entry>
+              <key>
+                <RunConfigurationRef>
+                  <option name="icon" value="dotNetProject.svg')" />
+                  <option name="name" value="RemoveDislike" />
+                </RunConfigurationRef>
+              </key>
+              <value>
+                <Pins>
+                  <option name="pins">
+                    <list>
+                      <Pin>
+                        <option name="consoleUUID" value="642002c6-35a4-4ffe-83c3-08d500db200c" />
+                        <option name="contentType" value="DebuggerOutput" />
+                        <option name="grepModel">
+                          <GrepModel>
+                            <option name="expression" value="[View]" />
+                            <option name="unlessExpression" value="" />
+                          </GrepModel>
+                        </option>
+                      </Pin>
+                      <Pin>
+                        <option name="consoleUUID" value="421ae690-c85d-4389-9b67-77c892dc8f70" />
+                        <option name="contentType" value="DebuggerOutput" />
+                        <option name="grepModel">
+                          <GrepModel>
+                            <option name="expression" value="[File]" />
+                            <option name="unlessExpression" value="" />
+                          </GrepModel>
+                        </option>
+                        <option name="parentConsoleUUID" value="642002c6-35a4-4ffe-83c3-08d500db200c" />
+                      </Pin>
+                    </list>
+                  </option>
+                </Pins>
+              </value>
+            </entry>
+          </map>
+        </option>
+      </PinnedGrepConsolesState>
+    </option>
+  </component>
+</project>
