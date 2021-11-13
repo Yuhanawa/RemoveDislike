@@ -1,0 +1,80 @@
+<Page x:Class="RemoveDislike.Views.Pages.CleanPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      mc:Ignorable="d"
+      Title="CleanPage"
+      PreviewDragEnter="CleanPage_OnPreviewDragEnter"
+      d:DesignHeight="450"
+      d:DesignWidth="800">
+
+    <Page.Resources>
+        <Style x:Key="LittleButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
+            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
+            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
+            <Setter Property="Foreground" Value="#57FFFFFF" />
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="6" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Name="State"
+                       Text="状态: 未清理"
+                       TextAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="#57FFFFFF" />
+            <Button Grid.Column="2"
+                    Name="Add" Content="&#xf067;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Add_OnClick" />
+            <Button Grid.Column="3"
+                    Name="OpenFolder" Content="&#xf07b;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="OpenFolder_OnClick" />
+            <Button Grid.Column="4"
+                    Name="Play" Content="&#xf04b;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Play_OnClick" />
+            <Button Grid.Column="5"
+                    Name="More" Content="&#xf142;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="More_OnClick" />
+        </Grid>
+        <Border Grid.Row="1" BorderBrush="#FA2C2C2C" BorderThickness="0,1,0,0">
+            <ScrollViewer Name="RuleListScrollViewer"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Hidden">
+                <ScrollViewer.Content>
+                    <StackPanel
+                        Name="RuleList"
+                        Initialized="List_OnInitialized" />
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</Page>

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cavitation", "Cavitation\Cavitation.csproj", "{913969E9-0443-4C06-9BEF-ED5655577708}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDislike", "RemoveDislike\RemoveDislike.csproj", "{913969E9-0443-4C06-9BEF-ED5655577708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
