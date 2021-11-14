@@ -1,3 +1,11 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/CodeInspection/WebPathMapping/IgnoredPaths/=VIEWS/@EntryIndexedValue">Views</s:String>
+	
+	
+	<s:String x:Key="/Default/CodeInspection/WebPathMapping/PathsInCorrectCasing/=IMG/@EntryIndexedValue">Img</s:String>
+	
+	
+	
+	<s:String x:Key="/Default/CodeInspection/WebPathMapping/PathsInCorrectCasing/=IMG_005C128X_002EICO/@EntryIndexedValue">Img\128x.ico</s:String>
+	<s:String x:Key="/Default/CodeInspection/WebPathMapping/PathsInCorrectCasing/=SRC_005CRESOURCES/@EntryIndexedValue">Src\Resources</s:String>
+	<s:String x:Key="/Default/CodeInspection/WebPathMapping/PathsInCorrectCasing/=SRC_005CVIEWS_005CRESOURCES/@EntryIndexedValue">Src\Views\Resources</s:String>
 	<s:String x:Key="/Default/CodeInspection/WebPathMapping/PathsInCorrectCasing/=VIEWS/@EntryIndexedValue">Views</s:String></wpf:ResourceDictionary>

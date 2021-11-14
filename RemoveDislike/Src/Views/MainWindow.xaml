@@ -6,7 +6,8 @@
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
             SizeChanged="MainWindow_OnSizeChanged"
-            Title="RemoveDislike -- A computer garbage removal tool"
+            Icon="/Resources/Img/Icon.png"
+            Title="RemoveDislike -- Remove Your Dislike Things "
             Height="614"
             Width="1024"
             MinHeight="614"
@@ -100,7 +101,6 @@
         </Style>
     </pu:WindowX.Resources>
 
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240" />
@@ -125,7 +125,7 @@
                     <TreeViewItem Header="常规清理" Name="CommonClear"
                                   pu:TreeViewItemHelper.Icon="&#xf039;"
                                   Style="{StaticResource MainMenuItemStyle}"
-                                  Selected="CommonClear_OnSelected"/>
+                                  Selected="CommonClear_OnSelected" />
                     <TreeViewItem Header="注册表清理" Name="ContextMenuClear"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
                                   Style="{StaticResource MainMenuItemStyle}" />
@@ -152,9 +152,7 @@
                VerticalContentAlignment="Top"
                HorizontalContentAlignment="Left"
                VerticalAlignment="Top"
-               HorizontalAlignment="Left" 
-               Initialized="MainFrame_OnInitialized"/>
-
-
+               HorizontalAlignment="Left"
+               Initialized="MainFrame_OnInitialized" />
     </Grid>
 </pu:WindowX>
