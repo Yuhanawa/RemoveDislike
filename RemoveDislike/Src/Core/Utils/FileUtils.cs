@@ -4,14 +4,14 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using static RemoveDislike.Core.Utils.CommonUtils;
+using static RemoveDislike.Core.Utils.LogUtils;
 
 namespace RemoveDislike.Core.Utils
 {
     public static class FileUtils
     {
         /// <summary>
-        /// 擦除文件
+        ///     擦除文件
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="timesToWrite"></param>
@@ -105,7 +105,6 @@ namespace RemoveDislike.Core.Utils
                 {
                     return new DelInfo(false, file.FullName, -1, e);
                 }
-
             }
         }
 
@@ -174,6 +173,33 @@ namespace RemoveDislike.Core.Utils
             }
         }
 
+        /// <summary>
+        ///     检查当前用户是否拥有此文件夹的操作权限
+        ///     Check whether the current user has operation permissions for this file or folder
+        /// </summary>
+        /// <param name="path">File or Folder Path</param>
+        /// <param name="isFolder"></param>
+        /// <see>
+        ///     <cref>https://blog.csdn.net/weixin_34391445/article/details/86017021</cref>
+        /// </see>
+        /// <returns></returns>
+        public static bool HasOperationPermission(string path, bool isFolder) =>
+            isFolder
+                ? File.GetAccessControl(path)
+                    .GetAccessRules(true, true, typeof(NTAccount))
+                    .OfType<FileSystemAccessRule>()
+                    .Where(i =>
+                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
+                    .ToList()
+                    .Any(i => i.AccessControlType == AccessControlType.Deny)
+                : File.GetAccessControl(path)
+                    .GetAccessRules(true, true, typeof(NTAccount))
+                    .OfType<FileSystemAccessRule>()
+                    .Where(i =>
+                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
+                    .ToList()
+                    .Any(i => i.AccessControlType == AccessControlType.Deny);
+
         public class DelInfo
         {
             public Exception Exception;
@@ -227,32 +253,5 @@ namespace RemoveDislike.Core.Utils
                 ? $"[File] [{(int)(Size / 1024)} MB] {Source} ; Size: {Size} KB. "
                 : $"[File] [Warn] {Exception.Message} ; Source: {Source} ; Size: {Size} KB. ";
         }
-
-        /// <summary>
-        /// 检查当前用户是否拥有此文件夹的操作权限
-        /// Check whether the current user has operation permissions for this file or folder
-        /// </summary>
-        /// <param name="path">File or Folder Path</param>
-        /// <param name="isFolder"></param>
-        /// <see>
-        ///     <cref>https://blog.csdn.net/weixin_34391445/article/details/86017021</cref>
-        /// </see>
-        /// <returns></returns>
-        public static bool HasOperationPermission(string path, bool isFolder) =>
-            isFolder
-                ? File.GetAccessControl(path)
-                    .GetAccessRules(true, true, typeof(NTAccount))
-                    .OfType<FileSystemAccessRule>()
-                    .Where(i =>
-                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
-                    .ToList()
-                    .Any(i => i.AccessControlType == AccessControlType.Deny)
-                : File.GetAccessControl(path)
-                    .GetAccessRules(true, true, typeof(NTAccount))
-                    .OfType<FileSystemAccessRule>()
-                    .Where(i =>
-                        i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
-                    .ToList()
-                    .Any(i => i.AccessControlType == AccessControlType.Deny);
     }
 }
