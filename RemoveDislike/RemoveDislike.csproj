@@ -1,161 +1,154 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{913969E9-0443-4C06-9BEF-ED5655577708}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>RemoveDislike</RootNamespace>
-    <AssemblyName>RemoveDislike</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <LangVersion>9</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Icon128x.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
-      <HintPath>..\packages\fastJSON.2.4.0.4\lib\net40\fastJSON.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=2021.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-      <HintPath>..\packages\JetBrains.Annotations.2021.3.0-eap3\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Panuon.UI.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Panuon.UI.Core.2.2.3\lib\net472\Panuon.UI.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Panuon.UI.Silver, Version=2.2.12.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Panuon.UI.Silver.2.2.12-alpha\lib\net472\Panuon.UI.Silver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Src\App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Core\Clean\Cleaner.cs" />
-    <Compile Include="Src\Core\Clean\Loader.cs" />
-    <Compile Include="Src\Core\Clean\CleanMode.cs" />
-    <Compile Include="Src\Core\Clean\Parser.cs" />
-    <Compile Include="Src\Core\Clean\Rule.cs" />
-    <Compile Include="Src\Core\ConfigHelper.cs" />
-    <Compile Include="Src\Core\Entrance.cs" />
-    <Compile Include="Src\Core\Regedit\ContextMenu.cs" />
-    <Compile Include="Src\Core\Utils\LogUtils.cs" />
-    <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
-    <Compile Include="Src\Core\Utils\FileUtils.cs" />
-    <Compile Include="Src\Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Views\Models\CleanInfoTab.xaml.cs">
-      <DependentUpon>CleanInfoTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Views\Models\ContextMenuInfoTab.xaml.cs">
-      <DependentUpon>ContextMenuInfoTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Views\Pages\CleanPage.cs">
-      <DependentUpon>CleanPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Views\Pages\ContextMenuManagerPage.cs">
-      <DependentUpon>ContextMenuManagerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Views\Utils\CommonUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="app.manifest" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Fonts\FontAwesome.otf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Src\Views\Models\CleanInfoTab.xaml" />
-    <Page Include="Src\Views\Models\ContextMenuInfoTab.xaml" />
-    <Page Include="Src\Views\Pages\CleanPage.xaml" />
-    <Page Include="Src\Views\Pages\ContextMenuManagerPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="Src\App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Img\Icon.png" />
-    <Resource Include="Resources\Img\Icon.svg" />
-    <Resource Include="Resources\Img\Icon128x.ico" />
-    <Resource Include="Resources\Img\Icon_black.png" />
-    <Resource Include="Resources\Img\Icon_green.png" />
-    <Resource Include="Resources\Img\Icon_pink.png" />
-    <Resource Include="Resources\Img\Icon_red.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icon128x.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{913969E9-0443-4C06-9BEF-ED5655577708}</ProjectGuid>
+        <OutputType>WinExe</OutputType>
+        <RootNamespace>RemoveDislike</RootNamespace>
+        <AssemblyName>RemoveDislike</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <WarningLevel>4</WarningLevel>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32Bit>false</Prefer32Bit>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ApplicationIcon>Icon128x.ico</ApplicationIcon>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+    <PropertyGroup>
+        <SignManifests>false</SignManifests>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
+            <HintPath>..\packages\fastJSON.2.4.0.4\lib\net40\fastJSON.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="JetBrains.Annotations, Version=2021.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+            <HintPath>..\packages\JetBrains.Annotations.2021.3.0-eap3\lib\net20\JetBrains.Annotations.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Panuon.UI.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\Panuon.UI.Core.2.2.3\lib\net472\Panuon.UI.Core.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Panuon.UI.Silver, Version=2.2.12.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\Panuon.UI.Silver.2.2.12-alpha\lib\net472\Panuon.UI.Silver.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xaml">
+            <RequiredTargetFramework>4.0</RequiredTargetFramework>
+        </Reference>
+        <Reference Include="WindowsBase"/>
+        <Reference Include="PresentationCore"/>
+        <Reference Include="PresentationFramework"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Src\App.xaml.cs">
+            <DependentUpon>App.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Src\Core\Clean\Cleaner.cs"/>
+        <Compile Include="Src\Core\Clean\Loader.cs"/>
+        <Compile Include="Src\Core\Clean\CleanMode.cs"/>
+        <Compile Include="Src\Core\Clean\Parser.cs"/>
+        <Compile Include="Src\Core\Clean\Rule.cs"/>
+        <Compile Include="Src\Core\ConfigHelper.cs"/>
+        <Compile Include="Src\Core\Entrance.cs"/>
+        <Compile Include="Src\Core\Regedit\ContextMenu.cs"/>
+        <Compile Include="Src\Core\Utils\LogUtils.cs"/>
+        <Compile Include="Src\Core\Utils\EnvironmentUtils.cs"/>
+        <Compile Include="Src\Core\Utils\FileUtils.cs"/>
+        <Compile Include="Src\Views\MainWindow.xaml.cs">
+            <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Models\CleanInfoTab.xaml.cs">
+            <DependentUpon>CleanInfoTab.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Models\ContextMenuInfoTab.xaml.cs">
+            <DependentUpon>ContextMenuInfoTab.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Pages\CleanPage.cs">
+            <DependentUpon>CleanPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Pages\ContextMenuManagerPage.cs">
+            <DependentUpon>ContextMenuManagerPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Src\Views\Utils\CommonUtils.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Properties\AssemblyInfo.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <ApplicationDefinition Include="Src\App.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+        </ApplicationDefinition>
+    </ItemGroup>
+    <ItemGroup>
+        <Page Include="Src\Views\MainWindow.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Include="Src\Views\Models\CleanInfoTab.xaml"/>
+        <Page Include="Src\Views\Models\ContextMenuInfoTab.xaml"/>
+        <Page Include="Src\Views\Pages\CleanPage.xaml"/>
+        <Page Include="Src\Views\Pages\ContextMenuManagerPage.xaml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="lib\"/>
+        <None Include="App.config"/>
+        <None Include="app.manifest"/>
+        <None Include="packages.config"/>
+        <None Include="Src\Views\Pages\ReadMe.md"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Img\Icon.png"/>
+        <Resource Include="Resources\Img\Icon.svg"/>
+        <Resource Include="Resources\Img\Icon128x.ico"/>
+        <Resource Include="Resources\Img\Icon_black.png"/>
+        <Resource Include="Resources\Img\Icon_green.png"/>
+        <Resource Include="Resources\Img\Icon_pink.png"/>
+        <Resource Include="Resources\Img\Icon_red.png"/>
+        <Resource Include="Icon128x.ico"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>
