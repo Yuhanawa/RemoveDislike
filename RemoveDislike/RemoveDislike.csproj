@@ -19,11 +19,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,15 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon128x.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
@@ -68,11 +78,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Src\Core\Clean\Cleaner.cs" />
+    <Compile Include="Src\Core\Clean\Loader.cs" />
+    <Compile Include="Src\Core\Clean\CleanMode.cs" />
+    <Compile Include="Src\Core\Clean\Parser.cs" />
     <Compile Include="Src\Core\Clean\Rule.cs" />
-    <Compile Include="Src\Core\Config.cs" />
+    <Compile Include="Src\Core\ConfigHelper.cs" />
     <Compile Include="Src\Core\Entrance.cs" />
     <Compile Include="Src\Core\Regedit\ContextMenu.cs" />
-    <Compile Include="Src\Core\Utils\CommonUtils.cs" />
+    <Compile Include="Src\Core\Utils\LogUtils.cs" />
     <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
     <Compile Include="Src\Core\Utils\FileUtils.cs" />
     <Compile Include="Src\Views\MainWindow.xaml.cs">
@@ -108,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +153,9 @@
     <Resource Include="Resources\Img\Icon_green.png" />
     <Resource Include="Resources\Img\Icon_pink.png" />
     <Resource Include="Resources\Img\Icon_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon128x.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
