@@ -1,7 +1,4 @@
-using System;
 using System.Windows;
-using System.Windows.Controls;
-using RemoveDislike.Core.Utils;
 using Microsoft.Win32;
 using RemoveDislike.Views.Models;
 
@@ -21,17 +18,16 @@ namespace RemoveDislike.Views.Pages
 
         private void General_OnLoaded(object sender, RoutedEventArgs e)
         {
-            RegistryKey general=  Core.Regedit.ContextMenu.GetGeneralMenu;            
-            RegistryKey shell =  Core.Regedit.ContextMenu.GeneralMenu.GetShell;
-            RegistryKey shellex =  Core.Regedit.ContextMenu.GeneralMenu.GetShellexcmh;
+            RegistryKey general = Core.Regedit.ContextMenu.GetGeneralMenu;
+            RegistryKey shell = Core.Regedit.ContextMenu.GeneralMenu.GetShell;
+            RegistryKey shellex = Core.Regedit.ContextMenu.GeneralMenu.GetShellexcmh;
             // RegistryKey _shellex =  Core.Regedit.ContextMenu.GeneralMenu.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                GeneralShellList.Children.Add(new ContextMenuInfoTab(true){Text = subKeyName});
-                        
+                GeneralShellList.Children.Add(new ContextMenuInfoTab(true) { Text = subKeyName });
+
             foreach (string subKeyName in shellex.GetSubKeyNames())
-                GeneralShellExList.Children.Add(new ContextMenuInfoTab(true){Text = subKeyName});
-            
+                GeneralShellExList.Children.Add(new ContextMenuInfoTab(true) { Text = subKeyName });
         }
     }
 }

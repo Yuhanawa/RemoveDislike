@@ -19,6 +19,7 @@ namespace RemoveDislike.Core.Utils
             { "Appdata", Environment.GetEnvironmentVariable("Appdata") },
             { "Temp", Environment.GetEnvironmentVariable("Temp") }
         };
+
         public static readonly string WinData = @$"{VariableDictionary["Appdata"]}\..\Local\Microsoft\Windows";
 
         public static string Get(string name)

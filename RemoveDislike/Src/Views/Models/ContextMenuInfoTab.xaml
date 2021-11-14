@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              Loaded="ContextMenuInfoTab_OnLoaded"
              d:DesignHeight="50" d:DesignWidth="420">
-    
+
     <UserControl.Resources>
         <Style x:Key="LittleButtonStyle" TargetType="Button"
                BasedOn="{StaticResource {x:Type Button}}">
@@ -23,8 +23,8 @@
             <Setter Property="Foreground" Value="#57FFFFFF" />
         </Style>
     </UserControl.Resources>
-    
-    
+
+
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180" />
@@ -34,29 +34,30 @@
             <ColumnDefinition Width="28" />
             <ColumnDefinition Width="28" />
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Name="EIcon" Source=
-               "{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
+        <Image Grid.Column="0" Name="EIcon"
+               Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
                 Path=Icon}"
                PreviewDragEnter="EIcon_OnPreviewDragEnter"
-               PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp"/>
-        <TextBlock Grid.Column="1" Name="EText" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
+               PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp" />
+        <TextBlock Grid.Column="1" Name="EText"
+                   Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
                  Path=Text}"
-                   PreviewMouseRightButtonUp="EText_OnPreviewMouseRightButtonUp"/>
-        <Button Grid.Column="2" Name="ESub" 
+                   PreviewMouseRightButtonUp="EText_OnPreviewMouseRightButtonUp" />
+        <Button Grid.Column="2" Name="ESub"
                 Content="&#xf2b0;"
                 Click="ESub_OnClick"
-                Style="{StaticResource LittleButtonStyle}"/>
+                Style="{StaticResource LittleButtonStyle}" />
         <Button Grid.Column="3" Name="EVisibility"
                 Content="?"
                 Click="EVisibility_OnClick"
-                Style="{StaticResource LittleButtonStyle}"/>
+                Style="{StaticResource LittleButtonStyle}" />
         <Button Grid.Column="4" Name="EDel"
                 Content="&#xf00d;"
                 Click="EDel_OnClick"
-                Style="{StaticResource LittleButtonStyle}"/>
+                Style="{StaticResource LittleButtonStyle}" />
         <Button Grid.Column="5" Name="EMore"
                 Click="EMore_OnClick"
                 Content="&#xf013;"
-                Style="{StaticResource LittleButtonStyle}"/>
+                Style="{StaticResource LittleButtonStyle}" />
     </Grid>
 </UserControl>

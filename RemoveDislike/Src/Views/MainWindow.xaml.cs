@@ -14,13 +14,15 @@ namespace RemoveDislike.Views
     /// </summary>
     public partial class MainWindow
     {
+        public delegate void Delegate();
+
         public static MainWindow Interface;
-        
+
         public static Thread MainThread;
         public static Thread I0Thread;
-        
-        public delegate void Delegate();
         public static List<Delegate> DelegateList;
+        private Page _clearPage;
+        private Page _contextMenuManagerPage;
 
         public MainWindow()
         {
@@ -30,12 +32,14 @@ namespace RemoveDislike.Views
 
             MainThread = Thread.CurrentThread;
             Thread.CurrentThread.Name = "MainThread";
-            
+
             DelegateList = new List<Delegate>();
 
             I0Thread = new Thread(
-                start: () => {
-                    while (true) {
+                () =>
+                {
+                    while (true)
+                    {
                         if (DelegateList.Count == 0)
                         {
                             Thread.Sleep(1000);
@@ -44,9 +48,9 @@ namespace RemoveDislike.Views
 
                         DelegateList[0]();
                         DelegateList.RemoveAt(0);
+                    }
+                }) { Name = "I0Thread" };
 
-                    }}){ Name = "I0Thread" };
-            
             I0Thread.Start();
 
             Application.Current.Exit += (sender, args) => I0Thread.Abort();
@@ -66,8 +70,6 @@ namespace RemoveDislike.Views
             MainFrame.Width = e.NewSize.Width - 255;
             MainFrame.Height = e.NewSize.Height - 8;
         }
-        private Page _clearPage;
-        private Page _contextMenuManagerPage;
 
         private void CommonClear_OnSelected(object sender, RoutedEventArgs e) =>
             MainFrame.Content = _clearPage;

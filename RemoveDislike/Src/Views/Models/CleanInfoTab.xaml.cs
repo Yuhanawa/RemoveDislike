@@ -16,22 +16,25 @@ namespace RemoveDislike.Views.Models
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {
             CleanPage.Interface.State.Text = "清理中... 可能时间较长... 请稍等...";
-            string key = RuleName.ToString();
-            MainWindow.DelegateList.Add( () => Clear(key));
+            string key = RuleName;
+            MainWindow.DelegateList.Add(() => Clear(key));
         }
-        
+
         private static async void Clear(string key)
         {
             var flag = false;
             ThreadPool.QueueUserWorkItem(_ =>
-                {
-                    Cleaner.Run(key);
-                    MainWindow.Interface.Dispatcher.Invoke(() =>
-                        CleanPage.Interface.State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanedSize} MB");
-                    flag = true;
-                });
+            {
+                Cleaner.ToRun(key);
+                MainWindow.Interface.Dispatcher.Invoke(() =>
+                    CleanPage.Interface.State.Text = $"清理中... 目前已清理： {Cleaner.AllCleanedSize} MB");
+                flag = true;
+            });
 
-                do { await Task.Delay(2000); } while (!flag);
+            do
+            {
+                await Task.Delay(2000);
+            } while (!flag);
 
             MainWindow.Interface.Dispatcher.Invoke(() =>
             {

@@ -65,70 +65,70 @@
                     Click="Temp_OnClick" />
         </Grid>
         <Border Grid.Row="1" BorderBrush="#FA2C2C2C" BorderThickness="0,1,0,0">
-           <TabControl>
-               <TabItem Name="General" Header="通用" Loaded="General_OnLoaded">
-                   <TabControl>
-                       <TabItem Header="Shell">
-                       <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                     HorizontalScrollBarVisibility="Hidden">
-                           <ScrollViewer.Content>
-                               <StackPanel Name="GeneralShellList" Background="Coral" />
-                           </ScrollViewer.Content>
-                       </ScrollViewer>
-                   </TabItem>
-                   <TabItem Header="ShellEx">
-                           <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                         HorizontalScrollBarVisibility="Hidden">
-                               <ScrollViewer.Content>
-                                   <StackPanel Name="GeneralShellExList" Background="Coral" />
-                               </ScrollViewer.Content>
-                           </ScrollViewer>
-                       </TabItem>
-                       </TabControl>
-               </TabItem>
-               <TabItem Header="桌面">
-                   <ScrollViewer 
-                       VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Hidden">
-                       <ScrollViewer.Content>
-                           <StackPanel />
-                       </ScrollViewer.Content>
-                   </ScrollViewer>                   
-               </TabItem>
-               <TabItem Header="文件">
-                   <ScrollViewer 
-                                 VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Hidden">
-                       <ScrollViewer.Content>
-                           <StackPanel />
-                       </ScrollViewer.Content>
-                   </ScrollViewer>                   
-               </TabItem>
-               <TabItem Header="目录">
-                   <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Hidden">
-                       <ScrollViewer.Content>
-                           <StackPanel />
-                       </ScrollViewer.Content>
-                   </ScrollViewer>                   
-               </TabItem>
-               <TabItem Header="IE">
-                   <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Hidden">
-                       <ScrollViewer.Content>
-                           <StackPanel />
-                       </ScrollViewer.Content>
-                   </ScrollViewer>                   
-               </TabItem>
-               <TabItem Header="特殊">
-                   <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Hidden">
-                       <ScrollViewer.Content>
-                           <StackPanel />
-                       </ScrollViewer.Content>
-                   </ScrollViewer>
-               </TabItem>
-           </TabControl>
+            <TabControl>
+                <TabItem Name="General" Header="通用" Loaded="General_OnLoaded">
+                    <TabControl>
+                        <TabItem Header="Shell">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Hidden">
+                                <ScrollViewer.Content>
+                                    <StackPanel Name="GeneralShellList" Background="Coral" />
+                                </ScrollViewer.Content>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="ShellEx">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Hidden">
+                                <ScrollViewer.Content>
+                                    <StackPanel Name="GeneralShellExList" Background="Coral" />
+                                </ScrollViewer.Content>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="桌面">
+                    <ScrollViewer
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Content>
+                            <StackPanel />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="文件">
+                    <ScrollViewer
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Content>
+                            <StackPanel />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="目录">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Content>
+                            <StackPanel />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="IE">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Content>
+                            <StackPanel />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="特殊">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
+                        <ScrollViewer.Content>
+                            <StackPanel />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
         </Border>
     </Grid>
 </Page>

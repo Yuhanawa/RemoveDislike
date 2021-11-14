@@ -47,8 +47,8 @@
                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CleanInfoTab},
                     Path=Size}" />
             <TextBlock Grid.Column="3" Text=" MB" />
-            
-            
+
+
             <Button Grid.Column="4"
                     Name="Del" Content="&#xf014;"
                     Style="{StaticResource LittleButtonStyle}"

@@ -20,7 +20,7 @@ namespace RemoveDislike.Views.Pages
         public CleanPage()
         {
             InitializeComponent();
-            
+
             Interface = this;
         }
 
@@ -31,7 +31,7 @@ namespace RemoveDislike.Views.Pages
         public void ReLoad(bool all)
         {
             if (all)
-                Entrance.Cleaner.ReLoad();
+                Cleaner.ReLoad();
 
             RuleList.Children.Clear();
             LoadRuleItem();
@@ -63,14 +63,14 @@ namespace RemoveDislike.Views.Pages
                 foreach (string name in fileDialog.FileNames)
                 {
                     FileInfo fileInfo = new(name);
-                    if (!File.Exists($@"{Config.RulesGroupsPath}/{fileInfo.Name}"))
+                    if (!File.Exists($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name}"))
                     {
-                        fileInfo.CopyTo($@"{Config.RulesGroupsPath}/{fileInfo.Name}");
+                        fileInfo.CopyTo($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name}");
                     }
                     else
                     {
-                        MessageBox.Show($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
-                        Log($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                        MessageBox.Show($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                        Log($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name} Is Exists");
                     }
                 }
 
@@ -83,7 +83,7 @@ namespace RemoveDislike.Views.Pages
                 StartInfo =
                 {
                     FileName = "explorer.exe",
-                    Arguments = Config.RulesGroupsPath
+                    Arguments = ConfigHelper.RulesGroupsPath
                 }
             }.Start();
 
@@ -97,13 +97,11 @@ namespace RemoveDislike.Views.Pages
         {
             int i = Cleaner.Keys.Count;
             foreach (string key in Cleaner.Keys)
-            {
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    Cleaner.Run(key);
+                    Cleaner.ToRun(key);
                     i--;
                 });
-            }
 
             do
             {
@@ -138,16 +136,17 @@ namespace RemoveDislike.Views.Pages
             foreach (string file in files)
             {
                 FileInfo fileInfo = new(file);
-                if (!File.Exists($@"{Config.RulesGroupsPath}/{fileInfo.Name}"))
+                if (!File.Exists($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name}"))
                 {
-                    fileInfo.CopyTo($@"{Config.RulesGroupsPath}/{fileInfo.Name}");
+                    fileInfo.CopyTo($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name}");
                 }
                 else
                 {
-                    MessageBox.Show($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
-                    Log($@"{Config.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                    MessageBox.Show($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name} Is Exists");
+                    Log($@"{ConfigHelper.RulesGroupsPath}/{fileInfo.Name} Is Exists");
                 }
             }
+
             ReLoad();
         }
     }

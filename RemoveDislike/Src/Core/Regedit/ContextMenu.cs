@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using RemoveDislike.Core.Utils;
 using Microsoft.Win32;
 
 
@@ -25,28 +22,44 @@ namespace RemoveDislike.Core.Regedit
             public static RegistryKey GetShell => Registry.ClassesRoot.OpenSubKey(@"*\shell");
             public static RegistryKey GetShellex => Registry.ClassesRoot.OpenSubKey(@"*\shellex");
             public static RegistryKey Get_shellex => Registry.ClassesRoot.OpenSubKey(@"*\-shellex");
-            public static RegistryKey GetShellexcmh => Registry.ClassesRoot.OpenSubKey(@"*\shellex\ContextMenuHandlers");
-            public static RegistryKey Get_shellexcmh => Registry.ClassesRoot.OpenSubKey(@"*\-shellex\ContextMenuHandlers");            
+
+            public static RegistryKey GetShellexcmh =>
+                Registry.ClassesRoot.OpenSubKey(@"*\shellex\ContextMenuHandlers");
+
+            public static RegistryKey Get_shellexcmh =>
+                Registry.ClassesRoot.OpenSubKey(@"*\-shellex\ContextMenuHandlers");
         }
 
         public static class Directory
         {
             public static RegistryKey GetDirectory => Registry.ClassesRoot.OpenSubKey(@"Directory");
             public static RegistryKey GetBackground => Registry.ClassesRoot.OpenSubKey(@"Directory\Background");
+            public static RegistryKey GetDefaultIcon => Registry.ClassesRoot.OpenSubKey(@"Directory\DefaultIcon");
+            public static RegistryKey GetShell => Registry.ClassesRoot.OpenSubKey(@"Directory\shell");
+
+            public static RegistryKey GetShellexcmh =>
+                Registry.ClassesRoot.OpenSubKey(@"Directory\shellex\ContextMenuHandlers");
+
+            public static RegistryKey Get_shellexcmh =>
+                Registry.ClassesRoot.OpenSubKey(@"Directory\-shellex\ContextMenuHandlers");
+
             public static class Background
             {
                 public static RegistryKey GetBackground => Registry.ClassesRoot.OpenSubKey(@"Directory\Background");
                 public static RegistryKey GetShell => Registry.ClassesRoot.OpenSubKey(@"Directory\Background\shell");
-                public static RegistryKey GetShellex => Registry.ClassesRoot.OpenSubKey(@"Directory\Background\shellex");
-                public static RegistryKey Get_shellex => Registry.ClassesRoot.OpenSubKey(@"Directory\Background\-shellex");
-                public static RegistryKey GetShellexcmh => Registry.ClassesRoot.OpenSubKey(@"Directory\Background\shellex\ContextMenuHandlers");
-                public static RegistryKey Get_shellexcmh => Registry.ClassesRoot.OpenSubKey(@"Directory\Background\-shellex\ContextMenuHandlers");                
-                                
+
+                public static RegistryKey GetShellex =>
+                    Registry.ClassesRoot.OpenSubKey(@"Directory\Background\shellex");
+
+                public static RegistryKey Get_shellex =>
+                    Registry.ClassesRoot.OpenSubKey(@"Directory\Background\-shellex");
+
+                public static RegistryKey GetShellexcmh =>
+                    Registry.ClassesRoot.OpenSubKey(@"Directory\Background\shellex\ContextMenuHandlers");
+
+                public static RegistryKey Get_shellexcmh =>
+                    Registry.ClassesRoot.OpenSubKey(@"Directory\Background\-shellex\ContextMenuHandlers");
             }
-            public static RegistryKey GetDefaultIcon => Registry.ClassesRoot.OpenSubKey(@"Directory\DefaultIcon");
-            public static RegistryKey GetShell => Registry.ClassesRoot.OpenSubKey(@"Directory\shell");
-            public static RegistryKey GetShellexcmh => Registry.ClassesRoot.OpenSubKey(@"Directory\shellex\ContextMenuHandlers");
-            public static RegistryKey Get_shellexcmh => Registry.ClassesRoot.OpenSubKey(@"Directory\-shellex\ContextMenuHandlers");
         }
     }
 }
