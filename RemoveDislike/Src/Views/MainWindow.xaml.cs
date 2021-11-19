@@ -15,45 +15,34 @@ namespace RemoveDislike.Views
     public partial class MainWindow
     {
         public delegate void Delegate();
+        public static MainWindow Interface { get; private set; }
 
-        public static MainWindow Interface;
+        public static Thread MainThread { get; set; } = Thread.CurrentThread;
+        private static readonly Thread I0Thread = new(() =>
+            {
+                while (true)
+                {
+                    if (DelegateList.Count == 0) { Thread.Sleep(1000); continue; }
 
-        public static Thread MainThread;
-        public static Thread I0Thread;
-        public static List<Delegate> DelegateList;
+                    ThreadPool.QueueUserWorkItem(_ => {
+                        DelegateList[0]();
+                        DelegateList.RemoveAt(0); });
+                }
+                // ReSharper disable once FunctionNeverReturns
+            }) { Name = "I0Thread" };
+        public static List<Delegate> DelegateList { get; set; } = new();
         private Page _clearPage;
         private Page _contextMenuManagerPage;
 
         public MainWindow()
         {
-            Entrance.Init();
             InitializeComponent();
             Interface = this;
 
-            MainThread = Thread.CurrentThread;
             Thread.CurrentThread.Name = "MainThread";
-
-            DelegateList = new List<Delegate>();
-
-            I0Thread = new Thread(
-                () =>
-                {
-                    while (true)
-                    {
-                        if (DelegateList.Count == 0)
-                        {
-                            Thread.Sleep(1000);
-                            continue;
-                        }
-
-                        DelegateList[0]();
-                        DelegateList.RemoveAt(0);
-                    }
-                }) { Name = "I0Thread" };
-
             I0Thread.Start();
 
-            Application.Current.Exit += (sender, args) => I0Thread.Abort();
+            Application.Current.Exit += (_, _) => I0Thread.Abort();
         }
 
         private void PinButtonOnClick(object sender, RoutedEventArgs e)

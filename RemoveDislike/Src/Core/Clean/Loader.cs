@@ -7,6 +7,9 @@ using static RemoveDislike.Core.Clean.Cleaner;
 
 namespace RemoveDislike.Core.Clean
 {
+    /// <summary>
+    /// Loader
+    /// </summary>
     public static class Loader
     {
         private static bool _isInit;
@@ -61,7 +64,7 @@ namespace RemoveDislike.Core.Clean
                     // "Cache", "Caches",
                     "$WinREAgent"
                 }));
-                rules.Add(new Rule(@"C:\\", CleanMode.RecursionFiles, new List<string>
+                rules.Add(new Rule(drive, CleanMode.RecursionFiles, new List<string>
                 {
                     ".temp", ".tmp", ".log", ".logs",
                     ".cache", ".caches", ".old", ".bak", ".back"
