@@ -17,25 +17,19 @@
                   <option name="pins">
                     <list>
                       <Pin>
-                        <option name="consoleUUID" value="642002c6-35a4-4ffe-83c3-08d500db200c" />
+                        <option name="consoleUUID" value="4f5ea46c-05af-4cfe-9452-9b0894cef05c" />
                         <option name="contentType" value="DebuggerOutput" />
-                        <option name="grepModel">
-                          <GrepModel>
-                            <option name="expression" value="[View]" />
-                            <option name="unlessExpression" value="" />
-                          </GrepModel>
+                        <option name="grepCompositeModel">
+                          <GrepCompositeModel>
+                            <option name="models">
+                              <list>
+                                <GrepModel>
+                                  <option name="expression" value="[2021" />
+                                </GrepModel>
+                              </list>
+                            </option>
+                          </GrepCompositeModel>
                         </option>
-                      </Pin>
-                      <Pin>
-                        <option name="consoleUUID" value="421ae690-c85d-4389-9b67-77c892dc8f70" />
-                        <option name="contentType" value="DebuggerOutput" />
-                        <option name="grepModel">
-                          <GrepModel>
-                            <option name="expression" value="[File]" />
-                            <option name="unlessExpression" value="" />
-                          </GrepModel>
-                        </option>
-                        <option name="parentConsoleUUID" value="642002c6-35a4-4ffe-83c3-08d500db200c" />
                       </Pin>
                     </list>
                   </option>
