@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
+using fastJSON;
 using RemoveDislike.Core.Utils;
 using static RemoveDislike.Core.Utils.LogUtils;
 
@@ -12,6 +13,7 @@ namespace RemoveDislike.Core.Clean
     /// </summary>
     public static class Parser
     {
+        [Obsolete("")]
         public static string Correction(string str)
         {
             // Remove comments and Blank lines
@@ -27,45 +29,16 @@ namespace RemoveDislike.Core.Clean
             return str.Trim();
         }
 
-        public static List<Rule> from_string(string ruleStr) =>
-            from_List(Correction(ruleStr).Split('\n'));
-
-        public static List<Rule> from_List(IEnumerable<string> list)
+        public static List<Rule> FromFile(string path)
         {
-            List<Rule> rules = new();
-            foreach (string[] split in list.Select(rule => rule.Trim().Split('|')))
-                switch (split.Length)
-                {
-                    case 1:
-                        rules.Add(new Rule(split[0].Trim()));
-                        break;
-                    case 2 when split[1].Trim() == ".":
-                        rules.Add(new Rule(split[0].Trim(), CleanMode.Files, "*"));
-                        break;
-                    case 2 when split[1].Trim() == "*":
-                        rules.Add(new Rule(split[0].Trim(), CleanMode.RecursionFiles,
-                            "*"));
-                        break;
-                    case 2:
-                        rules.Add(new Rule(split[0].Trim(), CleanMode.Files,
-                            split.Skip(1).ToList()));
-                        break;
-                    case >= 3:
-                        rules.Add(split[1].Trim() == "*"
-                            ? new Rule(split[0].Trim(), CleanMode.RecursionFiles,
-                                split.Skip(2).ToList())
-                            : new Rule(split[0].Trim(), CleanMode.Files,
-                                split.Skip(1).ToList()));
-                        break;
-                }
-
-            return rules;
+            Info(@$"[RuleParser] Loading rules from {path}");
+            return JSON.ToObject<List<Rule>>(File.ReadAllText(path));
         }
 
-        public static List<Rule> from_file(string path)
+        public static List<Rule> FromString(string json)
         {
-            Log(@$"[RuleParser] {path}");
-            return from_string(File.ReadAllText(path));
+            Info(@"[RuleParser] Loading rules from json(string)");
+            return JSON.ToObject<List<Rule>>(json);
         }
     }
 }
