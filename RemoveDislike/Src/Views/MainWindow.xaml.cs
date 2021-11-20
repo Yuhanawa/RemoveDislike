@@ -22,11 +22,16 @@ namespace RemoveDislike.Views
             {
                 while (true)
                 {
-                    if (DelegateList.Count == 0) { Thread.Sleep(1000); continue; }
-
-                    ThreadPool.QueueUserWorkItem(_ => {
-                        DelegateList[0]();
-                        DelegateList.RemoveAt(0); });
+                    if (DelegateList.Count > 0)
+                    {
+                        ThreadPool.QueueUserWorkItem(_ =>
+                        {
+                            var fn = (Delegate)DelegateList[0].Clone();
+                            DelegateList.RemoveAt(0); 
+                            fn();
+                        });
+                    }
+                    Thread.Sleep(2500);
                 }
                 // ReSharper disable once FunctionNeverReturns
             }) { Name = "I0Thread" };
