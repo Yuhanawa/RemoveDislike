@@ -12,7 +12,7 @@ namespace RemoveDislike.Core
     {
         public static readonly string ConfigPath = @$"{EnvironmentUtils.Get("APPData")}\RemoveDislike";
         public static readonly string ConfigFile = @$"{EnvironmentUtils.Get("APPData")}\RemoveDislike\Config.json";
-        public static readonly string RulesGroupsPath = @$"{ConfigPath}\Rules";
+        public static readonly string RuleBase = @$"{ConfigPath}\Rules";
 
         public static ConfigModule Config { get; set; }
 
@@ -23,8 +23,8 @@ namespace RemoveDislike.Core
 
         private static bool Exists()
         {
-            if (!Directory.Exists(RulesGroupsPath))
-                Directory.CreateDirectory(RulesGroupsPath);
+            if (!Directory.Exists(RuleBase))
+                Directory.CreateDirectory(RuleBase);
 
             return File.Exists(ConfigFile);
         }
