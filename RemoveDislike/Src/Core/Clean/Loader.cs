@@ -48,11 +48,11 @@ namespace RemoveDislike.Core.Clean
         private static void LoadExternalRules()
         {
             foreach (FileInfo file in new DirectoryInfo(ConfigHelper.RuleBase).GetFiles("*.json"))
-                CleanerGroup.Add(file.Name.Remove(file.Name.Length - 3),
+                CleanerGroup.Add(file.Name.Remove(file.Name.Length - 5),
                     new Model(FromFile(file.FullName), file.FullName));
         }
 
-        private static void LoadInternalRules()
+        public static void LoadInternalRules()
         {
             #region Temp(AllDrives)
 
@@ -78,6 +78,7 @@ namespace RemoveDislike.Core.Clean
             #endregion
 
             #region Temp(Safer)
+
             CleanerGroup.Add($"{I18NUtils.Get("Temp(Safer)")}", new Model(new List<Rule>
             {
                 new(@$"{EnvironmentUtils.Get("Windir")}\Prefetch\"),
@@ -93,8 +94,8 @@ namespace RemoveDislike.Core.Clean
                     "Cache", "GrShaderCache", "ShaderCache", "CacheStorage", "Font Cache", "CryptnetUrlCache"
                 })
             }) { Administrator = true, CarpetScan = true });
-            #endregion
 
+            #endregion
             
         }
     }

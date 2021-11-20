@@ -27,7 +27,7 @@ namespace RemoveDislike.Core.Clean
         /// </summary>
         public class Model
         {
-            private List<Rule> Rules { get; }
+            public List<Rule> Rules { get; set; }
 
             /// <summary>
             ///     [RuleGroup] Source: {Source} \nRules: {Rules}
@@ -85,7 +85,7 @@ namespace RemoveDislike.Core.Clean
                 if ((File.GetAttributes(path) & FileAttributes.System) != 0 ||
                     (File.GetAttributes(path) & FileAttributes.ReadOnly) != 0)
                     return false;
-                
+
                 // Check whether the current user has operation permissions for this file
                 return Administrator || FileUtils.HasOperationPermission(path, false);
             }

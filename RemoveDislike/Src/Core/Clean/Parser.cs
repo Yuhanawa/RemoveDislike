@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -13,7 +12,6 @@ namespace RemoveDislike.Core.Clean
     /// </summary>
     public static class Parser
     {
-        [Obsolete("")]
         public static string Correction(string str)
         {
             // Remove comments and Blank lines
@@ -32,13 +30,13 @@ namespace RemoveDislike.Core.Clean
         public static List<Rule> FromFile(string path)
         {
             Info(@$"[RuleParser] Loading rules from {path}");
-            return JSON.ToObject<List<Rule>>(File.ReadAllText(path));
+            return JSON.ToObject<List<Rule>>(Correction(File.ReadAllText(path)));
         }
 
         public static List<Rule> FromString(string json)
         {
             Info(@"[RuleParser] Loading rules from json(string)");
-            return JSON.ToObject<List<Rule>>(json);
+            return JSON.ToObject<List<Rule>>(Correction(json));
         }
     }
 }
