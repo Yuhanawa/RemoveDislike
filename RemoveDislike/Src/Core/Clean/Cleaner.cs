@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Principal;
 using RemoveDislike.Core.Utils;
 using static RemoveDislike.Core.Utils.LogUtils;
 
@@ -17,7 +16,7 @@ namespace RemoveDislike.Core.Clean
         {
             Load();
         }
-        
+
         public static Dictionary<string, Model> CleanerGroup { get; } = new();
         public static List<string> BlackList { get; } = new();
         public static string GetSource(string key) => CleanerGroup[key].Source;
@@ -28,79 +27,97 @@ namespace RemoveDislike.Core.Clean
         /// </summary>
         public class Model
         {
-            public List<Rule> Rules { get; set; }
+            private List<Rule> Rules { get; }
 
             /// <summary>
-            /// [RuleGroup] Source: {Source} \nRules: {Rules}
+            ///     [RuleGroup] Source: {Source} \nRules: {Rules}
             /// </summary>
             /// <returns> [RuleGroup] Source: {Source} \nRules: {Rules} </returns>
             public override string ToString() => $"[RuleGroup] Source: {Source} \nRules: {Rules}";
 
-            private bool Check(string path)
+            private bool RulesCheck()
             {
-                try
+                if (Rules.Count == 0)
                 {
-                    if (Directory.Exists(path))
-                    {
-                        if (new DirectoryInfo(path).GetFileSystemInfos().Length == 0)
-                        {
-                            Directory.Delete(path);
-                            return false;
-                        }
-
-                        if (BlackList.Any(any => any == path))
-                            return false;
-                        
-                        //&& new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
-                        return Administrator || FileUtils.HasOperationPermission(path, true);
-                        // 检查当前用户是否拥有此文件夹的操作权限
-                        // Check whether the current user has operation permissions for this folder
-                        
-                    }
-
-                    // ReSharper disable once InvertIf
-                    if (File.Exists(path))
-                    {
-                        if ((File.GetAttributes(path) & FileAttributes.System) != 0 ||
-                            (File.GetAttributes(path) & FileAttributes.ReadOnly) != 0)
-                            return false;
-
-                        // new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
-                        return Administrator || FileUtils.HasOperationPermission(path, false);
-                        // 检查当前用户是否拥有此文件的操作权限
-                        
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log(@$"[File] {e.Message}");
+                    Warn($"{Rules} has no rules");
                     return false;
                 }
 
-                Warn($"[File] the file is not file or folder {path}");
+                // Check the safety level
+                // ReSharper disable once InvertIf
+                if (SafetyLevel > ConfigHelper.Config.SafetyLevel)
+                {
+                    Info(@$"[File] {Source} is too dangerous({SafetyLevel}), skip it.");
+                    return false;
+                }
+
+                Info(@$"[File] {Source} is safe({SafetyLevel}), start to clean.");
+                return true;
+            }
+
+            private bool DirectoryCheck(string path)
+            {
+                if (Directory.Exists(path))
+                {
+                    Warn($"[File] The directory {path} is not found");
+                    return false;
+                }
+
+                if (Directory.GetFileSystemEntries(path).Length == 0)
+                {
+                    Directory.Delete(path);
+                    return false;
+                }
+
+                // ReSharper disable once InvertIf
+                if (BlackList.Any(any => any == path))
+                {
+                    Warn($"[File] The directory {path} is in BlackList");
+                    return false;
+                }
+
+                // Check whether the current user has operation permissions for this folder                    
+                return Administrator || FileUtils.HasOperationPermission(path, true);
+            }
+
+            private bool FileCheck(string path)
+            {
+                if ((File.GetAttributes(path) & FileAttributes.System) != 0 ||
+                    (File.GetAttributes(path) & FileAttributes.ReadOnly) != 0)
+                    return false;
+                
+                // Check whether the current user has operation permissions for this file
+                return Administrator || FileUtils.HasOperationPermission(path, false);
+            }
+
+            private bool PathCheck(string path)
+            {
+                if (MandatoryDir)
+                    return DirectoryCheck(path);
+
+                if (File.Exists(path))
+                    return FileCheck(path);
+
+                if (Directory.Exists(path))
+                    return DirectoryCheck(path);
+
+                Warn($"[File] {path} The Path is not file or folder ,  Maybe the is not Exists");
                 return false;
             }
 
             /// <summary>
-            /// Start
+            ///     Start
             /// </summary>
             public void Start()
             {
-                // Check the safety level
-                if (SafetyLevel > ConfigHelper.Config.SafetyLevel)
-                {
-                    Info(@$"[File] {Source} is too dangerous({SafetyLevel}), skip it.");
-                    return;
-                }
+                if (!RulesCheck()) return;
 
-                Info(@$"[File] {Source} is safe({SafetyLevel}), start to clean.");
-
-                foreach (Rule rule in Rules.Where(rule => Check(rule.Path)))
+                foreach (Rule rule in Rules.Where(rule => PathCheck(rule.Path)))
                 {
                     // if the path is a file, delete it
                     if (File.Exists(rule.Path))
                     {
-                        FileUtils.TryDelFile(rule.Path, true);
+                        UpdateData(FileUtils.TryDelFile(rule.Path, true).Size);
                         continue;
                     }
 
@@ -110,7 +127,7 @@ namespace RemoveDislike.Core.Clean
                     }
                     catch (Exception e)
                     {
-                        Log(@$"[File] {e}");
+                        Log(@$"[File] {rule} {e}");
                     }
                 }
             }
@@ -127,118 +144,53 @@ namespace RemoveDislike.Core.Clean
                     }
                     case CleanMode.Folders:
                     {
-                        if (rule.Feature[0] == "*" || StrEq(rule.Feature[0], "all"))
-                        {
-                            foreach (DirectoryInfo dir in root.GetDirectories().Where(dir => Check(dir.FullName)))
-                                TryDel(dir);
-                            break;
-                        }
+                        if (_UniversalCharacterCleanModule(root, rule, true)) return;
 
-                        foreach (DirectoryInfo dir in root.GetDirectories().Where(dir => Check(dir.FullName)))
-                            try
-                            {
-                                if (rule.Feature.Any(feature =>
-                                    StrEq(feature, dir.Name)) || dir.GetFileSystemInfos().Length == 0)
-                                    TryDel(dir);
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message}");
-                            }
+
+                        foreach (DirectoryInfo dir in root.GetDirectories()
+                            .Where(dir => DirectoryCheck(dir.FullName)))
+                            if (rule.Feature.Any(feature =>
+                                StrEq(feature, dir.Name)) || dir.GetFileSystemInfos().Length == 0)
+                                TryDel(dir);
 
                         break;
                     }
                     case CleanMode.Files:
                     {
-                        if (rule.Feature[0] == "*")
-                        {
-                            foreach (FileInfo file in root.GetFiles().Where(dir => Check(dir.FullName)))
-                                TryDel(file);
-                            break;
-                        }
+                        if (_UniversalCharacterCleanModule(root, rule, false)) return;
 
-                        FeatureTryDelFile(root, rule);
+                        _FileCleanupModule(root, rule);
 
                         break;
                     }
                     case CleanMode.RecursionFiles:
                     {
-                        void TryRecursion(DirectoryInfo dir)
+                        void Recursion(DirectoryInfo dir)
                         {
-                            try
-                            {
-                                FeatureTryDelFile(dir, rule);
-
-                                foreach (DirectoryInfo sub in dir.GetDirectories().Where(dir2 => Check(dir2.FullName)))
-                                    if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
-                                    else TryRecursion(sub);
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message}");
-                            }
+                            _FileCleanupModule(dir, rule);
+                            _RecursionFileModule(dir, Recursion);
                         }
 
-                        TryRecursion(root);
+                        Recursion(root);
 
                         break;
                     }
                     case CleanMode.RecursionFolders:
                     {
-                        void TryRecursion(DirectoryInfo fileSystemInfo)
-                        {
-                            try
-                            {
-                                foreach (DirectoryInfo sub in fileSystemInfo.GetDirectories()
-                                    .Where(dir => Check(dir.FullName)))
-                                    try
-                                    {
-                                        if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
-                                        else if (rule.Feature.Any(feature => StrEq(sub.Name, feature))) TryDel(sub);
-                                        else TryRecursion(sub);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log(@$"[File] {e.Message}");
-                                    }
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message}");
-                            }
-                        }
-
-                        TryRecursion(root);
+                        void Recursion(DirectoryInfo dir) => _DirCleanupModule(root, rule, Recursion);
+                        Recursion(root);
 
                         break;
                     }
                     case CleanMode.RecursionAll:
                     {
-                        void TryRecursion(DirectoryInfo dir)
+                        void Recursion(DirectoryInfo dir)
                         {
-                            try
-                            {
-                                FeatureTryDelFile(dir, rule);
-
-                                foreach (DirectoryInfo sub in dir.GetDirectories().Where(dir2 => Check(dir2.FullName)))
-                                    try
-                                    {
-                                        if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
-                                        else if (rule.Feature.Any(feature => StrEq(sub.Name, feature))) TryDel(sub);
-                                        else TryRecursion(sub);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log(@$"[File] {e.Message}");
-                                    }
-                            }
-                            catch (Exception e)
-                            {
-                                Log(@$"[File] {e.Message}");
-                            }
+                            _FileCleanupModule(dir, rule);
+                            _DirCleanupModule(dir, rule, Recursion);
                         }
 
-                        TryRecursion(root);
+                        Recursion(root);
 
                         break;
                     }
@@ -255,7 +207,7 @@ namespace RemoveDislike.Core.Clean
                 {
                     case DirectoryInfo dir:
                     {
-                        UpdateData(FileUtils.TryExDelDir(dir, true).Size);
+                        UpdateData(FileUtils.TryExDelDir(dir).Size);
                         break;
                     }
                     case FileInfo file:
@@ -266,30 +218,116 @@ namespace RemoveDislike.Core.Clean
                 }
             }
 
-            private void FeatureTryDelFile(DirectoryInfo dir, Rule rule)
+            private void _FileCleanupModule(DirectoryInfo dir, Rule rule)
             {
-                foreach (FileInfo file in dir.GetFiles().Where(file => Check(file.FullName)))
-                    if (rule.Feature.Any(feature => StrEq(file.Extension, feature)))
-                        TryDel(file);
+                try
+                {
+                    foreach (FileInfo file in dir.GetFiles().Where(file => PathCheck(file.FullName)))
+                        try
+                        {
+                            if (rule.Feature.Any(feature => StrEq(file.Extension, feature)))
+                                TryDel(file);
+                        }
+                        catch (Exception e)
+                        {
+                            Err(@$"[File] [In_FileCleanupModule] dir: {dir.FullName} rule: {rule} {e.Message} ", e);
+                        }
+                }
+                catch (Exception e)
+                {
+                    Err(@$"[File] [On_FileCleanupModule] dir: {dir.FullName} rule: {rule} {e.Message} ", e);
+                }
+            }
+
+            private void _DirCleanupModule(DirectoryInfo dir, Rule rule, Recursion recursion)
+            {
+                try
+                {
+                    foreach (DirectoryInfo sub in dir.GetDirectories()
+                        .Where(subDir => DirectoryCheck(subDir.FullName)))
+                        try
+                        {
+                            if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
+                            else if (rule.Feature.Any(feature => StrEq(sub.Name, feature))) TryDel(sub);
+                            else recursion(sub);
+                        }
+                        catch (Exception e)
+                        {
+                            Err(@$"[File] [In_DirCleanupModule] dir: {dir.FullName} rule: {rule} {e.Message} ", e);
+                        }
+                }
+                catch (Exception e)
+                {
+                    Err(@$"[File] [On_DirCleanupModule] dir: {dir.FullName} rule: {rule} {e.Message} ", e);
+                }
+            }
+
+            private void _RecursionFileModule(DirectoryInfo dir, Recursion recursion)
+            {
+                try
+                {
+                    foreach (DirectoryInfo sub in dir.GetDirectories().Where(subDir => PathCheck(subDir.FullName)))
+                        try
+                        {
+                            if (sub.GetFileSystemInfos().Length == 0) sub.Delete();
+                            else recursion(sub);
+                        }
+                        catch (Exception e)
+                        {
+                            Warn(@$"[File] [In_RecursionFileModule] [InForeach] {e.Message}");
+                        }
+                }
+                catch (Exception e)
+                {
+                    Warn(@$"[File] [On_RecursionFileModule] [OnForeach] {e.Message}");
+                }
+            }
+
+            private static bool _UniversalCharacterRecognition(string s) => s == "*" || StrEq(s, "all");
+
+            private bool _UniversalCharacterCleanModule(DirectoryInfo root, Rule rule, bool isDir)
+            {
+                switch (isDir)
+                {
+                    case true when _UniversalCharacterRecognition(rule.Feature[0]):
+                    {
+                        foreach (DirectoryInfo dir in root.GetDirectories()
+                            .Where(dir => DirectoryCheck(dir.FullName))) TryDel(dir);
+                        return true;
+                    }
+                    case false when _UniversalCharacterRecognition(rule.Feature[0]):
+                    {
+                        foreach (FileInfo file in root.GetFiles()
+                            .Where(dir => FileCheck(dir.FullName))) TryDel(file);
+                        return true;
+                    }
+                    default:
+                        return false;
+                }
             }
 
             public void ToDelete() => FileUtils.TryDelFile(Source, true);
-            
+
+            private delegate void Recursion(DirectoryInfo dir);
+
             #region UpdateData
+
             private void UpdateData(double size) => UpdateData(size, 1);
 
             private void UpdateData(double size, int count)
             {
                 if (size > 0)
-                    CleanedSize += size / 1024 / 1024;
+                    CleanedSize += size / 1024;
                 if (size >= 0)
                     CleanedCount += count;
             }
+
             #endregion
-            
+
             #region Fields
 
             public string Source { get; set; }
+            public bool MandatoryDir { get; set; }
             public bool ForceDelete { get; set; }
             public bool Administrator { get; set; }
             public bool CarpetScan { get; set; }
@@ -342,7 +380,7 @@ namespace RemoveDislike.Core.Clean
             }
 
             #endregion
-            
+
             #region Utils
 
             private static bool StrEq(string a, string b) =>
@@ -354,10 +392,11 @@ namespace RemoveDislike.Core.Clean
         }
 
         #region CleanerGroup Keys Values Count
+
         public static Dictionary<string, Model>.KeyCollection Keys => CleanerGroup.Keys;
         public static Dictionary<string, Model>.ValueCollection Values => CleanerGroup.Values;
         public static int Count => CleanerGroup.Count;
-        
+
         #endregion
 
         #region CleanedData

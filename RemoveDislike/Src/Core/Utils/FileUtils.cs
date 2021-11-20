@@ -108,12 +108,12 @@ namespace RemoveDislike.Core.Utils
             }
         }
 
-        public static DelInfo TryExDelDir(DirectoryInfo dir, bool output)
+        public static DelInfo TryExDelDir(DirectoryInfo dir)
         {
             var size = 0L;
             try
             {
-                size += dir.GetFiles().Sum(file => TryDelFile(file.ToString(), true).Size);
+                size += dir.GetFiles().Sum(file => TryDelFile(file.FullName, true).Size);
             }
             catch (Exception e)
             {
@@ -122,8 +122,7 @@ namespace RemoveDislike.Core.Utils
 
             try
             {
-                foreach (DirectoryInfo info in dir.GetDirectories())
-                    TryExDelDir(info, output);
+                size += dir.GetDirectories().Sum(info => TryExDelDir(info).Size);
             }
             catch (Exception e)
             {
@@ -155,13 +154,13 @@ namespace RemoveDislike.Core.Utils
             }
         }
 
-        private static void Del(FileSystemInfo fileSystemInfo, bool output)
+        public static void Del(FileSystemInfo fileSystemInfo, bool output)
         {
             switch (fileSystemInfo)
             {
                 case DirectoryInfo dir:
                 {
-                    TryExDelDir(dir, output);
+                    TryExDelDir(dir);
                     break;
                 }
                 case FileInfo file:
@@ -185,27 +184,27 @@ namespace RemoveDislike.Core.Utils
         /// <returns></returns>
         public static bool HasOperationPermission(string path, bool isFolder) =>
             isFolder
-                ? File.GetAccessControl(path)
+                ? Directory.GetAccessControl(path)
                     .GetAccessRules(true, true, typeof(NTAccount))
                     .OfType<FileSystemAccessRule>()
                     .Where(i =>
                         i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
-                    .ToList()
+                    .AsEnumerable()
                     .Any(i => i.AccessControlType == AccessControlType.Deny)
                 : File.GetAccessControl(path)
                     .GetAccessRules(true, true, typeof(NTAccount))
                     .OfType<FileSystemAccessRule>()
                     .Where(i =>
                         i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
-                    .ToList()
+                    .AsEnumerable()
                     .Any(i => i.AccessControlType == AccessControlType.Deny);
 
         public class DelInfo
         {
-            public Exception Exception;
-            public bool IsSuccess;
-            public long Size;
-            public string Source;
+            public Exception Exception { get; private set; }
+            public bool IsSuccess { get; private set; }
+            public long Size { get; private set; }
+            public string Source { get; private set; }
 
             public DelInfo()
             {
