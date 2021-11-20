@@ -8,7 +8,7 @@ using static RemoveDislike.Core.Clean.Cleaner;
 namespace RemoveDislike.Core.Clean
 {
     /// <summary>
-    /// Loader
+    ///     Loader
     /// </summary>
     public static class Loader
     {
@@ -47,13 +47,15 @@ namespace RemoveDislike.Core.Clean
 
         private static void LoadExternalRules()
         {
-            foreach (FileInfo file in new DirectoryInfo(ConfigHelper.RulesGroupsPath).GetFiles("*.cr"))
+            foreach (FileInfo file in new DirectoryInfo(ConfigHelper.RuleBase).GetFiles("*.json"))
                 CleanerGroup.Add(file.Name.Remove(file.Name.Length - 3),
-                    new Model(from_file(file.FullName), file.FullName));
+                    new Model(FromFile(file.FullName), file.FullName));
         }
 
         private static void LoadInternalRules()
         {
+            #region Temp(AllDrives)
+
             var rules = new List<Rule>();
             foreach (string drive in Directory.GetLogicalDrives())
             {
@@ -61,22 +63,23 @@ namespace RemoveDislike.Core.Clean
                 {
                     "Temp", "Tmp", ".temp",
                     "Log", "Logs", ".logs", ".log",
-                    // "Cache", "Caches",
                     "$WinREAgent"
                 }));
                 rules.Add(new Rule(drive, CleanMode.RecursionFiles, new List<string>
                 {
                     ".temp", ".tmp", ".log", ".logs",
-                    ".cache", ".caches", ".old", ".bak", ".back"
+                    ".cache", ".caches"
                 }));
             }
 
-            CleanerGroup.Add("全盘缓存日志", new Model(rules));
+            CleanerGroup.Add($"{I18NUtils.Get("Temp(AllDrives)")}", new Model(rules)
+                { Administrator = true, CarpetScan = true });
 
-            CleanerGroup.Add("固定缓存日志", new Model(new List<Rule>
+            #endregion
+
+            #region Temp(Safer)
+            CleanerGroup.Add($"{I18NUtils.Get("Temp(Safer)")}", new Model(new List<Rule>
             {
-                new(@"D:\Users\yuhan\Desktop\1.txt"),
-                new(@$"{EnvironmentUtils.Get("Windir")}\SoftwareDistribution\"),
                 new(@$"{EnvironmentUtils.Get("Windir")}\Prefetch\"),
                 new(@$"{EnvironmentUtils.Get("Windir")}\ServiceProfiles\LocalService\AppData\Local\FontCache\"),
                 new(@$"{EnvironmentUtils.WinData}\Explorer\"),
@@ -84,19 +87,15 @@ namespace RemoveDislike.Core.Clean
                 new(@$"{EnvironmentUtils.WinData}\History\"),
                 new(@$"{EnvironmentUtils.WinData}\ActionCenterCache\"),
                 new(@$"{EnvironmentUtils.WinData}\ActionCenterCache\"),
-                new(@$"{EnvironmentUtils.WinData}\..\", CleanMode.Folders, new List<string>
+                new(@$"{EnvironmentUtils.WinData}\..\", CleanMode.RecursionFolders, new List<string>
                 {
                     "Temp", "Tmp",
                     "Cache", "GrShaderCache", "ShaderCache", "CacheStorage", "Font Cache", "CryptnetUrlCache"
                 })
             }) { Administrator = true, CarpetScan = true });
+            #endregion
 
-            Dictionary<string, string> textRules = new()
-            {
-                { "test", @"" }
-            };
-            foreach (string key in textRules.Keys)
-                CleanerGroup.Add(key, new Model(from_string(textRules[key])));
+            
         }
     }
 }
