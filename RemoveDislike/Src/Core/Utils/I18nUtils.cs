@@ -5,19 +5,18 @@ using fastJSON;
 using static System.Threading.Thread;
 using static RemoveDislike.Core.Utils.LogUtils;
 
-
 namespace RemoveDislike.Core.Utils
 {
     public static class I18NUtils
     {
         private static Dictionary<string, string> I18N { get; set; } = new();
-        
+
         /// <summary>
         /// Get the translated string by key
         /// </summary>
         /// <param name="key"></param>
         /// <returns> if the key is found return translated string, else return key </returns>
-        public static string Get(string key) => 
+        public static string Get(string key) =>
             I18N.ContainsKey(key) ? I18N[key] : key;
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace RemoveDislike.Core.Utils
                 {
                     LoadLanguage("en");
                 }
-                catch (Exception e)
+                catch
                 {
                     // ignored
                 }
