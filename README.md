@@ -17,12 +17,12 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 ```json
 "ForceDelete": bool,	//Default: false
 "Administrator": bool,	// Default: false
-"CarpetScan": bool,		// Default: false
+"CarpetScan": bool,	// Default: false
 
-"CleanMode":"All",				// Default: "All"
-            "Files",			// Delete only eligible Files in this folder, excluding subfolders
-            "Folders",			// Delete only eligible Folders in this folder, excluding subfolders
-            "RecursionAll",		// Delete eligible files in this folder, including subfolders
+"CleanMode":"All",		// Default: "All"
+            "Files",		// Delete only eligible Files in this folder, excluding subfolders
+            "Folders",		// Delete only eligible Folders in this folder, excluding subfolders
+            "RecursionAll",	// Delete eligible files in this folder, including subfolders
             "RecursionFiles",	// Delete eligible Folders in this folder, including subfolders
             "RecursionFolders"	// Delete everything in this folder that matches the criteria, including subfolders
 ```
