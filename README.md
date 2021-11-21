@@ -14,7 +14,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ### Options:
 
-```json
+```json5
 "ForceDelete": bool,	//Default: false
 "Administrator": bool,	// Default: false
 "CarpetScan": bool,	// Default: false
@@ -29,7 +29,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ### Examples:
 
-``` json
+``` json5
 {
     "ForceDelete": false,	// Default: false
     "Administrator": true,	// Default: false
@@ -56,7 +56,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 }
 ```
 
-``` json
+``` json5
 {
     "ForceDelete": false,
     "Administrator": true,
