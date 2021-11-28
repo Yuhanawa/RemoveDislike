@@ -96,7 +96,6 @@ namespace RemoveDislike.Core.Clean
             }) { Administrator = true, CarpetScan = true });
 
             #endregion
-            
         }
     }
 }
