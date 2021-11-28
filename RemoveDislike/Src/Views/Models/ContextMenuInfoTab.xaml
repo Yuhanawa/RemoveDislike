@@ -7,7 +7,9 @@
              xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
              mc:Ignorable="d"
              Loaded="ContextMenuInfoTab_OnLoaded"
-             d:DesignHeight="50" d:DesignWidth="420">
+             Height="52"
+             FontSize="16"
+             d:DesignHeight="52" d:DesignWidth="420">
 
     <UserControl.Resources>
         <Style x:Key="LittleButtonStyle" TargetType="Button"
@@ -15,7 +17,7 @@
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Margin" Value="2" />
             <Setter Property="Height" Value="24" />
-            <Setter Property="FontSize" Value="14" />
+            <!-- <Setter Property="FontSize" Value="14" /> -->
             <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
             <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
             <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
@@ -25,7 +27,7 @@
     </UserControl.Resources>
 
 
-    <Grid Margin="5">
+    <Grid Margin="2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180" />
             <ColumnDefinition Width="*" />
@@ -35,13 +37,15 @@
             <ColumnDefinition Width="28" />
         </Grid.ColumnDefinitions>
         <Image Grid.Column="0" Name="EIcon"
+               Width="32" Height="32"
                Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
                 Path=Icon}"
                PreviewDragEnter="EIcon_OnPreviewDragEnter"
                PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp" />
         <TextBlock Grid.Column="1" Name="EText"
+                   VerticalAlignment="Center"
                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
-                 Path=Text}"
+                 Path=KeyName}"
                    PreviewMouseRightButtonUp="EText_OnPreviewMouseRightButtonUp" />
         <Button Grid.Column="2" Name="ESub"
                 Content="&#xf2b0;"
