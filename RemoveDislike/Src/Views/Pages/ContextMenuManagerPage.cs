@@ -29,13 +29,16 @@ namespace RemoveDislike.Views.Pages
             RegistryKey _shellex = RegistryUtils.GeneralMenu.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                GeneralShellList.Children.Add(new ContextMenuInfoTab(shell.OpenSubKey(subKeyName), subKeyName));
+                GeneralShellList.Children.Add(
+                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in shellex.GetSubKeyNames())
-                GeneralShellExList.Children.Add(new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName), subKeyName));
+                GeneralShellExList.Children.Add(
+                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in _shellex.GetSubKeyNames())
-                General_ShellExList.Children.Add(new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName), subKeyName));
+                General_ShellExList.Children.Add(
+                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
 
@@ -56,13 +59,16 @@ namespace RemoveDislike.Views.Pages
             RegistryKey _shellex = RegistryUtils.Directory.Background.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DesktopShellList.Children.Add(new ContextMenuInfoTab(shell.OpenSubKey(subKeyName), subKeyName));
+                DesktopShellList.Children.Add(
+                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in shellex.GetSubKeyNames())
-                DesktopShellExList.Children.Add(new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName), subKeyName));
+                DesktopShellExList.Children.Add(
+                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in _shellex.GetSubKeyNames())
-                Desktop_ShellExList.Children.Add(new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName), subKeyName));
+                Desktop_ShellExList.Children.Add(
+                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
 
@@ -83,16 +89,20 @@ namespace RemoveDislike.Views.Pages
             RegistryKey _shellex = RegistryUtils.Directory.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DirShellList.Children.Add(new ContextMenuInfoTab(shell.OpenSubKey(subKeyName), subKeyName));
+                DirShellList.Children.Add(
+                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in shellex.GetSubKeyNames())
-                DirShellExList.Children.Add(new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName), subKeyName));
+                DirShellExList.Children.Add(
+                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
 
             foreach (string subKeyName in _shellex.GetSubKeyNames())
-                Dir_ShellExList.Children.Add(new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName), subKeyName));
+                Dir_ShellExList.Children.Add(
+                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
+        [SuppressMessage("ReSharper", "IdentifierTypo")]
         private void LoadIEMenuList(object sender, EventArgs e)
         {
             // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\MenuExt
@@ -101,7 +111,8 @@ namespace RemoveDislike.Views.Pages
 
             if (menuExt == null) return;
             foreach (string subKeyName in menuExt.GetSubKeyNames())
-                IEList.Children.Add(new ContextMenuInfoTab(menuExt.OpenSubKey(subKeyName), subKeyName));
+                IEList.Children.Add(
+                    new ContextMenuInfoTab(menuExt.OpenSubKey(subKeyName, true), subKeyName));
         }
     }
 }
