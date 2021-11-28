@@ -38,12 +38,15 @@
                 <ColumnDefinition Width="28" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center"
                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CleanInfoTab},
                     Path=RuleName}" />
             <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CleanInfoTab},
                     Path=Source}" />
             <TextBlock Grid.Column="2"
+                       VerticalAlignment="Center"
                        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:CleanInfoTab},
                     Path=Size}" />
             <TextBlock Grid.Column="3" Text=" MB" />
