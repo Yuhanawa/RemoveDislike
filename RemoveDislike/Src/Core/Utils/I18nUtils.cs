@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using fastJSON;
@@ -12,7 +11,7 @@ namespace RemoveDislike.Core.Utils
         private static Dictionary<string, string> I18N { get; set; } = new();
 
         /// <summary>
-        /// Get the translated string by key
+        ///     Get the translated string by key
         /// </summary>
         /// <param name="key"></param>
         /// <returns> if the key is found return translated string, else return key </returns>
@@ -20,7 +19,7 @@ namespace RemoveDislike.Core.Utils
             I18N.ContainsKey(key) ? I18N[key] : key;
 
         /// <summary>
-        /// Load the i18n file
+        ///     Load the i18n file
         /// </summary>
         public static void Load()
         {
@@ -47,12 +46,12 @@ namespace RemoveDislike.Core.Utils
         }
 
         /// <summary>
-        /// LoadLanguage
+        ///     LoadLanguage
         /// </summary>
         /// <param name="language">
-        /// like "zh-CN"
-        /// You can get the language code here:
-        /// { System.Threading.Thread.CurrentThread.CurrentCulture.Name }
+        ///     like "zh-CN"
+        ///     You can get the language code here:
+        ///     { System.Threading.Thread.CurrentThread.CurrentCulture.Name }
         /// </param>
         /// <exception cref="FileNotFoundException"> Language file not found </exception>
         private static void LoadLanguage(string language)

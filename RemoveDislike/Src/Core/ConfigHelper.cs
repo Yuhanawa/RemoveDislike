@@ -57,7 +57,7 @@ namespace RemoveDislike.Core
                     else
                     {
                         Fatal("[Config] Fatal misconfiguration", e);
-                        
+
                         BuildDefault();
 
                         Environment.Exit(-2);

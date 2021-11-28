@@ -4,7 +4,7 @@ namespace RemoveDislike.Core
 {
     public static class Entrance
     {
-        public static Cleaner Cleaner { get; private set;}
+        public static Cleaner Cleaner { get; private set; }
 
         public static void Init()
         {

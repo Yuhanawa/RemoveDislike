@@ -64,15 +64,15 @@ namespace RemoveDislike.Core.Utils
             foreach (string key in dicMachine.Keys)
                 Info($"{key} :  {dicMachine[key]}");
 
-            
+
             Info(">>>UserEnvironmentVariables>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             // HKEY_CURRENT_USER\Environment
             IDictionary dicUser = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User);
-            
+
             foreach (string key in dicMachine.Keys)
                 Info($"{key} :  {dicUser[key]}");
 
-            
+
             Info(">>>ProcessEnvironmentVariables>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             IDictionary dicProcess = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Process);
 
@@ -81,10 +81,8 @@ namespace RemoveDislike.Core.Utils
 
             //特殊目录
             foreach (string name in Enum.GetNames(typeof(Environment.SpecialFolder)))
-            {
                 if (Enum.TryParse(name, out Environment.SpecialFolder sf))
                     Info($"{name} : {Environment.GetFolderPath(sf)}");
-            }
         }
 
         private static string GetOsVersion(Version ver)
@@ -123,7 +121,7 @@ namespace RemoveDislike.Core.Utils
                 }
                 else Warn("系统信息获取失败");
 
-                    if (centralProcessorReg != null)
+                if (centralProcessorReg != null)
                 {
                     Info($"CPU型号: {centralProcessorReg.GetValue("ProcessorNameString")}");
                     Info($"CPU主频: {centralProcessorReg.GetValue("~MHz")} MHz");

@@ -4,7 +4,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using RemoveDislike.Core;
 using RemoveDislike.Views.Pages;
 
 namespace RemoveDislike.Views
@@ -15,27 +14,23 @@ namespace RemoveDislike.Views
     public partial class MainWindow
     {
         public delegate void Delegate();
-        public static MainWindow Interface { get; private set; }
 
-        public static Thread MainThread { get; set; } = Thread.CurrentThread;
         private static readonly Thread I0Thread = new(() =>
+        {
+            while (true)
             {
-                while (true)
-                {
-                    if (DelegateList.Count > 0)
+                if (DelegateList.Count > 0)
+                    ThreadPool.QueueUserWorkItem(_ =>
                     {
-                        ThreadPool.QueueUserWorkItem(_ =>
-                        {
-                            var fn = (Delegate)DelegateList[0].Clone();
-                            DelegateList.RemoveAt(0); 
-                            fn();
-                        });
-                    }
-                    Thread.Sleep(2500);
-                }
-                // ReSharper disable once FunctionNeverReturns
-            }) { Name = "I0Thread" };
-        public static List<Delegate> DelegateList { get; set; } = new();
+                        var fn = (Delegate)DelegateList[0].Clone();
+                        DelegateList.RemoveAt(0);
+                        fn();
+                    });
+                Thread.Sleep(2500);
+            }
+            // ReSharper disable once FunctionNeverReturns
+        }) { Name = "I0Thread" };
+
         private Page _clearPage;
         private Page _contextMenuManagerPage;
 
@@ -49,6 +44,11 @@ namespace RemoveDislike.Views
 
             Application.Current.Exit += (_, _) => I0Thread.Abort();
         }
+
+        public static MainWindow Interface { get; private set; }
+
+        public static Thread MainThread { get; } = Thread.CurrentThread;
+        public static List<Delegate> DelegateList { get; } = new();
 
         private void PinButtonOnClick(object sender, RoutedEventArgs e)
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using RemoveDislike.Core;
+﻿using RemoveDislike.Core;
 using RemoveDislike.Core.Utils;
 using static RemoveDislike.Core.Utils.LogUtils;
 
@@ -10,14 +9,14 @@ namespace RemoveDislike
     ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App
-    { 
-        public App()
+    {
+        protected App()
         {
             Info("Output system information");
             OutputSystemInfo();
-            
+
             Entrance.Init();
-            
+
             Info("Application started");
             InitializeComponent();
         }
