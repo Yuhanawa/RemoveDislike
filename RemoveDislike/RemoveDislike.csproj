@@ -74,6 +74,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -94,11 +95,11 @@
     <Compile Include="Src\Core\Clean\Rule.cs" />
     <Compile Include="Src\Core\ConfigHelper.cs" />
     <Compile Include="Src\Core\Entrance.cs" />
-    <Compile Include="Src\Core\Regedit\ContextMenu.cs" />
     <Compile Include="Src\Core\Utils\I18nUtils.cs" />
     <Compile Include="Src\Core\Utils\LogUtils.cs" />
     <Compile Include="Src\Core\Utils\EnvironmentUtils.cs" />
     <Compile Include="Src\Core\Utils\FileUtils.cs" />
+    <Compile Include="Src\Core\Utils\RegistryUtils.cs" />
     <Compile Include="Src\Core\Utils\SystemInfoUtils.cs" />
     <Compile Include="Src\Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
+    <Folder Include="Src\Core\Regedit" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
