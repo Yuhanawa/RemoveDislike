@@ -24,19 +24,19 @@ namespace RemoveDislike.Core.Clean
             foreach (Match match in Regex.Matches(str, "%[^\\r\\n%]{1,128}%"))
                 str = str.Replace(match.Value, EnvironmentUtils.Get(match.Value));
 
-            return str.Trim();
+            return str.Replace(@"\",@"\\").Trim();
         }
 
-        public static List<Rule> FromFile(string path)
+        public static Cleaner.Model FromFile(string path)
         {
             Info(@$"[RuleParser] Loading rules from {path}");
-            return JSON.ToObject<List<Rule>>(Correction(File.ReadAllText(path)));
+            return JSON.ToObject<Cleaner.Model>(Correction(File.ReadAllText(path)));
         }
 
-        public static List<Rule> FromString(string json)
+        public static Cleaner.Model FromString(string json)
         {
             Info(@"[RuleParser] Loading rules from json(string)");
-            return JSON.ToObject<List<Rule>>(Correction(json));
+            return JSON.ToObject<Cleaner.Model>(Correction(json));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace RemoveDislike.Views.Models
         public ContextMenuInfoTab(RegistryKey key, string name)
         {
             InitializeComponent();
-            DataContext = this;
+            DataContext = key;
             KeyName = name;
 
             var path = key.GetValue("Icon")?.ToString();
@@ -69,8 +69,8 @@ namespace RemoveDislike.Views.Models
             {
                 if (value)
                     ((RegistryKey)DataContext).DeleteValue("LegacyDisable");
-
-                ((RegistryKey)DataContext).SetValue("LegacyDisable", "");
+                else
+                    ((RegistryKey)DataContext).SetValue("LegacyDisable", "");
             }
         }
 

@@ -57,12 +57,6 @@ namespace RemoveDislike.Core.Clean
 
             private bool DirectoryCheck(string path)
             {
-                if (Directory.Exists(path))
-                {
-                    Warn($"[File] The directory {path} is not found");
-                    return false;
-                }
-
                 if (Directory.GetFileSystemEntries(path).Length == 0)
                 {
                     Directory.Delete(path);
@@ -377,6 +371,11 @@ namespace RemoveDislike.Core.Clean
             {
                 Rules = rules;
                 Source = "Internal";
+            }
+
+            public Model()
+            {
+                
             }
 
             #endregion

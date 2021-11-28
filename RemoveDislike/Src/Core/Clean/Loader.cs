@@ -48,8 +48,7 @@ namespace RemoveDislike.Core.Clean
         private static void LoadExternalRules()
         {
             foreach (FileInfo file in new DirectoryInfo(ConfigHelper.RuleBase).GetFiles("*.json"))
-                CleanerGroup.Add(file.Name.Remove(file.Name.Length - 5),
-                    new Model(FromFile(file.FullName), file.FullName));
+                CleanerGroup.Add(file.Name.Remove(file.Name.Length - 5), FromFile(file.FullName));
         }
 
         public static void LoadInternalRules()
