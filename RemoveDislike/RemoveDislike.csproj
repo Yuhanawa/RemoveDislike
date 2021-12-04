@@ -9,7 +9,6 @@
         <StartupObject>RemoveDislike.App</StartupObject>
         <Copyright>Yuhanawa</Copyright>
         <Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Resources\ico\128x_black.ico</ApplicationIcon>
         <SignAssembly>False</SignAssembly>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -17,6 +16,7 @@
         <PackageProjectUrl>Github.com/Yuhanawa/RemoveDislike</PackageProjectUrl>
         <RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <NoWin32Manifest>true</NoWin32Manifest>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
