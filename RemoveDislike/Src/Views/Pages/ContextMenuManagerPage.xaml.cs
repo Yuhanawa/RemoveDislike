@@ -7,10 +7,7 @@ namespace RemoveDislike.Views.Pages
 {
     public partial class ContextMenuManagerPage
     {
-        public ContextMenuManagerPage()
-        {
-            InitializeComponent();
-        }
+        public ContextMenuManagerPage() => InitializeComponent();
 
         private void Temp_OnClick(object sender, RoutedEventArgs e)
         {

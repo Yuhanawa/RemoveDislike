@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using RemoveDislike.Core.Utils;
-using static RemoveDislike.Core.Utils.LogUtils;
 
 namespace RemoveDislike.Core.Clean
 {
@@ -12,13 +9,11 @@ namespace RemoveDislike.Core.Clean
     /// </summary>
     public class Cleaner
     {
-        public Cleaner()
-        {
-            Load();
-        }
+        public Cleaner() => Load();
 
         public static Dictionary<string, Model> CleanerGroup { get; } = new();
         public static List<string> BlackList { get; } = new();
+
         public static string GetSource(string key) => CleanerGroup[key].Source;
 
 
@@ -172,6 +167,7 @@ namespace RemoveDislike.Core.Clean
                     case CleanMode.RecursionFolders:
                     {
                         void Recursion(DirectoryInfo dir) => _DirCleanupModule(root, rule, Recursion);
+
                         Recursion(root);
 
                         break;
@@ -335,27 +331,34 @@ namespace RemoveDislike.Core.Clean
             ///     5: Risk of death
             ///     6: Refuse to execute
             /// </summary>
-            public int SafetyLevel =>
-                Administrator switch
-                {
-                    false when !ForceDelete && !CarpetScan => 0,
-                    true when !ForceDelete && !CarpetScan => 1,
-                    _ => ForceDelete switch
+            public int SafetyLevel
+            {
+                get =>
+                    Administrator switch
                     {
-                        true when !CarpetScan => 2,
-                        _ => CarpetScan switch
+                        false when !ForceDelete && !CarpetScan => 0,
+                        true when !ForceDelete && !CarpetScan => 1,
+                        _ => ForceDelete switch
                         {
-                            true when !Administrator && !ForceDelete => 3,
-                            true when Administrator && !ForceDelete => 4,
-                            true when ForceDelete => 5,
-                            _ => 6
+                            true when !CarpetScan => 2,
+                            _ => CarpetScan switch
+                            {
+                                true when !Administrator && !ForceDelete => 3,
+                                true when Administrator && !ForceDelete => 4,
+                                true when ForceDelete => 5,
+                                _ => 6
+                            }
                         }
-                    }
-                };
+                    };
+            }
 
             public double CleanedSize { get; private set; }
             public int CleanedCount { get; private set; }
-            public int RulesCount => Rules.Count;
+
+            public int RulesCount
+            {
+                get => Rules.Count;
+            }
 
             #endregion
 
@@ -375,7 +378,6 @@ namespace RemoveDislike.Core.Clean
 
             public Model()
             {
-                
             }
 
             #endregion
@@ -392,17 +394,37 @@ namespace RemoveDislike.Core.Clean
 
         #region CleanerGroup Keys Values Count
 
-        public static Dictionary<string, Model>.KeyCollection Keys => CleanerGroup.Keys;
-        public static Dictionary<string, Model>.ValueCollection Values => CleanerGroup.Values;
-        public static int Count => CleanerGroup.Count;
+        public static Dictionary<string, Model>.KeyCollection Keys
+        {
+            get => CleanerGroup.Keys;
+        }
+
+        public static Dictionary<string, Model>.ValueCollection Values
+        {
+            get => CleanerGroup.Values;
+        }
+
+        public static int Count
+        {
+            get => CleanerGroup.Count;
+        }
 
         #endregion
 
         #region CleanedData
 
-        public static double AllCleanedSize => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedSize);
-        public static double AllCleanedCount => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedCount);
+        public static double AllCleanedSize
+        {
+            get => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedSize);
+        }
+
+        public static double AllCleanedCount
+        {
+            get => CleanerGroup.Keys.Sum(key => CleanerGroup[key].CleanedCount);
+        }
+
         public static double GetCleanedSize(string key) => CleanerGroup[key].CleanedSize;
+
         public static double GetCleanedCount(string key) => CleanerGroup[key].CleanedCount;
 
         #endregion
@@ -412,6 +434,7 @@ namespace RemoveDislike.Core.Clean
         public static void ReLoad() => Loader.ReLoadAll();
 
         public static void Load() => Loader.LoadAll();
+
         public static void Delete(string key) => CleanerGroup[key].ToDelete();
 
         public static void ToRunAll()

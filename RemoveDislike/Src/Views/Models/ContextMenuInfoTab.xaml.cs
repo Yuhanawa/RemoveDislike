@@ -140,7 +140,7 @@ namespace RemoveDislike.Views.Models
                 }
                 catch (Exception ex)
                 {
-                    LogUtils.Err("Err", ex);
+                    Err("Err", ex);
                     return;
                 }
         }

@@ -54,9 +54,9 @@ namespace RemoveDislike.Views.Pages
         private void Add_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialog fileDialog = new OpenFileDialog
-            { Filter = "Json|*.json", Multiselect = true, DefaultExt = "*.json" };
+                { Filter = "Json|*.json", Multiselect = true, DefaultExt = "*.json" };
 
-            var result = fileDialog.ShowDialog();
+            bool? result = fileDialog.ShowDialog();
             if (result.HasValue && result.Value)
                 foreach (string name in fileDialog.FileNames)
                 {

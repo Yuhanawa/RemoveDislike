@@ -24,7 +24,7 @@ namespace RemoveDislike.Core.Clean
             foreach (Match match in Regex.Matches(str, "%[^\\r\\n%]{1,128}%"))
                 str = str.Replace(match.Value, EnvironmentUtils.Get(match.Value));
 
-            return str.Replace(@"\",@"\\").Trim();
+            return str.Replace(@"\", @"\\").Trim();
         }
 
         public static Cleaner.Model FromFile(string path)

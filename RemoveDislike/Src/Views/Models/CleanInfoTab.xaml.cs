@@ -8,10 +8,7 @@ namespace RemoveDislike.Views.Models
 {
     public partial class CleanInfoTab
     {
-        public CleanInfoTab()
-        {
-            InitializeComponent();
-        }
+        public CleanInfoTab() => InitializeComponent();
 
         private void Play_OnClick(object sender, RoutedEventArgs e)
         {

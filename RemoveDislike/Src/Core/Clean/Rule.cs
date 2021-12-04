@@ -31,6 +31,7 @@ namespace RemoveDislike.Core.Clean
         public List<string> Feature { get; set; }
         public CleanMode CleanMode { get; set; }
         public string Path { get; set; }
+
         public override string ToString() => $"[Rule] [{CleanMode}] [{Feature.Count}] {Path} ";
     }
 }

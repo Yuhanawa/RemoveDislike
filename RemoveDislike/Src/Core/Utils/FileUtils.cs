@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using static RemoveDislike.Core.Utils.LogUtils;
 
 namespace RemoveDislike.Core.Utils
 {
@@ -160,16 +158,16 @@ namespace RemoveDislike.Core.Utils
             switch (fileSystemInfo)
             {
                 case DirectoryInfo dir:
-                    {
-                        TryExDelDir(dir);
-                        break;
-                    }
+                {
+                    TryExDelDir(dir);
+                    break;
+                }
                 case FileInfo file:
-                    {
-                        if (output) Log(TryDelFile(file).ToString());
-                        else TryDelFile(file);
-                        break;
-                    }
+                {
+                    if (output) Log(TryDelFile(file).ToString());
+                    else TryDelFile(file);
+                    break;
+                }
             }
         }
 
@@ -249,9 +247,10 @@ namespace RemoveDislike.Core.Utils
                 return ToString();
             }
 
-            public override string ToString() => IsSuccess
-                ? $"[File] [{(int)(Size / 1024)} MB] {Source} ; Size: {Size} KB. "
-                : $"[File] [Warn] {Exception.Message} ; Source: {Source} ; Size: {Size} KB. ";
+            public override string ToString() =>
+                IsSuccess
+                    ? $"[File] [{(int)(Size / 1024)} MB] {Source} ; Size: {Size} KB. "
+                    : $"[File] [Warn] {Exception.Message} ; Source: {Source} ; Size: {Size} KB. ";
         }
     }
 }

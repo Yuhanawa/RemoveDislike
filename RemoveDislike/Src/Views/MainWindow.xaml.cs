@@ -18,21 +18,19 @@ namespace RemoveDislike.Views
         public delegate void Delegate();
 
         private readonly Thread I0Thread = new(() =>
-                             {
-                                 while (!Exiting)
-                                 {
-                                     if (DelegateList.Count > 0)
-                                         ThreadPool.QueueUserWorkItem(_ =>
-                                         {
-                                             var fn = (Delegate)DelegateList[0].Clone();
-                                             DelegateList.RemoveAt(0);
-                                             fn();
-                                         });
-                                     else Thread.Sleep(2500);
-                                 }
-                               // ReSharper disable once FunctionNeverReturns
-                           })
-        { Name = "I0Thread" };
+            {
+                while (!Exiting)
+                    if (DelegateList.Count > 0)
+                        ThreadPool.QueueUserWorkItem(_ =>
+                        {
+                            var fn = (Delegate)DelegateList[0].Clone();
+                            DelegateList.RemoveAt(0);
+                            fn();
+                        });
+                    else Thread.Sleep(2500);
+                // ReSharper disable once FunctionNeverReturns
+            })
+            { Name = "I0Thread" };
 
         private Page _clearPage;
         private Page _contextMenuManagerPage;
@@ -68,8 +66,7 @@ namespace RemoveDislike.Views
             MainFrame.Height = e.NewSize.Height - 8;
         }
 
-        private void CommonClear_OnSelected(object sender, RoutedEventArgs e) =>
-            MainFrame.Content = _clearPage;
+        private void CommonClear_OnSelected(object sender, RoutedEventArgs e) => MainFrame.Content = _clearPage;
 
         private void ContextMenuManager_OnSelected(object sender, RoutedEventArgs e) =>
             MainFrame.Content = _contextMenuManagerPage;

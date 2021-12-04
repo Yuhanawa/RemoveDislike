@@ -1,100 +1,100 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
-		<Nullable>warnings</Nullable>
-		<UseWPF>true</UseWPF>
-		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-		<StartupObject>RemoveDislike.App</StartupObject>
-		<Copyright>Yuhanawa</Copyright>
-		<Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<ApplicationIcon>Resources\ico\128x_black.ico</ApplicationIcon>
-		<SignAssembly>False</SignAssembly>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>Icon_black.png</PackageIcon>
-		<PackageProjectUrl>Github.com/Yuhanawa/RemoveDislike</PackageProjectUrl>
-		<RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
+        <Nullable>warnings</Nullable>
+        <UseWPF>true</UseWPF>
+        <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+        <StartupObject>RemoveDislike.App</StartupObject>
+        <Copyright>Yuhanawa</Copyright>
+        <Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <ApplicationIcon>Resources\ico\128x_black.ico</ApplicationIcon>
+        <SignAssembly>False</SignAssembly>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>Icon_black.png</PackageIcon>
+        <PackageProjectUrl>Github.com/Yuhanawa/RemoveDislike</PackageProjectUrl>
+        <RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM32'">
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM32'">
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <None Remove="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
-	  <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
-	  <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
-	  <None Remove="Resources\Fonts\FontAwesome.otf" />
-	  <None Remove="Src\Views\Icon.png" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
+        <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
+        <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
+        <None Remove="Resources\Fonts\FontAwesome.otf"/>
+        <None Remove="Src\Views\Icon.png"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="Resources\ico\128x_black.ico" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="Resources\ico\128x_black.ico"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="fastJSON" Version="2.4.0.4" />
-		<PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="fastJSON" Version="2.4.0.4"/>
+        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
-	  <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
-	  <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
-	  <Resource Include="Resources\Fonts\FontAwesome.otf" />
-	</ItemGroup>
+    <ItemGroup>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="Resources\Img\Icon_black.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="Resources\Img\Icon_black.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
 
 </Project>
