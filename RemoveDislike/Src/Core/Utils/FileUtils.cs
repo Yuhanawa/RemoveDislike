@@ -21,40 +21,41 @@ namespace RemoveDislike.Core.Utils
             try
             {
                 if (!File.Exists(filename)) return false;
-                //设置文件的属性为正常，这是为了防止文件是只读 
+                //设置文件的属性为正常，这是为了防止文件是只读
                 File.SetAttributes(filename, FileAttributes.Normal);
-                //计算扇区数目 
+                //计算扇区数目
                 double sectors = Math.Ceiling(new FileInfo(filename).Length / 512.0);
-                // 创建一个同样大小的虚拟缓存 
+                // 创建一个同样大小的虚拟缓存
                 var dummyBuffer = new byte[512];
-                // 创建一个加密随机数目生成器 
-                var rng = new RNGCryptoServiceProvider();
-                // 打开这个文件的FileStream 
+                // 创建一个加密随机数目生成器
+                // var rng = new RNGCryptoServiceProvider();
+                var rng = RandomNumberGenerator.Create();
+                // 打开这个文件的FileStream
                 var inputStream = new FileStream(filename, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
                 for (var currentPass = 0; currentPass < timesToWrite; currentPass++)
                 {
-                    // 文件流位置 
+                    // 文件流位置
                     inputStream.Position = 0;
-                    //循环所有的扇区 
+                    //循环所有的扇区
                     for (var sectorsWritten = 0; sectorsWritten < sectors; sectorsWritten++)
                     {
-                        //把垃圾数据填充到流中 
+                        //把垃圾数据填充到流中
                         rng.GetBytes(dummyBuffer);
-                        // 写入文件流中 
+                        // 写入文件流中
                         inputStream.Write(dummyBuffer, 0, dummyBuffer.Length);
                     }
                 }
 
-                // 清空文件 
+                // 清空文件
                 inputStream.SetLength(0);
-                // 关闭文件流 
+                // 关闭文件流
                 inputStream.Close();
-                // 清空原始日期需要 
+                // 清空原始日期需要
                 var dt = new DateTime(2037, 1, 1, 0, 0, 0);
                 File.SetCreationTime(filename, dt);
                 File.SetLastAccessTime(filename, dt);
                 File.SetLastWriteTime(filename, dt);
-                // 删除文件 
+                // 删除文件
                 File.Delete(filename);
 
                 return true;
@@ -159,16 +160,16 @@ namespace RemoveDislike.Core.Utils
             switch (fileSystemInfo)
             {
                 case DirectoryInfo dir:
-                {
-                    TryExDelDir(dir);
-                    break;
-                }
+                    {
+                        TryExDelDir(dir);
+                        break;
+                    }
                 case FileInfo file:
-                {
-                    if (output) Log(TryDelFile(file).ToString());
-                    else TryDelFile(file);
-                    break;
-                }
+                    {
+                        if (output) Log(TryDelFile(file).ToString());
+                        else TryDelFile(file);
+                        break;
+                    }
             }
         }
 
@@ -184,14 +185,14 @@ namespace RemoveDislike.Core.Utils
         /// <returns></returns>
         public static bool HasOperationPermission(string path, bool isFolder) =>
             isFolder
-                ? Directory.GetAccessControl(path)
+                ? new DirectoryInfo(path).GetAccessControl()
                     .GetAccessRules(true, true, typeof(NTAccount))
                     .OfType<FileSystemAccessRule>()
                     .Where(i =>
                         i.IdentityReference.Value == Path.Combine(Environment.UserDomainName, Environment.UserName))
                     .AsEnumerable()
                     .Any(i => i.AccessControlType == AccessControlType.Deny)
-                : File.GetAccessControl(path)
+                : new FileInfo(path).GetAccessControl()
                     .GetAccessRules(true, true, typeof(NTAccount))
                     .OfType<FileSystemAccessRule>()
                     .Where(i =>

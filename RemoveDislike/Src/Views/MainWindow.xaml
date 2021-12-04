@@ -6,7 +6,7 @@
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
             SizeChanged="MainWindow_OnSizeChanged"
-            Icon="/Resources/Img/Icon.png"
+            Icon="../../Resources/Img/Icon.png"
             Title="RemoveDislike -- Remove Your Dislike Things "
             Height="614"
             Width="1024"
@@ -21,7 +21,7 @@
 
     <pu:WindowXCaption.MinimizeButtonStyle>
         <Style
-            BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowX}}}"
+            BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#8c8c8c" />
@@ -30,7 +30,7 @@
     </pu:WindowXCaption.MinimizeButtonStyle>
     <pu:WindowXCaption.MaximizeButtonStyle>
         <Style
-            BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaximizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowX}}}"
+            BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaximizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="11" />
             <Setter Property="Foreground" Value="#8c8c8c" />
@@ -39,7 +39,7 @@
     </pu:WindowXCaption.MaximizeButtonStyle>
     <pu:WindowXCaption.CloseButtonStyle>
         <Style
-            BasedOn="{StaticResource {ComponentResourceKey ResourceId=CloseButtonStyle, TypeInTargetAssembly={x:Type pu:WindowX}}}"
+            BasedOn="{StaticResource {ComponentResourceKey ResourceId=CloseButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="#8c8c8c" />
@@ -55,7 +55,7 @@
             FontFamily="{StaticResource FontAwesome}">
             <Button.Style>
                 <Style
-                    BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowX}}}"
+                    BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
                     TargetType="Button">
                     <!-- <Setter Property="FontSize" Value="12" /> -->
                     <Setter Property="Foreground" Value="#8c8c8c" />

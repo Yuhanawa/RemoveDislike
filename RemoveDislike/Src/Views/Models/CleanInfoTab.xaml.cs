@@ -75,7 +75,6 @@ namespace RemoveDislike.Views.Models
             set => SetValue(RuleNameProperty, value);
         }
 
-
         public string Source
         {
             get => (string)GetValue(SourceProperty);
@@ -88,6 +87,6 @@ namespace RemoveDislike.Views.Models
             set => SetValue(SizeProperty, value);
         }
 
-        #endregion
+        #endregion Property
     }
 }

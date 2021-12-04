@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -6,16 +5,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
-using RemoveDislike.Core;
 using RemoveDislike.Core.Clean;
 using RemoveDislike.Views.Models;
-using static RemoveDislike.Views.Utils.CommonUtils;
+
 
 namespace RemoveDislike.Views.Pages
 {
     public partial class CleanPage
     {
-        public static CleanPage Interface { get; private set;  }
+        public static CleanPage Interface { get; private set; }
 
         public CleanPage()
         {
@@ -56,21 +54,21 @@ namespace RemoveDislike.Views.Pages
         private void Add_OnClick(object sender, RoutedEventArgs e)
         {
             FileDialog fileDialog = new OpenFileDialog
-                { Filter = "Json|*.json", Multiselect = true, DefaultExt = "*.json" };
+            { Filter = "Json|*.json", Multiselect = true, DefaultExt = "*.json" };
 
-            // ReSharper disable once PossibleInvalidOperationException
-            if (fileDialog.ShowDialog().Value)
+            var result = fileDialog.ShowDialog();
+            if (result.HasValue && result.Value)
                 foreach (string name in fileDialog.FileNames)
                 {
                     FileInfo fileInfo = new(name);
-                    if (!File.Exists($@"{ConfigHelper.RuleBase}/{fileInfo.Name}"))
+                    if (!File.Exists($"{ConfigHelper.RuleBase}/{fileInfo.Name}"))
                     {
-                        fileInfo.CopyTo($@"{ConfigHelper.RuleBase}/{fileInfo.Name}");
+                        fileInfo.CopyTo($"{ConfigHelper.RuleBase}/{fileInfo.Name}");
                     }
                     else
                     {
-                        MessageBox.Show($@"{ConfigHelper.RuleBase}/{fileInfo.Name} Is Exists");
-                        Log($@"{ConfigHelper.RuleBase}/{fileInfo.Name} Is Exists");
+                        MessageBox.Show($"{ConfigHelper.RuleBase}/{fileInfo.Name} Is not Exists");
+                        Info($"[View] {ConfigHelper.RuleBase}/{fileInfo.Name} Is not Exists");
                     }
                 }
 
@@ -142,8 +140,8 @@ namespace RemoveDislike.Views.Pages
                 }
                 else
                 {
-                    MessageBox.Show($@"{ConfigHelper.RuleBase}/{fileInfo.Name} Is Exists");
-                    Log($@"{ConfigHelper.RuleBase}/{fileInfo.Name} Is Exists");
+                    MessageBox.Show($@"{ConfigHelper.RuleBase}/{fileInfo.Name} Is not Exists");
+                    Info($"[View] {ConfigHelper.RuleBase}/{fileInfo.Name} Is not Exists");
                 }
             }
 

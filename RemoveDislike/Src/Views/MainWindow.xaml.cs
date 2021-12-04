@@ -11,25 +11,28 @@ namespace RemoveDislike.Views
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Panuon.UI.Silver.WindowX
     {
+        private static bool Exiting { get; set; } = false;
+
         public delegate void Delegate();
 
-        private static readonly Thread I0Thread = new(() =>
-        {
-            while (true)
-            {
-                if (DelegateList.Count > 0)
-                    ThreadPool.QueueUserWorkItem(_ =>
-                    {
-                        var fn = (Delegate)DelegateList[0].Clone();
-                        DelegateList.RemoveAt(0);
-                        fn();
-                    });
-                Thread.Sleep(2500);
-            }
-            // ReSharper disable once FunctionNeverReturns
-        }) { Name = "I0Thread" };
+        private readonly Thread I0Thread = new(() =>
+                             {
+                                 while (!Exiting)
+                                 {
+                                     if (DelegateList.Count > 0)
+                                         ThreadPool.QueueUserWorkItem(_ =>
+                                         {
+                                             var fn = (Delegate)DelegateList[0].Clone();
+                                             DelegateList.RemoveAt(0);
+                                             fn();
+                                         });
+                                     else Thread.Sleep(2500);
+                                 }
+                               // ReSharper disable once FunctionNeverReturns
+                           })
+        { Name = "I0Thread" };
 
         private Page _clearPage;
         private Page _contextMenuManagerPage;
@@ -42,7 +45,7 @@ namespace RemoveDislike.Views
             Thread.CurrentThread.Name = "MainThread";
             I0Thread.Start();
 
-            Application.Current.Exit += (_, _) => I0Thread.Abort();
+            Application.Current.Exit += (_, _) => Exiting = true;
         }
 
         public static MainWindow Interface { get; private set; }

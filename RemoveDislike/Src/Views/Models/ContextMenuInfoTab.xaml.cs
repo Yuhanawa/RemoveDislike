@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -6,7 +5,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-using RemoveDislike.Core.Utils;
+
 
 namespace RemoveDislike.Views.Models
 {
@@ -17,7 +16,6 @@ namespace RemoveDislike.Views.Models
 
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(ImageSource), typeof(ContextMenuInfoTab));
-
 
         public ContextMenuInfoTab(RegistryKey key, string name)
         {
@@ -87,9 +85,8 @@ namespace RemoveDislike.Views.Models
         }
 
         private void ContextMenuInfoTab_OnLoaded(object sender, RoutedEventArgs e) =>
-            // Maybe you can't see it 
+            // Maybe you can't see it
             EVisibility.Content = TabVisibility ? "" : "";
-
 
         #region Event
 
@@ -148,6 +145,6 @@ namespace RemoveDislike.Views.Models
                 }
         }
 
-        #endregion
+        #endregion Event
     }
 }

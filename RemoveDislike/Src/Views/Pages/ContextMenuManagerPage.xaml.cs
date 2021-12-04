@@ -1,8 +1,6 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using Microsoft.Win32;
-using RemoveDislike.Core.Utils;
 using RemoveDislike.Views.Models;
 
 namespace RemoveDislike.Views.Pages
@@ -41,7 +39,6 @@ namespace RemoveDislike.Views.Pages
                     new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
-
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         [SuppressMessage("ReSharper", "IdentifierTypo")]
         private void LoadStarMenuList(object sender, EventArgs e)
@@ -70,7 +67,6 @@ namespace RemoveDislike.Views.Pages
                 Desktop_ShellExList.Children.Add(
                     new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
-
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         [SuppressMessage("ReSharper", "IdentifierTypo")]
