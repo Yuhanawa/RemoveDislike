@@ -1,6 +1,12 @@
 bin/
 obj/
 /packages/
+
+# rider
 riderModule.iml
 /_ReSharper.Caches/
-.idea/sonarlint/*
+.idea/*
+!.idea/.idea.RemoveDislike\
+
+#vs
+.vs
