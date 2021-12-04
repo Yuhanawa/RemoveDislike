@@ -60,15 +60,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
-        <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
-        <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
-        <None Remove="Resources\Fonts\FontAwesome.otf"/>
-        <None Remove="Src\Views\Icon.png"/>
+        <None Remove="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
+        <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
+        <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
+        <None Remove="Resources\Fonts\FontAwesome.otf" />
+        <None Remove="Src\Views\Icon.png" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Resources\ico\128x_black.ico"/>
+        <Content Include="Resources\ico\128x_black.ico" />
     </ItemGroup>
 
     <ItemGroup>
@@ -79,15 +79,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="fastJSON" Version="2.4.0.4"/>
-        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha"/>
+        <PackageReference Include="fastJSON" Version="2.4.0.4" />
+        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha" />
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
-        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
+        <Resource Include="Resources\Fonts\FontAwesome.otf" />
     </ItemGroup>
 
     <ItemGroup>
