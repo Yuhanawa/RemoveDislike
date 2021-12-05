@@ -5,11 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
       mc:Ignorable="d"
-      Background="Brown"
+      Initialized="ContextMenuManagerPage_OnInitialized"
       Title="ContextMenuManagerPage"
       d:DesignHeight="450"
       d:DesignWidth="800">
-
 
     <Page.Resources>
         <Style x:Key="LittleButtonStyle" TargetType="Button"
@@ -25,21 +24,23 @@
             <Setter Property="Foreground" Value="#57FFFFFF" />
         </Style>
         <Style x:Key="ListPanelStyle" TargetType="StackPanel">
-            <Setter Property="Background" Value="DarkGreen" />
+            <Setter Property="Background" Value="Transparent" />
         </Style>
         <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer"
                BasedOn="{StaticResource {x:Type ScrollViewer}}">
-            <Setter Property="Background" Value="CadetBlue" />
+            <Setter Property="Background" Value="#323333" />
             <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
         </Style>
         <Style x:Key="MenuStyle" TargetType="TabItem"
                BasedOn="{StaticResource {x:Type TabItem}}">
-            <Setter Property="Background" Value="Goldenrod" />
+            <Setter Property="Background" Value="#3e4249" />
         </Style>
-        <Style x:Key="TabItemStyle" TargetType="TabItem"
-               BasedOn="{StaticResource {x:Type TabItem}}">
-            <Setter Property="Background" Value="Goldenrod" />
+        <Style x:Key="TabControlStyle" TargetType="TabControl"
+               BasedOn="{StaticResource TabControlStyle}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="#353941" />
         </Style>
     </Page.Resources>
 
@@ -60,7 +61,7 @@
                 <ColumnDefinition Width="6" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-                       Text="The “netherworld” color scheme will be removed when the UI is complete!"
+                       Text="The 'netherworld' color scheme will be removed when the UI is complete!"
                        TextAlignment="Left"
                        VerticalAlignment="Center"
                        Foreground="#57FFFFFF" />
@@ -72,156 +73,76 @@
                     Name="OpenFolder" Content="&#xf07b;"
                     Style="{StaticResource LittleButtonStyle}"
                     Click="Temp_OnClick" />
-            <Button Grid.Column="4"
-                    Name="Play" Content="&#xf04b;"
-                    Style="{StaticResource LittleButtonStyle}"
-                    Click="Temp_OnClick" />
             <Button Grid.Column="5"
                     Name="More" Content="&#xf142;"
                     Style="{StaticResource LittleButtonStyle}"
                     Click="Temp_OnClick" />
         </Grid>
         <Border Grid.Row="1" BorderBrush="#FA2C2C2C" BorderThickness="0,1,0,0">
-            <TabControl>
+            <TabControl Style="{StaticResource TabControlStyle}">
+                
                 <TabItem Style="{StaticResource MenuStyle}" Name="StarMenu" Header="Star"
                          Initialized="LoadStarMenuList">
-                    <TabControl>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="StarShellList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="StarShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <!-- ReSharper disable once InconsistentNaming -->
-                                    <StackPanel Name="Star_ShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
-                </TabItem>
-                <TabItem Style="{StaticResource MenuStyle}" Name="GeneralMenu" Header="通用"
-                         Initialized="LoadGeneralList">
-                    <TabControl>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="GeneralShellList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="GeneralShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <!-- ReSharper disable once InconsistentNaming -->
-                                    <StackPanel Name="General_ShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
-                </TabItem>
-                <TabItem Style="{StaticResource MenuStyle}" Name="DesktopMenu" Header="桌面"
-                         Initialized="LoadDesktopMenuList">
-                    <TabControl>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="DesktopShellList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <StackPanel Name="DesktopShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                <ScrollViewer.Content>
-                                    <!-- ReSharper disable once InconsistentNaming -->
-                                    <StackPanel Name="Desktop_ShellExList" Style="{StaticResource ListPanelStyle}" />
-                                </ScrollViewer.Content>
-                            </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
-                </TabItem>
-                <TabItem Style="{StaticResource MenuStyle}" Name="FileMenu" Header="文件" Initialized="LoadFileMenuList">
-                    <ScrollViewer
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Hidden">
-                        <TabControl>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <StackPanel Name="FileShellList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <StackPanel Name="FileShellExList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <!-- ReSharper disable once InconsistentNaming -->
-                                        <StackPanel Name="File_ShellExList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                        </TabControl>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Style="{StaticResource MenuStyle}" Name="DirMenu" Header="目录" Initialized="LoadDirMenuList">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                        <TabControl>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <StackPanel Name="DirShellList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <StackPanel Name="DirShellExList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                            <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                                <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                    <ScrollViewer.Content>
-                                        <!-- ReSharper disable once InconsistentNaming -->
-                                        <StackPanel Name="Dir_ShellExList" Style="{StaticResource ListPanelStyle}" />
-                                    </ScrollViewer.Content>
-                                </ScrollViewer>
-                            </TabItem>
-                        </TabControl>
+                        <ScrollViewer.Content>
+                            <StackPanel Name="StarList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
+                
+                <TabItem Style="{StaticResource MenuStyle}" Name="GeneralMenu" Header="*"
+                         Initialized="LoadGeneralList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="GeneralList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                
+                <TabItem Style="{StaticResource MenuStyle}" Name="AllFileSystemObjectsMenu"
+                         Header="AllFileSystemObjects">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="AllFileSystemObjectsList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="FolderMenu" Header="Folder"
+                         Initialized="LoadFolderMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="FolderList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                
+                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryMenu" Header="Directory"
+                         Initialized="LoadDirMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DirectoryList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                
+                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryBackgroundMenu" Header="DirectoryBackground">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DirectoryBackgroundList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="DesktopBackgroundMenu" Header="DesktopBackground"
+                         Initialized="LoadDesktopMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DesktopBackgroundList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+                
                 <!-- ReSharper disable once InconsistentNaming -->
                 <TabItem Style="{StaticResource MenuStyle}" Name="IEMenu" Header="IE" Initialized="LoadIEMenuList">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
@@ -231,38 +152,7 @@
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Style="{StaticResource MenuStyle}" Name="SpecialMenu" Header="特殊">
-                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                        <ScrollViewer.Content>
-                            <TabControl>
-                                <TabItem Style="{StaticResource TabItemStyle}" Header="Shell">
-                                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                        <ScrollViewer.Content>
-                                            <StackPanel Name="SpecialShellList" Style="{StaticResource ListPanelStyle}" />
-                                        </ScrollViewer.Content>
-                                    </ScrollViewer>
-                                </TabItem>
-                                <TabItem Style="{StaticResource TabItemStyle}" Header="ShellEx">
-                                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                        <ScrollViewer.Content>
-                                            <StackPanel Name="SpecialShellExList"
-                                                        Style="{StaticResource ListPanelStyle}" />
-                                        </ScrollViewer.Content>
-                                    </ScrollViewer>
-                                </TabItem>
-                                <TabItem Style="{StaticResource TabItemStyle}" Header="_ShellEx">
-                                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                                        <ScrollViewer.Content>
-                                            <!-- ReSharper disable once InconsistentNaming -->
-                                            <StackPanel Name="Special_ShellExList"
-                                                        Style="{StaticResource ListPanelStyle}" />
-                                        </ScrollViewer.Content>
-                                    </ScrollViewer>
-                                </TabItem>
-                            </TabControl>
-                        </ScrollViewer.Content>
-                    </ScrollViewer>
-                </TabItem>
+                
             </TabControl>
         </Border>
     </Grid>

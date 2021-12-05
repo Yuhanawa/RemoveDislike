@@ -4,64 +4,62 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RemoveDislike.Views.Models"
+             xmlns:i="clr-namespace:RemoveDislike.Views"
              xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
              mc:Ignorable="d"
-             Loaded="ContextMenuInfoTab_OnLoaded"
-             Height="52"
+             PreviewMouseRightButtonDown="ControlOnMouseRightDown"
              FontSize="16"
-             d:DesignHeight="52" d:DesignWidth="420">
+             d:DesignHeight="62" d:DesignWidth="480" d:DataContext="{d:DesignInstance local:ContextMenuInfoTab}">
 
     <UserControl.Resources>
-        <Style x:Key="LittleButtonStyle" TargetType="Button"
-               BasedOn="{StaticResource {x:Type Button}}">
+        <Style x:Key="TextToggleButtonStyle" TargetType="ToggleButton"
+               BasedOn="{StaticResource {x:Type ToggleButton}}">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="8" />
             <!-- <Setter Property="FontSize" Value="14" /> -->
-            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
-            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
-            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
-            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
-            <Setter Property="Foreground" Value="#57FFFFFF" />
+            <Setter Property="pu:ToggleButtonHelper.CheckedForeground" Value="#5AEAEAEA" />
+            <Setter Property="pu:ToggleButtonHelper.HoverForeground" Value="#5AA3A3A3" />
+            <Setter Property="Foreground" Value="#5A9A9A9A" />
         </Style>
     </UserControl.Resources>
 
+    <StackPanel>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="36" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="124" />
+                    <ColumnDefinition Width="124" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0"
+                       Source="{Binding Mode=OneWay,Path=Icon}"
+                       PreviewDragEnter="EIcon_OnPreviewDragEnter"
+                       PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp" />
 
-    <Grid Margin="2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="28" />
-            <ColumnDefinition Width="28" />
-            <ColumnDefinition Width="28" />
-            <ColumnDefinition Width="28" />
-        </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Name="EIcon"
-               Width="32" Height="32"
-               Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
-                Path=Icon}"
-               PreviewDragEnter="EIcon_OnPreviewDragEnter"
-               PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp" />
-        <TextBlock Grid.Column="1" Name="EText"
-                   VerticalAlignment="Center"
-                   Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
-                 Path=KeyName}"
-                   PreviewMouseRightButtonUp="EText_OnPreviewMouseRightButtonUp" />
-        <Button Grid.Column="2" Name="ESub"
-                Content="&#xf2b0;"
-                Click="ESub_OnClick"
-                Style="{StaticResource LittleButtonStyle}" />
-        <Button Grid.Column="3" Name="EVisibility"
-                Content="?"
-                Click="EVisibility_OnClick"
-                Style="{StaticResource LittleButtonStyle}" />
-        <Button Grid.Column="4" Name="EDel"
-                Content="&#xf00d;"
-                Click="EDel_OnClick"
-                Style="{StaticResource LittleButtonStyle}" />
-        <Button Grid.Column="5" Name="EMore"
-                Click="EMore_OnClick"
-                Content="&#xf013;"
-                Style="{StaticResource LittleButtonStyle}" />
-    </Grid>
+                <TextBlock Grid.Column="1"
+                           Foreground="#bfbfbf"
+                           Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
+                 Path=KeyName}" />
+                <ToggleButton Grid.Column="2" Content="shift"
+                              IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extended}"
+                              pu:ToggleButtonHelper.CheckedContent="IsShift"
+                              Style="{StaticResource TextToggleButtonStyle}" />
+                <pu:Switch Width="120" Grid.Column="3" CornerRadius="2"
+                           IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=LegacyDisable}" />
+            </Grid>
+
+            <Grid Name="MenuGrid" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Content="{Binding Source={x:Static i:I18nXamlData.ChangeIcon}}" />
+                <Button Grid.Column="1" Content="{Binding Source={x:Static i:I18nXamlData.OpenReg}}" />
+                <Button Grid.Column="2" Content="{Binding Source={x:Static i:I18nXamlData.Delete}}" />
+            </Grid>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

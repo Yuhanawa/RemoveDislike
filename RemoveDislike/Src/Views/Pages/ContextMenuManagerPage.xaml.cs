@@ -20,20 +20,10 @@ namespace RemoveDislike.Views.Pages
         {
             // GeneralMenu
             RegistryKey shell = RegistryUtils.GeneralMenu.GetShell;
-            RegistryKey shellex = RegistryUtils.GeneralMenu.GetShellexcmh;
-            RegistryKey _shellex = RegistryUtils.GeneralMenu.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                GeneralShellList.Children.Add(
+                GeneralList.Children.Add(
                     new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in shellex.GetSubKeyNames())
-                GeneralShellExList.Children.Add(
-                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in _shellex.GetSubKeyNames())
-                General_ShellExList.Children.Add(
-                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -49,25 +39,15 @@ namespace RemoveDislike.Views.Pages
         {
             // Directory\Background
             RegistryKey shell = RegistryUtils.Directory.Background.GetShell;
-            RegistryKey shellex = RegistryUtils.Directory.Background.GetShellexcmh;
-            RegistryKey _shellex = RegistryUtils.Directory.Background.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DesktopShellList.Children.Add(
+                DesktopBackgroundList.Children.Add(
                     new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in shellex.GetSubKeyNames())
-                DesktopShellExList.Children.Add(
-                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in _shellex.GetSubKeyNames())
-                Desktop_ShellExList.Children.Add(
-                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadFileMenuList(object sender, EventArgs e)
+        private void LoadFolderMenuList(object sender, EventArgs e)
         {
             // TODO
         }
@@ -78,20 +58,10 @@ namespace RemoveDislike.Views.Pages
         {
             // Directory
             RegistryKey shell = RegistryUtils.Directory.GetShell;
-            RegistryKey shellex = RegistryUtils.Directory.GetShellexcmh;
-            RegistryKey _shellex = RegistryUtils.Directory.Get_shellexcmh;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DirShellList.Children.Add(
+                DirectoryList.Children.Add(
                     new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in shellex.GetSubKeyNames())
-                DirShellExList.Children.Add(
-                    new ContextMenuInfoTab(shellex.OpenSubKey(subKeyName, true), subKeyName));
-
-            foreach (string subKeyName in _shellex.GetSubKeyNames())
-                Dir_ShellExList.Children.Add(
-                    new ContextMenuInfoTab(_shellex.OpenSubKey(subKeyName, true), subKeyName));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -106,6 +76,11 @@ namespace RemoveDislike.Views.Pages
             foreach (string subKeyName in menuExt.GetSubKeyNames())
                 IEList.Children.Add(
                     new ContextMenuInfoTab(menuExt.OpenSubKey(subKeyName, true), subKeyName));
+        }
+
+        private void ContextMenuManagerPage_OnInitialized(object sender, EventArgs e)
+        {
+            //
         }
     }
 }

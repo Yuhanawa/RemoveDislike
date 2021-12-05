@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-
 
 namespace RemoveDislike.Views.Models
 {
@@ -14,61 +14,41 @@ namespace RemoveDislike.Views.Models
         public static readonly DependencyProperty KeyNameProperty =
             DependencyProperty.Register("KeyName", typeof(string), typeof(ContextMenuInfoTab));
 
-        public static readonly DependencyProperty IconProperty =
-            DependencyProperty.Register("Icon", typeof(ImageSource), typeof(ContextMenuInfoTab));
+        public RegistryKey RegistryKey { get; set; }
 
-        public ContextMenuInfoTab(RegistryKey key, string name)
+        public ContextMenuInfoTab(RegistryKey registryKey, string keyName)
         {
             InitializeComponent();
-            DataContext = key;
-            KeyName = name;
 
-            var path = key.GetValue("Icon")?.ToString();
-            if (path == null)
+            RegistryKey = registryKey;
+            KeyName = keyName;
+
+            DataContext = this;
+        }
+
+        private static BitmapImage DllIcon =>
+            new(new Uri("pack://application:,,,/RemoveDislike;component/Resources/Img/dll.png"));
+
+        private static BitmapImage DefaultIcon =>
+            new(new Uri("pack://application:,,,/RemoveDislike;component/Resources/Img/default.png"));
+
+        public bool LegacyDisable
+        {
+            get => !RegistryKey.GetValueNames().Contains("LegacyDisable");
+            set
             {
-                // TODO (null value)
-            }
-            else if (path.EndsWith(".exe"))
-            {
-                var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-
-                if (icon == null) return;
-
-                ImageSource img = Imaging.CreateBitmapSourceFromHBitmap(
-                    icon.ToBitmap().GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-                Icon = img;
-            }
-            else if (path.Contains(".exe") && path.Contains(","))
-            {
-                var icon = System.Drawing.Icon.ExtractAssociatedIcon(path.Split(',')[0]);
-
-                if (icon == null) return;
-
-                ImageSource img = Imaging.CreateBitmapSourceFromHBitmap(
-                    icon.ToBitmap().GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-                Icon = img;
-            }
-            else
-            {
-                Icon = new BitmapImage(new Uri(path));
+                if (value) RegistryKey.DeleteValue("LegacyDisable");
+                else RegistryKey.SetValue("LegacyDisable", "");
             }
         }
 
-        public bool TabVisibility
+        public bool Extended
         {
-            get => !((RegistryKey)DataContext).GetValueNames().Contains("LegacyDisable");
+            get => RegistryKey.GetValueNames().Contains("Extended");
             set
             {
-                if (value)
-                    ((RegistryKey)DataContext).DeleteValue("LegacyDisable");
-                else
-                    ((RegistryKey)DataContext).SetValue("LegacyDisable", "");
+                if (value) RegistryKey.SetValue("Extended", "");
+                else RegistryKey.DeleteValue("Extended");
             }
         }
 
@@ -80,45 +60,46 @@ namespace RemoveDislike.Views.Models
 
         public ImageSource Icon
         {
-            get => (ImageSource)GetValue(IconProperty);
-            set => SetValue(IconProperty, value);
-        }
+            get
+            {
+                var path = RegistryKey.GetValue("Icon")?.ToString();
 
-        private void ContextMenuInfoTab_OnLoaded(object sender, RoutedEventArgs e) =>
-            // Maybe you can't see it
-            EVisibility.Content = TabVisibility ? "" : "";
+                if (string.IsNullOrEmpty(path)) return DefaultIcon;
+
+                if (path.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase) ||
+                    path.Contains(".exe", StringComparison.CurrentCultureIgnoreCase) && path.Contains(','))
+                {
+                    var icon = System.Drawing.Icon.ExtractAssociatedIcon(path.Split(',')[0]);
+
+                    return icon == null
+                        ? DefaultIcon
+                        : Imaging.CreateBitmapSourceFromHBitmap(
+                            icon.ToBitmap().GetHbitmap(),
+                            IntPtr.Zero,
+                            Int32Rect.Empty,
+                            BitmapSizeOptions.FromEmptyOptions());
+                }
+
+                if (path.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase)) return DllIcon;
+                if (path.EndsWith(".ico", StringComparison.CurrentCultureIgnoreCase))
+                    return new BitmapImage(new Uri(path, UriKind.Absolute));
+                if (path.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase))
+                    return new BitmapImage(new Uri(path, UriKind.Absolute));
+                if (path.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase))
+                    return new BitmapImage(new Uri(path, UriKind.Absolute));
+                if (path.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase))
+                    return new BitmapImage(new Uri(path, UriKind.Absolute));
+                // ReSharper disable once ConvertIfStatementToReturnStatement
+                if (path.EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase))
+                    return new BitmapImage(new Uri(path, UriKind.Absolute));
+
+                return DefaultIcon;
+            }
+        }
 
         #region Event
 
         private void EIcon_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            // TODO
-        }
-
-        private void EText_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            // TODO
-        }
-
-        private void ESub_OnClick(object sender, RoutedEventArgs e)
-        {
-            // TODO
-        }
-
-        private void EVisibility_OnClick(object sender, RoutedEventArgs e)
-        {
-            TabVisibility = !TabVisibility;
-
-            // Maybe you cannot see it!
-            EVisibility.Content = TabVisibility ? "" : "";
-        }
-
-        private void EDel_OnClick(object sender, RoutedEventArgs e)
-        {
-            // TODO
-        }
-
-        private void EMore_OnClick(object sender, RoutedEventArgs e)
         {
             // TODO
         }
@@ -144,6 +125,9 @@ namespace RemoveDislike.Views.Models
                     return;
                 }
         }
+
+        private void ControlOnMouseRightDown(object sender, MouseButtonEventArgs e) =>
+            MenuGrid.Visibility = MenuGrid.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
 
         #endregion Event
     }
