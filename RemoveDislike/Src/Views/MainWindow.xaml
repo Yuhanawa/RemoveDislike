@@ -6,7 +6,7 @@
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
             mc:Ignorable="d"
             SizeChanged="MainWindow_OnSizeChanged"
-            Icon="../../Resources/Img/Icon.png"
+            Icon="/Resources/Img/Icon.png"
             Title="RemoveDislike -- Remove Your Dislike Things "
             Height="614"
             Width="1024"

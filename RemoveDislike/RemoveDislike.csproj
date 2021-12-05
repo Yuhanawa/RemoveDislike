@@ -3,7 +3,6 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
-        <Nullable>warnings</Nullable>
         <UseWPF>true</UseWPF>
         <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
         <StartupObject>RemoveDislike.App</StartupObject>
@@ -16,7 +15,7 @@
         <PackageProjectUrl>Github.com/Yuhanawa/RemoveDislike</PackageProjectUrl>
         <RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <NoWin32Manifest>true</NoWin32Manifest>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -64,7 +63,6 @@
         <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
         <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
         <None Remove="Resources\Fonts\FontAwesome.otf" />
-        <None Remove="Src\Views\Icon.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -88,6 +86,9 @@
         <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
         <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
         <Resource Include="Resources\Fonts\FontAwesome.otf" />
+        <Resource Include="Resources\Img\Icon.png" />
+        <Resource Include="Resources\Img\default.png" />
+        <Resource Include="Resources\Img\dll.png" />
     </ItemGroup>
 
     <ItemGroup>
