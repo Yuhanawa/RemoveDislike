@@ -14,6 +14,45 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ### Options:
 
+```json
+{
+    "header": {
+        "name": "Examples",
+        "author": "me",
+        "description": "This is an examples",
+        "force": false
+    },
+    "rules": {
+//      "name:description": {
+//        "*.*": [
+//          "Here is path"
+//        ]
+//      },
+        "log:log file": {
+            "*.{log,logs}": [
+                "%APPDATA%/../../../"
+            ]
+        },
+        "tmp:temp file": {
+            "*": [
+                "%TMP%","$WinREAgent",
+				"%WINDIR%/ServiceProfiles/LocalService/AppData/Local/FontCache/",
+				"%WINDIR%/Explorer/",
+				"%WINDIR%/Prefetch/",
+				"%WINDIR%/Fonts/Deleted/",
+				"%WINDIR%/ActionCenterCache/"				
+            ],
+            "*.{tmp,temp}": [
+                "%APPDATA%/../../../"
+            ]
+        }
+    }
+}
+
+```
+
+## Old (will be removed)
+
 ```json5
 "ForceDelete": bool,	//Default: false
 "Administrator": bool,	// Default: false
@@ -29,7 +68,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ### Examples:
 
-``` json5
+```json5
 {
     "ForceDelete": false,	// Default: false
     "Administrator": true,	// Default: false
@@ -56,7 +95,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 }
 ```
 
-``` json5
+```json5
 {
     "ForceDelete": false,
     "Administrator": true,
