@@ -58,21 +58,14 @@
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     </PropertyGroup>
 
-    <ItemGroup>
-        <None Remove="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
-        <None Remove="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
-        <None Remove="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
-        <None Remove="Resources\Fonts\FontAwesome.otf" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Resources\ico\128x_black.ico" />
-    </ItemGroup>
 
     <ItemGroup>
         <None Include="..\README.md">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
+        </None>
+        <None Update="lib\CleanupModule.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
@@ -82,6 +75,7 @@
     </ItemGroup>
 
     <ItemGroup>
+
         <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
         <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
         <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
@@ -89,13 +83,8 @@
         <Resource Include="Resources\Img\Icon.png" />
         <Resource Include="Resources\Img\default.png" />
         <Resource Include="Resources\Img\dll.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="Resources\Img\Icon_black.png">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
+        <Resource Include="Resources\Ico\128x_black.ico" />
+        <Resource Include="Resources\Lang\zh-CN.lang" />
     </ItemGroup>
 
 </Project>
