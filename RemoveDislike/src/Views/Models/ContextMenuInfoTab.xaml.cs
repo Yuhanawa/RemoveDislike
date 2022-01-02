@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -14,8 +13,6 @@ namespace RemoveDislike.Views.Models
         public static readonly DependencyProperty KeyNameProperty =
             DependencyProperty.Register("KeyName", typeof(string), typeof(ContextMenuInfoTab));
 
-        public RegistryKey RegistryKey { get; set; }
-
         public ContextMenuInfoTab(RegistryKey registryKey, string keyName)
         {
             InitializeComponent();
@@ -25,6 +22,8 @@ namespace RemoveDislike.Views.Models
 
             DataContext = this;
         }
+
+        public RegistryKey RegistryKey { get; set; }
 
         private static BitmapImage DllIcon =>
             new(new Uri("pack://application:,,,/RemoveDislike;component/Resources/Img/dll.png"));
@@ -99,11 +98,6 @@ namespace RemoveDislike.Views.Models
 
         #region Event
 
-        private void EIcon_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            // TODO
-        }
-
         private void EIcon_OnPreviewDragEnter(object sender, DragEventArgs e)
         {
             //仅支持文件的拖放
@@ -117,7 +111,7 @@ namespace RemoveDislike.Views.Models
             foreach (string file in files)
                 try
                 {
-                    // TODO
+                    // TODO add support for .ico, .png, .jpg, .bmp, .gif
                 }
                 catch (Exception ex)
                 {

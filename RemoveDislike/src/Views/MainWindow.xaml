@@ -4,8 +4,8 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+            xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
             mc:Ignorable="d"
-            SizeChanged="MainWindow_OnSizeChanged"
             Icon="/Resources/Img/Icon.png"
             Title="RemoveDislike -- Remove Your Dislike Things "
             Height="614"
@@ -47,22 +47,16 @@
         </Style>
     </pu:WindowXCaption.CloseButtonStyle>
     <pu:WindowXCaption.ExtendControl>
-        <Button
+        <ToggleButton
             Name="Pin"
             Click="PinButtonOnClick"
             Content="&#xf08d;"
             Margin="-1,0,1,0"
-            FontFamily="{StaticResource FontAwesome}">
-            <Button.Style>
-                <Style
-                    BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
-                    TargetType="Button">
-                    <!-- <Setter Property="FontSize" Value="12" /> -->
-                    <Setter Property="Foreground" Value="#8c8c8c" />
-                    <Setter Property="pu:ButtonHelper.HoverBackground" Value="#06FFFFFF" />
-                </Style>
-            </Button.Style>
-        </Button>
+            Background="Transparent"
+            Foreground="#8c8c8c"
+            pu:ToggleButtonHelper.HoverForeground="#E6DEDEDE"
+            pu:ToggleButtonHelper.CheckedForeground="#F5F5FFFA"
+            FontFamily="{StaticResource FontAwesome}" />
     </pu:WindowXCaption.ExtendControl>
     <pu:WindowXCaption.HeaderTemplate>
         <DataTemplate>
@@ -106,6 +100,14 @@
             <ColumnDefinition Width="240" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1"
+              Margin="4">
+            <Frame
+                Name="MainFrame"
+                NavigationUIVisibility="Hidden" />
+        </Grid>
+
         <Border Grid.Column="0"
                 Background="#313131"
                 BorderThickness="0,0,1,0"
@@ -122,37 +124,26 @@
                 <TreeView Grid.Row="1"
                           Margin="0,10,0,0"
                           Style="{StaticResource MainMenuStyle}">
-                    <TreeViewItem Header="常规清理" Name="CommonClear"
+                    <TreeViewItem Header="{l:Lang Common Clear}" Name="CommonClear"
                                   pu:TreeViewItemHelper.Icon="&#xf039;"
                                   Style="{StaticResource MainMenuItemStyle}"
+                                  IsSelected="True"
                                   Selected="CommonClear_OnSelected" />
-                    <TreeViewItem Header="注册表清理" Name="ContextMenuClear"
+                    <TreeViewItem Header="{l:Lang Registry Management}" Name="RegistryManagement"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="软件清理" Name="AppClear"
-                                  pu:TreeViewItemHelper.Icon="&#xf268;"
-                                  Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="右键管理" Name="ContextMenuManager"
+                    <TreeViewItem Header="{l:Lang Context Menu Management}" Name="ContextMenuManagement"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
-                                  Selected="ContextMenuManager_OnSelected"
+                                  Selected="ContextMenuManagement_OnSelected"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="杂项"
+                    <TreeViewItem Header="{l:Lang Miscellaneous}"
                                   pu:TreeViewItemHelper.Icon="&#xf014;"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="关于"
+                    <TreeViewItem Header="{l:Lang about}"
                                   pu:TreeViewItemHelper.Icon="&#xf129;  "
                                   Style="{StaticResource MainMenuItemStyle}" />
                 </TreeView>
             </Grid>
         </Border>
-        <Frame Grid.Column="1"
-               Name="MainFrame"
-               NavigationUIVisibility="Hidden"
-               Margin="4"
-               VerticalContentAlignment="Top"
-               HorizontalContentAlignment="Left"
-               VerticalAlignment="Top"
-               HorizontalAlignment="Left"
-               Initialized="MainFrame_OnInitialized" />
     </Grid>
 </pu:WindowX>

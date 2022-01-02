@@ -1,10 +1,6 @@
-using System;
 using System.IO;
 using System.Windows;
 using fastJSON;
-using RemoveDislike.Core.Utils;
-using static RemoveDislike.Core.Utils.LogUtils;
-
 
 namespace RemoveDislike.Core
 {
@@ -14,12 +10,12 @@ namespace RemoveDislike.Core
         public static readonly string ConfigFile = @$"{EnvironmentUtils.Get("APPData")}\RemoveDislike\Config.json";
         public static readonly string RuleBase = @$"{ConfigPath}\Rules";
 
-        public static ConfigModule Config { get; set; }
-
         private static readonly JSONParameters JsonParameters = new()
             { UseExtensions = false, UseEscapedUnicode = false };
 
         private static bool _isInit;
+
+        public static ConfigModule Config { get; set; }
 
         private static bool Exists()
         {
@@ -57,9 +53,7 @@ namespace RemoveDislike.Core
                     else
                     {
                         Fatal("[Config] Fatal misconfiguration", e);
-
-                        BuildDefault();
-
+                        
                         Environment.Exit(-2);
                     }
                 }
@@ -67,7 +61,6 @@ namespace RemoveDislike.Core
             else
             {
                 Warn("[Config] Not found Config, Will to regenerated");
-                BuildDefault();
                 Save();
             }
 
@@ -95,24 +88,9 @@ namespace RemoveDislike.Core
             Load();
         }
 
-        public static void BuildDefault() =>
-            Config = new ConfigModule
-            {
-                SafetyLevel = 2
-            };
-
         public class ConfigModule
         {
-            /// <summary>
-            ///     0: Safety
-            ///     1: Normal
-            ///     2: Danger
-            ///     3: Very Danger
-            ///     4: Extremely Danger
-            ///     5: Risk of death
-            ///     6: Refuse to execute
-            /// </summary>
-            public int SafetyLevel { get; set; }
+            public bool AllowForce { get; set; } = false;
         }
     }
 }

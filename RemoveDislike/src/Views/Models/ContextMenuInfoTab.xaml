@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RemoveDislike.Views.Models"
-             xmlns:i="clr-namespace:RemoveDislike.Views"
              xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+             xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
              mc:Ignorable="d"
              PreviewMouseRightButtonDown="ControlOnMouseRightDown"
              FontSize="16"
@@ -34,8 +34,7 @@
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0"
                        Source="{Binding Mode=OneWay,Path=Icon}"
-                       PreviewDragEnter="EIcon_OnPreviewDragEnter"
-                       PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp" />
+                       PreviewDragEnter="EIcon_OnPreviewDragEnter" />
 
                 <TextBlock Grid.Column="1"
                            Foreground="#bfbfbf"
@@ -56,9 +55,9 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="{Binding Source={x:Static i:I18nXamlData.ChangeIcon}}" />
-                <Button Grid.Column="1" Content="{Binding Source={x:Static i:I18nXamlData.OpenReg}}" />
-                <Button Grid.Column="2" Content="{Binding Source={x:Static i:I18nXamlData.Delete}}" />
+                <Button Content="{l:Lang ChangeIcon}" />
+                <Button Grid.Column="1" Content="{l:Lang OpenReg}" />
+                <Button Grid.Column="2" Content="{l:Lang Delete}" />
             </Grid>
         </StackPanel>
     </StackPanel>

@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using Microsoft.Win32;
-using static RemoveDislike.Core.Utils.LogUtils;
 
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -57,8 +55,8 @@ namespace RemoveDislike.Core.Utils
         public static void LogInfo2()
         {
             Info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            Info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             Info(">>>MachineEnvironmentVariables>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            Info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             IDictionary dicMachine = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
 
             foreach (string key in dicMachine.Keys)
@@ -79,7 +77,7 @@ namespace RemoveDislike.Core.Utils
             foreach (string key in dicProcess.Keys)
                 Info($"{key} :  {dicProcess[key]}");
 
-            //特殊目录
+            // Special catalog
             foreach (string name in Enum.GetNames(typeof(Environment.SpecialFolder)))
                 if (Enum.TryParse(name, out Environment.SpecialFolder sf))
                     Info($"{name} : {Environment.GetFolderPath(sf)}");
@@ -93,7 +91,7 @@ namespace RemoveDislike.Core.Utils
                 6 when ver.Minor == 0 => "Win Vista",
                 6 when ver.Minor == 1 => "Win 7",
                 5 when ver.Minor == 0 => "Win 2000",
-                _ => "未知"
+                _ => "unknown"
             };
 
             return strClient;
@@ -112,28 +110,30 @@ namespace RemoveDislike.Core.Utils
 
                 if (currentVersionReg != null)
                 {
-                    Info($"系统名称: {currentVersionReg.GetValue("ProductName")}");
-                    Info(
-                        $"系统版本: {currentVersionReg.GetValue("CurrentVersion")} {currentVersionReg.GetValue("CurrentBuildNumber")})");
-                    Info($"系统路径: {currentVersionReg.GetValue("SystemRoot")})");
-                    Info($"系统ID:  {currentVersionReg.GetValue("ProductId")})");
-                    Info($"系统用户: {currentVersionReg.GetValue("RegisteredOwner")}");
+                    Info($"SystemName: {currentVersionReg.GetValue("ProductName")}");
+                    Info($"SystemVersion: {currentVersionReg.GetValue("CurrentVersion")}" +
+                         $" {currentVersionReg.GetValue("CurrentBuildNumber")})");
+                    Info($"SystemRoot: {currentVersionReg.GetValue("SystemRoot")})");
+                    Info($"ProductId:  {currentVersionReg.GetValue("ProductId")})");
+                    Info($"RegisteredOwner: {currentVersionReg.GetValue("RegisteredOwner")}");
                 }
-                else Warn("系统信息获取失败");
+                else Warn("Failed to obtain system information");
 
                 if (centralProcessorReg != null)
                 {
-                    Info($"CPU型号: {centralProcessorReg.GetValue("ProcessorNameString")}");
-                    Info($"CPU主频: {centralProcessorReg.GetValue("~MHz")} MHz");
-                }else Warn("CPU信息获取失败");
+                    Info($"ProcessorNameString: {centralProcessorReg.GetValue("ProcessorNameString")}");
+                    Info($"MHz: {centralProcessorReg.GetValue("~MHz")} MHz");
+                }
+                else Warn("Failed to obtain CPU information");
 
                 if (biosReg != null)
-                    Info($"主板型号: {biosReg.GetValue("BaseBoardManufacturer")} {biosReg.GetValue("BaseBoardProduct")}");
-                else Warn("主板信息获取失败");
+                    Info(
+                        $"BaseBoardManufacturer: {biosReg.GetValue("BaseBoardManufacturer")} {biosReg.GetValue("BaseBoardProduct")}");
+                else Warn("Failed to obtain BaseBoard information");
             }
             catch (Exception e)
             {
-                Err("", e);
+                Err("unknown err", e);
             }
         }
     }
