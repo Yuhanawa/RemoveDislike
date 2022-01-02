@@ -1,0 +1,159 @@
+<Page x:Class="RemoveDislike.Views.Pages.ContextMenuManagementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      mc:Ignorable="d"
+      Initialized="ContextMenuManagerPage_OnInitialized"
+      Title="ContextMenuManagementPage"
+      d:DesignHeight="450"
+      d:DesignWidth="800">
+
+    <Page.Resources>
+        <Style x:Key="LittleButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
+            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
+            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
+            <Setter Property="Foreground" Value="#57FFFFFF" />
+        </Style>
+        <Style x:Key="ListPanelStyle" TargetType="StackPanel">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer"
+               BasedOn="{StaticResource {x:Type ScrollViewer}}">
+            <Setter Property="Background" Value="#323333" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+        </Style>
+        <Style x:Key="MenuStyle" TargetType="TabItem"
+               BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="Background" Value="#3e4249" />
+        </Style>
+        <Style x:Key="TabControlStyle" TargetType="TabControl"
+               BasedOn="{StaticResource TabControlStyle}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="#353941" />
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="6" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="The 'netherworld' color scheme will be removed when the UI is complete!"
+                       TextAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="#57FFFFFF" />
+            <Button Grid.Column="2"
+                    Name="Add" Content="&#xf067;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Temp_OnClick" />
+            <Button Grid.Column="3"
+                    Name="OpenFolder" Content="&#xf07b;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Temp_OnClick" />
+            <Button Grid.Column="5"
+                    Name="More" Content="&#xf142;"
+                    Style="{StaticResource LittleButtonStyle}"
+                    Click="Temp_OnClick" />
+        </Grid>
+        <Border Grid.Row="1" BorderBrush="#FA2C2C2C" BorderThickness="0,1,0,0">
+            <TabControl Style="{StaticResource TabControlStyle}">
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="StarMenu" Header="Star"
+                         Initialized="LoadStarMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="StarList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="GeneralMenu" Header="*"
+                         Initialized="LoadGeneralList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="GeneralList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="AllFileSystemObjectsMenu"
+                         Header="AllFileSystemObjects">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="AllFileSystemObjectsList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="FolderMenu" Header="Folder"
+                         Initialized="LoadFolderMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="FolderList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryMenu" Header="Directory"
+                         Initialized="LoadDirMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DirectoryList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryBackgroundMenu" Header="DirectoryBackground">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DirectoryBackgroundList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Style="{StaticResource MenuStyle}" Name="DesktopBackgroundMenu" Header="DesktopBackground"
+                         Initialized="LoadDesktopMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <StackPanel Name="DesktopBackgroundList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- ReSharper disable once InconsistentNaming -->
+                <TabItem Style="{StaticResource MenuStyle}" Name="IEMenu" Header="IE" Initialized="LoadIEMenuList">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Content>
+                            <!-- ReSharper disable once InconsistentNaming -->
+                            <StackPanel Name="IEList" Style="{StaticResource ListPanelStyle}" />
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </TabItem>
+
+            </TabControl>
+        </Border>
+    </Grid>
+</Page>
