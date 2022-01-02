@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace RemoveDislike.Core.Utils
@@ -17,10 +16,9 @@ namespace RemoveDislike.Core.Utils
             { "UserProFile", Environment.GetEnvironmentVariable("UserProFile") },
             { "HomePath", Environment.GetEnvironmentVariable("HomePath") },
             { "Appdata", Environment.GetEnvironmentVariable("Appdata") },
-            { "Temp", Environment.GetEnvironmentVariable("Temp") }
+            { "Temp", Environment.GetEnvironmentVariable("Temp") },
+            { "WinData", @$"{Environment.GetEnvironmentVariable("Appdata")}\..\Local\Microsoft\Windows" }
         };
-
-        public static readonly string WinData = @$"{VariableDictionary["Appdata"]}\..\Local\Microsoft\Windows";
 
         public static string Get(string name)
         {
