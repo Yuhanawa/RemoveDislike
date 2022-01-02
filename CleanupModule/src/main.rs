@@ -1,5 +1,5 @@
-use cleanup_module::*;
-use std::env;
+ use std::env;
+ use CleanupModule::*;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

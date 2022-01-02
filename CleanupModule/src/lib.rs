@@ -111,3 +111,14 @@ pub fn size_to_string(size: u64) -> String {
     }
     format!("{} {}", size, unit)
 }
+
+
+#[no_mangle]
+pub extern fn Cleanup(path: String) -> u64 {
+    cleanup(path.as_str())
+}
+
+#[no_mangle]
+pub extern fn SizeToStr(size: u64) -> String {
+    size_to_string(size)
+}
