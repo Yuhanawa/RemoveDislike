@@ -1,4 +1,3 @@
-using System.Diagnostics;
 
 namespace RemoveDislike.Core.Utils
 {
@@ -7,10 +6,11 @@ namespace RemoveDislike.Core.Utils
         public static string Log(string m)
         {
             var output = $"[{DateTime.Now}] {m}";
-            Debug.WriteLine(output);
+            System.Diagnostics.Debug.WriteLine(output);
             return output;
         }
 
+        public static string Debug(string m) => Log($"[Debug] {m}");
         public static string Info(string m) => Log($"[Info] {m}");
 
         public static string Warn(string m) => Log($"[Warn] {m}");

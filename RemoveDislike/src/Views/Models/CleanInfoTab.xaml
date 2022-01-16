@@ -39,19 +39,22 @@
                                VerticalAlignment="Center"
                                Text="{Binding Author}" />
                     <TextBlock Grid.Column="2"
+                               Name="SizeBlock"
                                VerticalAlignment="Center"
-                               Text="{Binding SizeStr,Mode=OneWay}" />
+                               Text="" />
 
                     <Button Grid.Column="3"
-                            Name="Del" Content="&#xf014;"
+                            Name="DelBtn" Content="&#xf014;"
                             Style="{StaticResource LittleButtonStyle}"
-                            Click="Del_OnClick" />
-                    <Button Grid.Column="4" Name="Play" Content="&#xf04b;"
+                            Click="DelBtn_OnClick" />
+                    <Button Grid.Column="4" Name="PlayBtn" Content="&#xf04b;"
                             Style="{StaticResource LittleButtonStyle}"
                             Click="Play_OnClick" />
                     <ToggleButton Grid.Column="5"
-                                  Name="Tick" Content="&#xf0c8;"
-                                  IsChecked="{Binding IsEnable, Mode=TwoWay}"
+                                  Name="TickTgBtn"
+                                  Checked="TickTgBtn_OnChecked"
+                                  Unchecked="TickTgBtn_OnUnchecked"
+                                  Content="&#xf0c8;"
                                   Style="{StaticResource LittleToggleButtonStyle}" />
                 </Grid>
             </Grid>

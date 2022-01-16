@@ -19,7 +19,6 @@
 
         <ToggleButton Grid.Column="1"
                       Name="Tick" Content="&#xf0c8;"
-                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
                       Style="{StaticResource LittleToggleButtonStyle}" />
     </Grid>
 

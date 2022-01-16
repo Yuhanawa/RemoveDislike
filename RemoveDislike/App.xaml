@@ -37,11 +37,11 @@
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAwesome5}" />
                 <Setter Property="pu:ToggleButtonHelper.CornerRadius" Value="4" />
-                <Setter Property="pu:ToggleButtonHelper.HoverBackground" Value="#5AEAEAEA" />
-                <Setter Property="pu:ToggleButtonHelper.HoverForeground" Value="#87FFFFFF" />
-                <Setter Property="pu:ToggleButtonHelper.CheckedBackground" Value="#5AEAEAEA" />
-                <Setter Property="pu:ToggleButtonHelper.CheckedForeground" Value="#FFF" />
-                <Setter Property="Foreground" Value="#57FFFFFF" />
+                <Setter Property="pu:ToggleButtonHelper.HoverBackground" Value="#56EAEAEA" />
+                <Setter Property="pu:ToggleButtonHelper.HoverForeground" Value="#5FFFFFFF" />
+                <Setter Property="pu:ToggleButtonHelper.CheckedBackground" Value="#2EEAEAEA" />
+                <Setter Property="pu:ToggleButtonHelper.CheckedForeground" Value="#78FFFFFF" />
+                <Setter Property="Foreground" Value="#32FFFFFF" />
             </Style>
 
         </ResourceDictionary>

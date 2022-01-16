@@ -65,7 +65,7 @@
             <PackagePath>\</PackagePath>
         </None>
         <None Update="lib\CleanupModule.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

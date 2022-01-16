@@ -1,61 +1,45 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using fastJSON;
+using RemoveDislike.Core.Utils;
 
 namespace RemoveDislike.Core.Module
 {
     public static class CleanupModule
     {
-        public static Dictionary<string, RuleFile> RulesFileList { get; } = new();
-        public static long TotalSize { get; set; }
-        public static string TotalSizeStr => SizeToStr(TotalSize);
+        public static Dictionary<string, RuleModule> RulesFileList { get; } = new();
 
-        public static void Load()
-        {
-            foreach (string path in Directory.GetFiles(
-                ConfigHelper.RuleBase, "*.json", SearchOption.AllDirectories))
-            {
-                RulesFileList.Add("WillBeAdded", new RuleFile(path));
-                RulesFileList.Add(RulesFileList["WillBeAdded"].Identifier, RulesFileList["WillBeAdded"]);
-                RulesFileList.Remove("WillBeAdded");
-            }
-        }
+        #region Total Size
 
-        public static long Run(string path)
-        {
-            long size = Cleanup(path);
-            foreach (RuleFile rf in RulesFileList.Values.Where(rf => rf.Path == path))
-                rf.Size += size;
-
-            TotalSize += size;
-            return size;
-        }
-
-        public static long Run(string name, string author)
-        {
-            if (!RulesFileList.ContainsKey(name) || RulesFileList[name].Author != author)
-                return 0;
-
-            return Run(RulesFileList[name].Path);
-        }
-
-
-        #region DllImport
-
-        [DllImport("lib\\CleanupModule.dll", CharSet = CharSet.Unicode)]
-        private static extern long Cleanup(string path);
-
-        [DllImport("lib\\CleanupModule.dll", CharSet = CharSet.Unicode)]
-        internal static extern string SizeToStr(long size);
+        public static long TotalSize => RulesFileList.Sum(x => x.Value.Size);
+        public static string TotalSizeStr => SizeUtils.ToString(TotalSize);
 
         #endregion
+
+
+        #region Load and Reload
+
+        public static void ReLoad()
+        {
+            RulesFileList.Clear();
+            Load();
+        }
+
+        public static void Load() =>
+            new DirectoryInfo(ConfigHelper.RuleBase)
+                .GetFiles("*.json", SearchOption.AllDirectories)
+                .ToList().ForEach(file =>
+                    RulesFileList.Add(file.Name, new RuleModule(file.FullName)));
     }
 
-    public class RuleFile
+    #endregion
+
+
+    public class RuleModule
     {
-        public RuleFile(string path)
+        public RuleModule(string path)
         {
             Path = path;
             var json = JSON.ToObject<Dictionary<string, Dictionary<string, object>>>(File.ReadAllText(path));
@@ -64,17 +48,81 @@ namespace RemoveDislike.Core.Module
             Author = json["header"]["author"].ToString();
             Description = json["header"]["description"].ToString();
             Force = json["header"]["force"] as bool? ?? false;
-            SubRules = json["rules"].Keys.ToList();
+
+            foreach (string str in json["rules"].Keys.ToList())
+            {
+                var o = (Dictionary<string, object>)json["rules"][str];
+                Dictionary<string, List<string>> dic = o.Keys.ToDictionary(key => key,
+                    key => ((List<object>)o[key]).ConvertAll(
+                            c =>
+                            {
+                                var output = c.ToString();
+                                new Regex("%[^%]+%").Matches(c.ToString()).ToList().ForEach(
+                                    match =>
+                                        output =
+                                            output.Replace(
+                                                match.Value,
+                                                EnvironmentUtils.Get(match.Value.Trim('%'))));
+                                return output;
+                            })
+                        .ToList());
+                /*  Parse json
+                 *  Maybe only God can understand this line of code
+                 *  "rules": {
+                 *      "r1": { "sub1": ["str1","str2"], "sub2": ["str1","str2"] },
+                 *      "r2": { "sub1": ["str1","str2"], "sub2": ["str1","str2"] }
+                 *     }
+                 * */
+
+                SubRules.Add(str, dic);
+            }
+
+            Info($"[RuleModule] Loaded rule: {Name}-{Author} from: {Path}");
         }
 
-        public List<string> SubRules { get; set; }
+        public Dictionary<string, Dictionary<string, List<string>>> SubRules { get; set; } = new();
         public string Path { get; }
+        public string FileName => Path.Split('\\').Last();
         public string Identifier => $"{Name} - {Author}";
-        public bool IsEnable { get; set; }
         public long Size { get; set; }
 
-        public string SizeStr => $"{Size / 1024 / 1024:F0} MB"; // CleanupModule.SizeToStr(Size);        
+        public string SizeStr => SizeUtils.ToString(Size);
 
+        private void _Run(ICollection<string> disabledList)
+        {
+            foreach (string key in SubRules.Keys)
+            {
+                if (disabledList.Contains(key)) return;
+
+                foreach (string patten in SubRules[key].Keys)
+                foreach (string targetPath in SubRules[key][patten])
+                    try
+                    {
+                        if (targetPath.EndsWith('\\') || targetPath.EndsWith('/'))
+                        {
+                            new DirectoryInfo(targetPath).GetFileSystemInfos(patten, SearchOption.AllDirectories)
+                                .ToList().ForEach(file => { Size += file.TryDel(); });
+                        }
+                        else Size += new FileInfo(targetPath).TryDel();
+                    }
+                    catch (Exception e)
+                    {
+                        Warn($"[RuleModule] {e.Message}");
+                    }
+            }
+        }
+
+        public void Run(ICollection<string> disabledList)
+        {
+            try
+            {
+                _Run(disabledList);
+            }
+            catch (Exception e)
+            {
+                Err("[RuleModule]", e);
+            }
+        }
 
         #region header
 

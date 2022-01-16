@@ -1,7 +1,9 @@
 use serde_json::Value;
 use std::{env, fs, io::Read};
 
-pub fn cleanup(path: &str) -> u64 {
+pub fn cleanup(path: &str,disabled: String) -> u64 {
+    let disabled_list:Vec<&str> = disabled.split("|_split_|").collect();
+    
     let mut jsonstr = String::new();
     fs::File::open(&path)
         .unwrap()
@@ -28,6 +30,9 @@ pub fn cleanup(path: &str) -> u64 {
         .for_each(|(_, rule)| {
             rule.as_object().unwrap().iter().for_each(|(pattern, v)| {
                 v.as_array().unwrap().iter().for_each(|path| {
+                    if disabled_list.contains(&pattern.as_str()) {
+                        return;
+                    }
                     let path = path.as_str().unwrap();
                     all_len += file_processing(path, pattern);
                 })
@@ -49,10 +54,10 @@ fn file_processing(path: &str, pattern: &String) -> u64 {
                         tmp = meta.len();
                     }
                     if let Ok(_) = fs::remove_file(f.path()) {
-                        println!("{}", f.path().display());
+                        // println!("{}", f.path().display());
                         len += tmp;
                     } else {
-                        println!("!!!ERR: {}", f.path().display());
+                        // println!("!!!ERR: {}", f.path().display());
                     }
                 }
             }
@@ -114,10 +119,9 @@ pub fn size_to_string(size: u64) -> String {
 
 
 #[no_mangle]
-pub extern fn Cleanup(path: String) -> u64 {
-    cleanup(path.as_str())
+pub extern fn Cleanup(path: String, disabled:String) -> u64 {
+    cleanup(path.as_str(), disabled)
 }
-
 #[no_mangle]
 pub extern fn SizeToStr(size: u64) -> String {
     size_to_string(size)
