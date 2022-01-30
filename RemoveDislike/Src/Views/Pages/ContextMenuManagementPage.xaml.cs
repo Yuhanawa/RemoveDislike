@@ -22,8 +22,15 @@ namespace RemoveDislike.Views.Pages
             RegistryKey shell = RegistryUtils.GeneralMenu.GetShell;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                GeneralList.Children.Add(
-                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
+                try
+                {
+                    GeneralList.Children.Add(
+                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
+                }
+                catch (Exception exception)
+                {
+                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
+                }
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -41,8 +48,15 @@ namespace RemoveDislike.Views.Pages
             RegistryKey shell = RegistryUtils.Directory.Background.GetShell;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DesktopBackgroundList.Children.Add(
-                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
+                try
+                {
+                    DesktopBackgroundList.Children.Add(
+                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
+                }
+                catch (Exception exception)
+                {
+                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
+                }
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -60,8 +74,15 @@ namespace RemoveDislike.Views.Pages
             RegistryKey shell = RegistryUtils.Directory.GetShell;
 
             foreach (string subKeyName in shell.GetSubKeyNames())
-                DirectoryList.Children.Add(
-                    new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
+                try
+                {
+                    DirectoryList.Children.Add(
+                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName,true), subKeyName));
+                }
+                catch (Exception exception)
+                {
+                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
+                }
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]

@@ -51,7 +51,7 @@
             <Button Grid.Column="2"
                     Name="Add" Content="&#xf067;"
                     Style="{StaticResource LittleButtonStyle}"
-                    Click="Add_OnClick" />
+                    Click="AddBtn_OnClick" />
             <Button Grid.Column="3"
                     Name="OpenFolder" Content="&#xf07b;"
                     Style="{StaticResource LittleButtonStyle}"
@@ -71,7 +71,7 @@
                           HorizontalScrollBarVisibility="Hidden">
                 <ScrollViewer.Content>
                     <StackPanel
-                        Name="RuleList"
+                        Name="ItemPanel"
                         Initialized="List_OnInitialized" />
                 </ScrollViewer.Content>
             </ScrollViewer>

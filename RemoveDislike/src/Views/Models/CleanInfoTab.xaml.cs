@@ -44,7 +44,8 @@ namespace RemoveDislike.Views.Models
                 // BackgroundWorker bw = new();
                 // bw.DoWork += (_, _) => 
                     Rule.Run(GetDisabledList());
-                // bw.RunWorkerAsync();
+                    SizeBlock.Text = Rule.SizeStr;
+                    // bw.RunWorkerAsync();
             });
 
         /// <summary>

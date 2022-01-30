@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using fastJSON;
-using RemoveDislike.Core.Utils;
+using RemoveDislike.Core.Utils.AntPathMatching;
 
 namespace RemoveDislike.Core.Module
 {
@@ -56,8 +56,8 @@ namespace RemoveDislike.Core.Module
                     key => ((List<object>)o[key]).ConvertAll(
                             c =>
                             {
-                                var output = c.ToString();
-                                new Regex("%[^%]+%").Matches(c.ToString()).ToList().ForEach(
+                                var output = c.ToString()!;
+                                new Regex("%[^%]+%").Matches(c.ToString()!).ToList().ForEach(
                                     match =>
                                         output =
                                             output.Replace(
@@ -98,16 +98,21 @@ namespace RemoveDislike.Core.Module
                 foreach (string targetPath in SubRules[key][patten])
                     try
                     {
-                        if (targetPath.EndsWith('\\') || targetPath.EndsWith('/'))
-                        {
-                            new DirectoryInfo(targetPath).GetFileSystemInfos(patten, SearchOption.AllDirectories)
-                                .ToList().ForEach(file => { Size += file.TryDel(); });
-                        }
-                        else Size += new FileInfo(targetPath).TryDel();
+                        new AntDirectory(new Ant(patten))
+                                .SearchRecursively(targetPath, true)
+                                .ToList().ForEach(path =>
+                                {
+                                    if (File.Exists(path))
+                                        Size += new FileInfo(path).TryDel();                                         
+                                    else if  (Directory.Exists(path))
+                                        // Shouldn't be the case
+                                        // but i'm not sure
+                                        Size += new DirectoryInfo(path).TryDel();
+                                });
                     }
                     catch (Exception e)
                     {
-                        Warn($"[RuleModule] {e.Message}");
+                        Warn($"[RuleModule] {e.Message}\nException: {e}");
                     }
             }
         }
@@ -123,7 +128,7 @@ namespace RemoveDislike.Core.Module
                 Err("[RuleModule]", e);
             }
         }
-
+    
         #region header
 
         public string Name { get; set; }

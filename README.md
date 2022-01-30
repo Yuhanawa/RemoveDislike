@@ -12,9 +12,74 @@ Basic functionality is about 15% complete
 
 The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
-### Options:
-
 ```json
+
+{
+    "header": {
+        "name": "CleanTempFiles",
+        "author": "Yuhanawa",
+        "description": "Clean cache and temporary files of system and software",
+        "force": false
+    },
+    "rules": {
+        "Logs:Windows Logs and User Log": {
+            "*": [
+                "%WINDIR%/Logs/",
+                "%WINDIR%/SoftwareDistribution/DataStore/Logs/",
+                "C:/ProgramData/Microsoft/Search/Data/Applications/Windows/GatherLogs/",
+                "%WINDIR%/System32/LogFiles/"
+            ],
+            "/**/*.{log,logs,Log,Logs,LOG,LOGS}": [
+                "%WINDIR%/",
+                "%APPDATA%/../Local/Microsoft/Windows/WebCache/",
+                "%APPDATA%/../../"
+            ],
+            "/**/{log,logs,Log,Logs,LOG,LOGS}": [
+                "%APPDATA%/../../"
+            ],
+            "/**/{log,logs,Log,Logs,LOG,LOGS}.{txt}": [
+                "%APPDATA%/../../"
+            ],
+            "/**/{log,logs,Log,Logs,LOG,LOGS}/**": [
+                "%APPDATA%/../../"
+            ]
+        },
+        "Caches:Windows Cache and User Cache(or Temp)": {
+            "*": [
+                "%WINDIR%/Explorer/",
+                "%WINDIR%/Temp/",
+                "%APPDATA%/Microsoft/Windows/Recent",
+                "C:/$WinREAgent/",
+                "%WINDIR%/ServiceProfiles/LocalService/AppData/Local/FontCache/",
+                "%APPDATA%/../LocalLow/Microsoft/CryptnetUrlCache/Content/",
+                "%WINDIR%/SoftwareDistribution/Download/SharedFileCache/",
+                "%WINDIR%/Prefetch/",
+                "%WINDIR%/Fonts/Deleted/",
+                "%WINDIR%/ActionCenterCache/",
+                "%APPDATA%/../Local/CrashDumps/"
+            ],
+            "/**/*.{tmp,temp,Tmp,Temp}": [
+                "%APPDATA%/../../"
+            ],
+            "/**/{tmp,temp,Tmp,Temp}/**": [
+                "%APPDATA%/../../",
+                "%WINDIR%/"
+            ],
+            "/**/*.{cache,Cache}": [
+                "%APPDATA%/../../"
+            ],
+            "/**/{cache,Cache,GPUCache,Code Cache}/**": [
+                "%APPDATA%/../../"
+            ]
+        }
+    }
+}
+
+```
+
+
+#### OLD
+```json5
 {
     "header": {
         "name": "Examples",
@@ -24,7 +89,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
     },
     "rules": {
 //      "name:description": {
-//        "*.*": [
+//        "Ant-Style: [
 //          "Here is path"
 //        ]
 //      },
@@ -35,7 +100,7 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
         },
         "tmp:temp file": {
             "*": [
-                "%TMP%","$WinREAgent",
+                "%TMP%","C:$WinREAgent",
 				"%WINDIR%/ServiceProfiles/LocalService/AppData/Local/FontCache/",
 				"%WINDIR%/Explorer/",
 				"%WINDIR%/Prefetch/",
@@ -50,65 +115,3 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 }
 
 ```
-
-## Old (will be removed)
-
-```json5
-"ForceDelete": bool,	//Default: false
-"Administrator": bool,	// Default: false
-"CarpetScan": bool,	// Default: false
-
-"CleanMode":"All",		// Default: "All"
-            "Files",		// Delete only eligible Files in this folder, excluding subfolders
-            "Folders",		// Delete only eligible Folders in this folder, excluding subfolders
-            "RecursionAll",	// Delete eligible files in this folder, including subfolders
-            "RecursionFiles",	// Delete eligible Folders in this folder, including subfolders
-            "RecursionFolders"	// Delete everything in this folder that matches the criteria, including subfolders
-```
-
-### Examples:
-
-```json5
-{
-    "ForceDelete": false,	// Default: false
-    "Administrator": true,	// Default: false
-    "CarpetScan": true,		// Default: false
-    "Rules": [
-        {	// Delete all the folders named "Temp" and "Tmp" in "C:\\"
-            "Feature": [
-                "Temp",  // not case sensitive
-                "Tmp"
-            ],
-            "CleanMode": "RecursionFolders",
-            "Path": "C:\\"
-        },
-        {	// Delete all files with the suffix ".temp" ".log" ".cache" in "D:\\"
-            "Feature": [
-                ".temp",  // not case sensitive
-                ".log",
-                ".cache"
-            ],
-            "CleanMode": "RecursionFiles",
-            "Path": "D:\\"
-        }
-    ]
-}
-```
-
-```json5
-{
-    "ForceDelete": false,
-    "Administrator": true,
-    "CarpetScan": false,
-    "Rules": [
-        {
-            "CleanMode": "All",	// Default is "All", So it can Ignore
-            "Path": "C:\\WINDOWS\\Prefetch\\"
-        },
-        {
-            "Path": "%Temp%"	//Support Environment variables
-        }
-    ]
-}
-```
-

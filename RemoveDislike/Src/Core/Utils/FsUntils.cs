@@ -12,9 +12,11 @@ namespace RemoveDislike.Core.Utils
                 switch (file)
                 {
                     case FileInfo fileInfo:
+                        string fullName = fileInfo.FullName;
+                        long fileSize = fileInfo.Length;
                         fileInfo.Delete();
-                        Debug($"[TryDel] File: {fileInfo.FullName} Size: {fileInfo.Length}");
-                        return fileInfo.Length;
+                        Debug($"[TryDel] File: {fullName} Size: {fileSize}");
+                        return fileSize;
                     case DirectoryInfo directoryInfo:
                     {
                         Debug($"[TryDel] Directory: {directoryInfo.FullName}");
@@ -22,7 +24,6 @@ namespace RemoveDislike.Core.Utils
                             = directoryInfo.GetFiles().Sum(f => f.TryDel())
                               + directoryInfo.GetDirectories().Sum(d => d.TryDel());
                         try { directoryInfo.Delete(); } catch { }
-
                         return size;
                     }
                     default: return 0;
