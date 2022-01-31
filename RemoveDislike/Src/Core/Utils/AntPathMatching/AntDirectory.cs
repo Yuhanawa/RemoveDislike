@@ -17,7 +17,7 @@ public class AntDirectory
     /// <param name="ant">Ant pattern used for directory-searching.</param>
     /// <param name="fileSystem">File system to be used</param>
     /// <exception cref="ArgumentNullException">Throw when <paramref name="ant" /> is null.</exception>
-    public AntDirectory(Ant ant) => 
+    public AntDirectory(Ant ant) =>
         this.ant = ant ?? throw new ArgumentNullException(nameof(ant));
 
     /// <summary>
@@ -29,29 +29,59 @@ public class AntDirectory
     /// <inheritDoc />
     public IEnumerable<string> SearchRecursively(string directory, bool includeDirectoryPath = false)
     {
-        directory.Replace("\\", "/").Split('/').ToList().ForEach(x =>
-        {
-            if (x == "..")
-                directory = Path.GetDirectoryName(directory);
-            else if (x != ".")
-                directory = Path.Combine(directory, x);
+        directory = PathFormatting(directory);
 
-        });
-        directory = directory.Replace("\\", "/").TrimStart('/');
-        
         string[] files = Directory.Exists(directory)
             ? DirectoryInfoUtils.TryGetAllFilePaths(directory)
             : Array.Empty<string>();
 
-        foreach (string file in files.Select(x => x.Replace("\\", "/").TrimStart('/')))
+        foreach (string file in files.Select(GetUnixPath))
         {
-            string actualFile = file.TrimStart(directory.ToCharArray()).TrimStart('/');
-            
-            if (ant.IsMatch(ant.IgnoreCase?actualFile.ToLower():actualFile))
+            string actualFile = file.TrimStart(directory!.ToCharArray()).TrimStart('/');
+
+            if (ant.IsMatch(ant.IgnoreCase ? actualFile.ToLower() : actualFile))
+            {
                 yield return includeDirectoryPath
                     ? file
                     : actualFile;
-            
+            }
         }
+    }
+
+    /// <summary>
+    ///     Searches all the files in the given directory using the ant-style pattern.
+    /// </summary>
+    /// <param name="directory">Path to directory to search in.</param>
+    /// <param name="action"></param>
+    /// <param name="includeDirectoryPath">Indicates if the returned paths must include the directory.</param>
+    public void SearchRecursively(string directory, Action<string> action, bool includeDirectoryPath = false)
+    {
+        directory = PathFormatting(directory);
+
+        if (!Directory.Exists(directory)) return;
+
+
+        DirectoryInfoUtils.TryGetAllFilePaths(directory, file =>
+        {
+            file = GetUnixPath(file);
+            string actualFile = file.TrimStart(directory!.ToCharArray()).TrimStart('/');
+
+            if (ant.IsMatch(ant.IgnoreCase ? actualFile.ToLower() : actualFile))
+                action(includeDirectoryPath ? file : actualFile);
+        });
+    }
+
+    private static string GetUnixPath(string path) => path.Replace(@"\", "/").TrimStart('/');
+
+    private static string PathFormatting(string path)
+    {
+        GetUnixPath(path).Split('/').ToList().ForEach(x =>
+        {
+            if (x == "..")
+                path = Path.GetDirectoryName(path);
+            else if (x != ".")
+                path = Path.Combine(path, x);
+        });
+        return GetUnixPath(path);
     }
 }

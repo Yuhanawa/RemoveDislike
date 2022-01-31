@@ -46,9 +46,11 @@
                     <Button Grid.Column="3"
                             Name="DelBtn" Content="&#xf014;"
                             Style="{StaticResource LittleButtonStyle}"
+                            Visibility="Hidden"
                             Click="DelBtn_OnClick" />
                     <Button Grid.Column="4" Name="PlayBtn" Content="&#xf04b;"
                             Style="{StaticResource LittleButtonStyle}"
+                            Visibility="Hidden"
                             Click="Play_OnClick" />
                     <ToggleButton Grid.Column="5"
                                   Name="TickTgBtn"
