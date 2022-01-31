@@ -60,7 +60,7 @@ public static class DirectoryInfoUtils
         try
         {
             try { Directory.GetFiles(path).ToList().ForEach(action); }
-            catch (Exception e) { /* ignore errors */ }
+            catch { /* ignore errors */ }
 
             foreach (string directory in Directory.GetDirectories(path))
                 try { TryGetAllFilePaths(directory, action); }
