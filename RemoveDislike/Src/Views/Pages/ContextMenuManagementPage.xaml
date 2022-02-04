@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
       mc:Ignorable="d"
-      Initialized="ContextMenuManagerPage_OnInitialized"
       Title="ContextMenuManagementPage"
       d:DesignHeight="450"
       d:DesignWidth="800">
@@ -34,13 +33,13 @@
         </Style>
         <Style x:Key="MenuStyle" TargetType="TabItem"
                BasedOn="{StaticResource {x:Type TabItem}}">
-            <Setter Property="Background" Value="#3e4249" />
+            <Setter Property="Background" Value="DimGray" />
         </Style>
         <Style x:Key="TabControlStyle" TargetType="TabControl"
                BasedOn="{StaticResource TabControlStyle}">
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="#353941" />
+            <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="#3F413E" />
         </Style>
     </Page.Resources>
 
@@ -68,87 +67,59 @@
             <Button Grid.Column="2"
                     Name="Add" Content="&#xf067;"
                     Style="{StaticResource LittleButtonStyle}"
-                    Click="Temp_OnClick" />
+                    Click="Add_OnClick" />
             <Button Grid.Column="3"
                     Name="OpenFolder" Content="&#xf07b;"
                     Style="{StaticResource LittleButtonStyle}"
-                    Click="Temp_OnClick" />
+                    Click="OpenFolder_OnClick" />
             <Button Grid.Column="5"
                     Name="More" Content="&#xf142;"
                     Style="{StaticResource LittleButtonStyle}"
-                    Click="Temp_OnClick" />
+                    Click="More_OnClick" />
         </Grid>
         <Border Grid.Row="1" BorderBrush="#FA2C2C2C" BorderThickness="0,1,0,0">
             <TabControl Style="{StaticResource TabControlStyle}">
 
-                <TabItem Style="{StaticResource MenuStyle}" Name="StarMenu" Header="Star"
-                         Initialized="LoadStarMenuList">
+                <TabItem Style="{StaticResource MenuStyle}" Header="*">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <ScrollViewer.Content>
-                            <StackPanel Name="StarList" Style="{StaticResource ListPanelStyle}" />
+                            <StackPanel Name="GeneralList" Style="{StaticResource ListPanelStyle}"
+                                        Initialized="LoadGeneralList" />
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Style="{StaticResource MenuStyle}" Name="GeneralMenu" Header="*"
-                         Initialized="LoadGeneralList">
+                <TabItem Style="{StaticResource MenuStyle}" Header="AllFileSystemObjects">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <ScrollViewer.Content>
-                            <StackPanel Name="GeneralList" Style="{StaticResource ListPanelStyle}" />
+                            <StackPanel Style="{StaticResource ListPanelStyle}"
+                                        Initialized="AllFileSystemObjectsList_OnInitialized" />
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Style="{StaticResource MenuStyle}" Name="AllFileSystemObjectsMenu"
-                         Header="AllFileSystemObjects">
+                <TabItem Style="{StaticResource MenuStyle}" Header="Folder">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <ScrollViewer.Content>
-                            <StackPanel Name="AllFileSystemObjectsList" Style="{StaticResource ListPanelStyle}" />
+                            <StackPanel Style="{StaticResource ListPanelStyle}" Initialized="FolderList_OnInitialized" />
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Style="{StaticResource MenuStyle}" Name="FolderMenu" Header="Folder"
-                         Initialized="LoadFolderMenuList">
+                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryMenu" Header="Directory">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <ScrollViewer.Content>
-                            <StackPanel Name="FolderList" Style="{StaticResource ListPanelStyle}" />
+                            <StackPanel Style="{StaticResource ListPanelStyle}"
+                                        Initialized="DirectoryList_OnInitialized" />
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryMenu" Header="Directory"
-                         Initialized="LoadDirMenuList">
+                <TabItem Style="{StaticResource MenuStyle}" Header="DesktopBackground">
                     <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <ScrollViewer.Content>
-                            <StackPanel Name="DirectoryList" Style="{StaticResource ListPanelStyle}" />
-                        </ScrollViewer.Content>
-                    </ScrollViewer>
-                </TabItem>
-
-                <TabItem Style="{StaticResource MenuStyle}" Name="DirectoryBackgroundMenu" Header="DirectoryBackground">
-                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                        <ScrollViewer.Content>
-                            <StackPanel Name="DirectoryBackgroundList" Style="{StaticResource ListPanelStyle}" />
-                        </ScrollViewer.Content>
-                    </ScrollViewer>
-                </TabItem>
-
-                <TabItem Style="{StaticResource MenuStyle}" Name="DesktopBackgroundMenu" Header="DesktopBackground"
-                         Initialized="LoadDesktopMenuList">
-                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                        <ScrollViewer.Content>
-                            <StackPanel Name="DesktopBackgroundList" Style="{StaticResource ListPanelStyle}" />
-                        </ScrollViewer.Content>
-                    </ScrollViewer>
-                </TabItem>
-
-                <!-- ReSharper disable once InconsistentNaming -->
-                <TabItem Style="{StaticResource MenuStyle}" Name="IEMenu" Header="IE" Initialized="LoadIEMenuList">
-                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
-                        <ScrollViewer.Content>
-                            <!-- ReSharper disable once InconsistentNaming -->
-                            <StackPanel Name="IEList" Style="{StaticResource ListPanelStyle}" />
+                            <StackPanel Name="DesktopBackgroundList" Style="{StaticResource ListPanelStyle}"
+                                        Initialized="LoadDesktopMenuList" />
                         </ScrollViewer.Content>
                     </ScrollViewer>
                 </TabItem>

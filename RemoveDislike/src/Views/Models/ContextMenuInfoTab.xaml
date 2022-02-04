@@ -40,12 +40,12 @@
                            Foreground="#bfbfbf"
                            Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ContextMenuInfoTab},
                  Path=KeyName}" />
-                <ToggleButton Grid.Column="2" Content="shift"
+                <ToggleButton Grid.Column="2" Content="NoShift"
                               IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Extended}"
                               pu:ToggleButtonHelper.CheckedContent="IsShift"
                               Style="{StaticResource TextToggleButtonStyle}" />
-                <pu:Switch Width="120" Grid.Column="3" CornerRadius="2"
-                           IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=LegacyDisable}" />
+                <pu:Switch Width="120" Grid.Column="3" CornerRadius="2" CheckedBackground="#087cfa"
+                           IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Enabled}" />
             </Grid>
 
             <Grid Name="MenuGrid" Visibility="Collapsed">

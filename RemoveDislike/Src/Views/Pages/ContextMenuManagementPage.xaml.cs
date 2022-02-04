@@ -1,107 +1,78 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using RemoveDislike.Views.Models;
 
-namespace RemoveDislike.Views.Pages
+namespace RemoveDislike.Views.Pages;
+
+public partial class ContextMenuManagementPage
 {
-    public partial class ContextMenuManagementPage
+    public ContextMenuManagementPage() => InitializeComponent();
+
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "IdentifierTypo")]
+    private void LoadGeneralList(object sender, EventArgs e)
     {
-        public ContextMenuManagementPage() => InitializeComponent();
+        LoadList(@"*\shell", (StackPanel)sender);
+        LoadList(@"*\shellex\ContextMenuHandlers", (StackPanel)sender, true);
+    }
 
-        private void Temp_OnClick(object sender, RoutedEventArgs e)
-        {
-            // TODO
-        }
+    private void LoadDesktopMenuList(object sender, EventArgs e)
+    {
+        LoadList(@"DesktopBackground\shell", (StackPanel)sender);
+        LoadList(@"DesktopBackground\shellex\ContextMenuHandlers", (StackPanel)sender, true);
+    }
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadGeneralList(object sender, EventArgs e)
-        {
-            // GeneralMenu
-            RegistryKey shell = RegistryUtils.GeneralMenu.GetShell;
 
-            foreach (string subKeyName in shell.GetSubKeyNames())
-                try
-                {
-                    GeneralList.Children.Add(
-                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
-                }
-                catch (Exception exception)
-                {
-                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
-                }
-        }
+    private void DirectoryList_OnInitialized(object sender, EventArgs e)
+    {
+        LoadList(@"Directory\shell", (StackPanel)sender);
+        LoadList(@"Directory\Background\shell", (StackPanel)sender);
+        LoadList(@"Directory\shellex\ContextMenuHandlers", (StackPanel)sender, true);
+        LoadList(@"Directory\Background\shellex\ContextMenuHandlers", (StackPanel)sender, true);
+    }
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadStarMenuList(object sender, EventArgs e)
-        {
-            // StarMenu
-        }
+    private void AllFileSystemObjectsList_OnInitialized(object sender, EventArgs e) =>
+        LoadList(@"AllFilesystemObjects\\shellex\\ContextMenuHandlers\\", (StackPanel)sender, true);
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadDesktopMenuList(object sender, EventArgs e)
-        {
-            // Directory\Background
-            RegistryKey shell = RegistryUtils.Directory.Background.GetShell;
+    private void LoadList(string keyStr, StackPanel panel, bool isEx = false)
+    {
+        RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyStr, true);
 
-            foreach (string subKeyName in shell.GetSubKeyNames())
-                try
-                {
-                    DesktopBackgroundList.Children.Add(
-                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName, true), subKeyName));
-                }
-                catch (Exception exception)
-                {
-                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
-                }
-        }
+        if (key == null) return;
+        foreach (string subKeyName in key.GetSubKeyNames())
+            try
+            {
+                if (subKeyName.StartsWith('{') && subKeyName.EndsWith('}')) continue;
+                panel.Children.Add(
+                    new ContextMenuInfoTab(key.OpenSubKey(subKeyName, true), subKeyName, isEx)
+                );
+            }
+            catch (Exception exception)
+            {
+                Err($"RegistryKey: {subKeyName} Can't be opened.\n", exception);
+            }
+    }
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadFolderMenuList(object sender, EventArgs e)
-        {
-            // TODO
-        }
+    private void FolderList_OnInitialized(object sender, EventArgs e)
+    {
+        LoadList(@"Folder\shell", (StackPanel)sender);
+        LoadList(@"Folder\shellex\ContextMenuHandlers", (StackPanel)sender, true);
+    }
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadDirMenuList(object sender, EventArgs e)
-        {
-            // Directory
-            RegistryKey shell = RegistryUtils.Directory.GetShell;
+    private void Add_OnClick(object sender, RoutedEventArgs e)
+    {
+        // TODO Add_OnClick
+    }
 
-            foreach (string subKeyName in shell.GetSubKeyNames())
-                try
-                {
-                    DirectoryList.Children.Add(
-                        new ContextMenuInfoTab(shell.OpenSubKey(subKeyName,true), subKeyName));
-                }
-                catch (Exception exception)
-                {
-                    Err($"RegistryKey: {subKeyName} Can't be opened.\n",exception);
-                }
-        }
+    private void OpenFolder_OnClick(object sender, RoutedEventArgs e)
+    {
+        // TODO OpenFolder_OnClick
+    }
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")]
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
-        private void LoadIEMenuList(object sender, EventArgs e)
-        {
-            // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\MenuExt
-            RegistryKey menuExt =
-                Registry.CurrentUser.OpenSubKey(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\MenuExt");
-
-            if (menuExt == null) return;
-            foreach (string subKeyName in menuExt.GetSubKeyNames())
-                IEList.Children.Add(
-                    new ContextMenuInfoTab(menuExt.OpenSubKey(subKeyName, true), subKeyName));
-        }
-
-        private void ContextMenuManagerPage_OnInitialized(object sender, EventArgs e)
-        {
-            //
-        }
+    private void More_OnClick(object sender, RoutedEventArgs e)
+    {
+        // ToDO More_OnClick
     }
 }
