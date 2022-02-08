@@ -70,21 +70,33 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="fastJSON" Version="2.4.0.4" />
-        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha" />
+        <PackageReference Include="fastJSON" Version="2.4.0.4"/>
+        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha"/>
     </ItemGroup>
 
     <ItemGroup>
 
-        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
-        <Resource Include="Resources\Fonts\FontAwesome.otf" />
-        <Resource Include="Resources\Img\Icon.png" />
-        <Resource Include="Resources\Img\default.png" />
-        <Resource Include="Resources\Img\dll.png" />
-        <Resource Include="Resources\Ico\128x_black.ico" />
-        <Resource Include="Resources\Lang\zh-CN.lang" />
+        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Img\Icon.png"/>
+        <Resource Include="Resources\Img\default.png"/>
+        <Resource Include="Resources\Img\dll.png"/>
+        <Resource Include="Resources\Ico\128x_black.ico"/>
+        <Resource Include="Resources\Lang\zh-CN.lang"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="src\Views\Models\Clean\CleanInfoTabItem.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="src\Views\Models\Clean\CleanInfoTabItem.xaml.cs">
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
 </Project>

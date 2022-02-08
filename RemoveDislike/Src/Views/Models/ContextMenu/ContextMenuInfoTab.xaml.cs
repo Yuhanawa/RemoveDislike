@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 
-namespace RemoveDislike.Views.Models;
+namespace RemoveDislike.Views.Models.ContextMenu;
 
 public partial class ContextMenuInfoTab
 {
@@ -53,9 +53,9 @@ public partial class ContextMenuInfoTab
             if (IsEx)
             {
                 if (Enabled == value || DefaultValue == "") return;
-                DefaultValue = Enabled 
+                DefaultValue = Enabled
                     ? DefaultValue.Insert(DefaultValue.Length - 1, "-")
-                    : DefaultValue.Remove(DefaultValue.Length - 1 -1, 1);
+                    : DefaultValue.Remove(DefaultValue.Length - 1 - 1, 1);
             }
             else
             {

@@ -2,9 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using RemoveDislike.Views.Models;
+using RemoveDislike.Views.Models.ContextMenu;
 
-namespace RemoveDislike.Views.Pages;
+namespace RemoveDislike.Views.Pages.ContextMenuPage;
 
 public partial class ContextMenuManagementPage
 {

@@ -1,9 +1,9 @@
-<UserControl x:Class="RemoveDislike.Views.Models.CleanInfoTab"
+<UserControl x:Class="RemoveDislike.Views.Models.Clean.CleanInfoTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:RemoveDislike.Views.Models"
+             xmlns:local="clr-namespace:RemoveDislike.Views.Models.Clean"
              mc:Ignorable="d"
              PreviewMouseRightButtonUp="ControlMouseRightButtonUp"
              d:DesignHeight="52" d:DesignWidth="780">

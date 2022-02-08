@@ -6,7 +6,7 @@ using System.Windows.Input;
 using RemoveDislike.Core.Module;
 using RemoveDislike.Views.Utils;
 
-namespace RemoveDislike.Views.Models;
+namespace RemoveDislike.Views.Models.Clean;
 
 /// <summary>
 /// </summary>
