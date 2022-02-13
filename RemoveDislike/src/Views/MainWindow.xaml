@@ -131,7 +131,8 @@
                                   Selected="CommonClear_OnSelected" />
                     <TreeViewItem Header="{l:Lang Registry Management}" Name="RegistryManagement"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
-                                  Style="{StaticResource MainMenuItemStyle}" />
+                                  Style="{StaticResource MainMenuItemStyle}"
+                                  Selected="RegistryManagement_OnSelected" />
                     <TreeViewItem Header="{l:Lang Context Menu Management}" Name="ContextMenuManagement"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="ContextMenuManagement_OnSelected"

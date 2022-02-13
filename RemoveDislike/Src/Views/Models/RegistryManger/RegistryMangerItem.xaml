@@ -1,0 +1,38 @@
+<UserControl x:Class="RemoveDislike.Views.Models.RegistryManger.RegistryMangerItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:RemoveDislike.Views.Models.RegistryManger"
+             mc:Ignorable="d"
+             d:DesignHeight="52" d:DesignWidth="780">
+
+    <Border BorderThickness="1"
+            BorderBrush="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:RegistryMangerItem},
+                                                         Path=BorderBrush}">
+
+
+        <Grid Margin="5" ToolTip="{Binding Description}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="28" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="{Binding RegName}" />
+
+                <ToggleButton Grid.Column="1"
+                              Name="ToggleBtn"
+                              IsChecked="{Binding RegValue, Mode=TwoWay}"
+                              Content="&#xf0c8;"
+                              Style="{StaticResource LittleToggleButtonStyle}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

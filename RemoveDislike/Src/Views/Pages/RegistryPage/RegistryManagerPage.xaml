@@ -1,0 +1,12 @@
+<Page x:Class="RemoveDislike.Views.Pages.RegistryPage.RegistryManagerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:registryPage="clr-namespace:RemoveDislike.Views.Pages.RegistryPage"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="RegistryManagerPage" d:DataContext="{d:DesignInstance registryPage:RegistryManagerPage}">
+    <StackPanel Name="Panel" Initialized="Panel_OnInitialized" />
+</Page>

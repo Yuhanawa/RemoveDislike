@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RemoveDislike.Views.Pages.Clean;
 using RemoveDislike.Views.Pages.ContextMenuPage;
+using RemoveDislike.Views.Pages.RegistryPage;
 
 namespace RemoveDislike.Views;
 
@@ -23,6 +24,7 @@ public partial class MainWindow
     public Dictionary<string, Page> Pages { get; } = new()
     {
         ["CleanPage"] = new CleanPage(),
+        ["RegistryManagerPage"] = new RegistryManagerPage(),
         ["ContextMenuManagementPage"] = new ContextMenuManagementPage()
 
         // ["Home"] = new HomePage(),
@@ -39,4 +41,7 @@ public partial class MainWindow
 
     private void ContextMenuManagement_OnSelected(object sender, RoutedEventArgs e) =>
         MainFrame.Content = Pages["ContextMenuManagementPage"];
+
+    private void RegistryManagement_OnSelected(object sender, RoutedEventArgs e) =>
+        MainFrame.Content = Pages["RegistryManagerPage"];
 }
