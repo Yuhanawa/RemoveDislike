@@ -10,18 +10,18 @@ namespace RemoveDislike.Core.Utils.AntPathMatching;
 [DebuggerDisplay("Pattern = {regex}")]
 public class Ant
 {
+    public readonly bool IgnoreCase;
     private readonly string originalPattern;
     private readonly Regex regex;
-    public readonly bool IgnoreCase;
 
     /// <summary>
     ///     Initializes a new <see cref="Ant" />.
     /// </summary>
     /// <param name="pattern">Ant-style pattern.</param>
-    public Ant(string pattern,bool ignoreCase=false)
+    public Ant(string pattern, bool ignoreCase = false)
     {
         IgnoreCase = ignoreCase;
-        pattern = ignoreCase?pattern.ToLower():pattern;
+        pattern = ignoreCase ? pattern.ToLower() : pattern;
         originalPattern = pattern ?? string.Empty;
         regex = new Regex(
             EscapeAndReplace(originalPattern),

@@ -77,8 +77,8 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ```
 
-
 #### OLD
+
 ```json5
 {
     "header": {

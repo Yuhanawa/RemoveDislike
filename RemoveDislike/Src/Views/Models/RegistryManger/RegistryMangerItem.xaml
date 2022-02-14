@@ -32,8 +32,8 @@
                               IsChecked="{Binding RegValue, Mode=TwoWay}"
                               Content="&#xf0c8;"
                               Style="{StaticResource LittleToggleButtonStyle}" />
-                
-                <TextBox Grid.Column="1" Name="Box" Visibility="Collapsed" Text="{Binding RegTextValue, Mode=TwoWay}"/>
+
+                <TextBox Grid.Column="1" Name="Box" Visibility="Collapsed" Text="{Binding RegTextValue, Mode=TwoWay}" />
             </Grid>
         </Grid>
     </Border>
