@@ -137,12 +137,12 @@
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="ContextMenuManagement_OnSelected"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="{l:Lang Miscellaneous}"
-                                  pu:TreeViewItemHelper.Icon="&#xf014;"
-                                  Style="{StaticResource MainMenuItemStyle}" />
-                    <TreeViewItem Header="{l:Lang about}"
-                                  pu:TreeViewItemHelper.Icon="&#xf129;  "
-                                  Style="{StaticResource MainMenuItemStyle}" />
+                    <!-- <TreeViewItem Header="{l:Lang Miscellaneous}" -->
+                    <!--               pu:TreeViewItemHelper.Icon="&#xf014;" -->
+                    <!--               Style="{StaticResource MainMenuItemStyle}" /> -->
+                    <!-- <TreeViewItem Header="{l:Lang about}" -->
+                    <!--               pu:TreeViewItemHelper.Icon="&#xf129;  " -->
+                    <!--               Style="{StaticResource MainMenuItemStyle}" /> -->
                 </TreeView>
             </Grid>
         </Border>

@@ -27,11 +27,13 @@
                            VerticalAlignment="Center"
                            Text="{Binding RegName}" />
 
-                <ToggleButton Grid.Column="1"
+                <ToggleButton Grid.Column="1" Visibility="Collapsed"
                               Name="ToggleBtn"
                               IsChecked="{Binding RegValue, Mode=TwoWay}"
                               Content="&#xf0c8;"
                               Style="{StaticResource LittleToggleButtonStyle}" />
+                
+                <TextBox Grid.Column="1" Name="Box" Visibility="Collapsed" Text="{Binding RegTextValue, Mode=TwoWay}"/>
             </Grid>
         </Grid>
     </Border>
