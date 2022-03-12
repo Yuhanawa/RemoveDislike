@@ -124,16 +124,16 @@
                 <TreeView Grid.Row="1"
                           Margin="0,10,0,0"
                           Style="{StaticResource MainMenuStyle}">
-                    <TreeViewItem Header="{l:Lang Common Clear}" Name="CommonClear"
+                    <TreeViewItem Header="{l:Lang Clean}"
                                   pu:TreeViewItemHelper.Icon="&#xf039;"
                                   Style="{StaticResource MainMenuItemStyle}"
                                   IsSelected="True"
                                   Selected="CommonClear_OnSelected" />
-                    <TreeViewItem Header="{l:Lang Registry Management}" Name="RegistryManagement"
+                    <TreeViewItem Header="{l:Lang Registry}"
                                   pu:TreeViewItemHelper.Icon="&#xf1ac;"
                                   Style="{StaticResource MainMenuItemStyle}"
                                   Selected="RegistryManagement_OnSelected" />
-                    <TreeViewItem Header="{l:Lang Context Menu Management}" Name="ContextMenuManagement"
+                    <TreeViewItem Header="{l:Lang Context Menu}"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="ContextMenuManagement_OnSelected"
                                   Style="{StaticResource MainMenuItemStyle}" />
