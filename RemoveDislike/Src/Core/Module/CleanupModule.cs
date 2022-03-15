@@ -26,17 +26,91 @@ public static class CleanupModule
         Load();
     }
 
-    public static void Load() =>
+    public static void Load()
+    {
+        RuleModule emptyFolderRule = null;
+        emptyFolderRule = new RuleModule(
+            "Empty Folder",
+            "Yuhanawa",
+            "Empty Folder Clean",
+            false,
+            false, false,
+            (disabledList, action) =>
+            {
+                void EmptyFolder(string path)
+                {
+                    while (true)
+                    {
+                        try
+                        {
+                            if (Directory.Exists(path) &&
+                                !disabledList.Contains(path) &&
+                                Directory.GetFileSystemEntries(path).Length == 0)
+                            {
+                                Info(path);
+                                Directory.Delete(path);
+                                if (emptyFolderRule!=null) emptyFolderRule.Size++;
+                                action(path);
+                                if (path.Length > 4 && string.IsNullOrEmpty(Directory.GetParent(path)?.FullName))
+                                {
+                                    path = Directory.GetParent(path)!.FullName;
+                                    continue;
+                                }
+                            }
+                            else if (path != null) Directory.GetDirectories(path).ToList().ForEach(EmptyFolder);
+                        }
+                        catch (Exception e)
+                        {
+                            Err("UnKnow",e);
+                            
+                        }
+                        break;
+                    }
+                }
+
+                foreach (DriveInfo drive in DriveInfo.GetDrives())
+                {
+                    if (!drive.IsReady) continue;
+                    foreach (DirectoryInfo directory in drive.RootDirectory.EnumerateDirectories())
+                        EmptyFolder(directory.FullName);
+                }
+            }
+        );
+
+
+
+
+        RulesFileList.Add("Empty Folder", emptyFolderRule);
+                
         new DirectoryInfo(ConfigHelper.RuleBase)
             .GetFiles("*.json", SearchOption.AllDirectories)
             .ToList().ForEach(file =>
                 RulesFileList.Add(file.Name, new RuleModule(file.FullName)));
+    }
 }
 
 #endregion
 
 public class RuleModule
 {
+    public RuleModule(
+        string name,
+        string author,
+        string description,
+        bool force,
+        bool ignoreCase,
+        bool danger,
+        Action<ICollection<string>, Action<string>> featuredRule
+    )
+    {
+        Name = name;
+        Author = author;
+        Description = description;
+        Force = force;
+        IgnoreCase = ignoreCase;
+        Danger = danger;
+        FeaturedRule = featuredRule;
+    }
     public RuleModule(string path)
     {
         Path = path;
@@ -116,7 +190,10 @@ public class RuleModule
     {
         try
         {
-            _Run(disabledList, action);
+            if (FeaturedRule==null)
+                _Run(disabledList, action);
+            else
+                FeaturedRule.Invoke(disabledList, action);
         }
         catch (Exception e)
         {
@@ -132,6 +209,8 @@ public class RuleModule
     public bool Force { get; set; }
     public bool IgnoreCase { get; set; }
     public bool Danger { get; set; }
+    
+    public Action<ICollection<string>,Action<string>> FeaturedRule { get; set; }
 
     #endregion
 }
