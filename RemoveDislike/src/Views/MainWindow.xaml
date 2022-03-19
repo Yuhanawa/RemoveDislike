@@ -129,20 +129,14 @@
                                   Style="{StaticResource MainMenuItemStyle}"
                                   IsSelected="True"
                                   Selected="CommonClear_OnSelected" />
-                    <TreeViewItem Header="{l:Lang Registry}"
-                                  pu:TreeViewItemHelper.Icon="&#xf1ac;"
-                                  Style="{StaticResource MainMenuItemStyle}"
-                                  Selected="RegistryManagement_OnSelected" />
                     <TreeViewItem Header="{l:Lang Context Menu}"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="ContextMenuManagement_OnSelected"
                                   Style="{StaticResource MainMenuItemStyle}" />
-                    <!-- <TreeViewItem Header="{l:Lang Miscellaneous}" -->
-                    <!--               pu:TreeViewItemHelper.Icon="&#xf014;" -->
-                    <!--               Style="{StaticResource MainMenuItemStyle}" /> -->
-                    <!-- <TreeViewItem Header="{l:Lang about}" -->
-                    <!--               pu:TreeViewItemHelper.Icon="&#xf129;  " -->
-                    <!--               Style="{StaticResource MainMenuItemStyle}" /> -->
+                    <TreeViewItem Header="{l:Lang SystemInfo}"
+                                  pu:TreeViewItemHelper.Icon="&#xf014;"
+                                  Selected="SystemInfo_OnSelected"
+                                  Style="{StaticResource MainMenuItemStyle}" />
                 </TreeView>
             </Grid>
         </Border>

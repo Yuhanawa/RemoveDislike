@@ -15,7 +15,6 @@ public class AntDirectory
     ///     Initializes a new <see cref="AntDirectory" />.
     /// </summary>
     /// <param name="ant">Ant pattern used for directory-searching.</param>
-    /// <param name="fileSystem">File system to be used</param>
     /// <exception cref="ArgumentNullException">Throw when <paramref name="ant" /> is null.</exception>
     public AntDirectory(Ant ant) =>
         this.ant = ant ?? throw new ArgumentNullException(nameof(ant));

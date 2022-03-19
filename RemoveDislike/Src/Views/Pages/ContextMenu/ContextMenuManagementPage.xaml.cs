@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using RemoveDislike.Views.Models.ContextMenu;
 
-namespace RemoveDislike.Views.Pages.ContextMenuPage;
+namespace RemoveDislike.Views.Pages.ContextMenu;
 
 public partial class ContextMenuManagementPage
 {

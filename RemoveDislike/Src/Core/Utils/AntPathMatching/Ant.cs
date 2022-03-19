@@ -18,6 +18,7 @@ public class Ant
     ///     Initializes a new <see cref="Ant" />.
     /// </summary>
     /// <param name="pattern">Ant-style pattern.</param>
+    /// <param name="ignoreCase">ignore Case(default:false)</param>
     public Ant(string pattern, bool ignoreCase = false)
     {
         IgnoreCase = ignoreCase;
@@ -47,9 +48,6 @@ public class Ant
         if (unix.EndsWith("/")) unix += "**";
 
         pattern = unix
-            // .Replace(@"/**/", "(.*[/])")
-            // .Replace(@"**/", "(.*)")
-            // .Replace(@"/**", "(.*)")
             .Replace(@"*", "([^/]*)")
             .Replace(@"([^/]*)([^/]*)", "(.*)")
             .Replace(@"?", "(.)")

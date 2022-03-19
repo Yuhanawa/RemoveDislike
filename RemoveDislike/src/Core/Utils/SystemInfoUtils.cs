@@ -83,7 +83,7 @@ public static class SystemInfoUtils
                 Info($"{name} : {Environment.GetFolderPath(sf)}");
     }
 
-    private static string GetOsVersion(Version ver)
+    public static string GetOsVersion(Version ver)
     {
         string strClient = ver.Major switch
         {
