@@ -6,7 +6,7 @@ using Microsoft.Win32;
 using RemoveDislike.Core.Module;
 using RemoveDislike.Views.Models.Clean;
 
-namespace RemoveDislike.Views.Pages.Clean;
+namespace RemoveDislike.Views.Pages;
 
 public partial class CleanPage
 {

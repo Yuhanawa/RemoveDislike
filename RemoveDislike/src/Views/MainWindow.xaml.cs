@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using RemoveDislike.Views.Pages.Clean;
-using RemoveDislike.Views.Pages.ContextMenu;
-using RemoveDislike.Views.Pages.SystemInfo;
-
-// using RemoveDislike.Views.Pages.RegistryPage;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
+using Hardware.Info;
+using RemoveDislike.Views.Pages;
 
 namespace RemoveDislike.Views;
 
@@ -15,31 +16,100 @@ namespace RemoveDislike.Views;
 /// </summary>
 public partial class MainWindow
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-        Interface = this;
+    #region window
+        public MainWindow()
+        {
+            InitializeComponent();
+            Interface = this;
 
-        Thread.CurrentThread.Name = "MainThread";
-    }
-
-    private Dictionary<string, Page> Pages { get; } = new()
-    {
-        ["CleanPage"] = new CleanPage(),
-        ["ContextMenuManagementPage"] = new ContextMenuManagementPage(),
-        ["SystemInfoPage"] = new SystemInfoPage()
-    };
-
+            Thread.CurrentThread.Name = "MainThread";
+        }
     public static MainWindow Interface { get; private set; }
 
     private void PinButtonOnClick(object sender, RoutedEventArgs e) => Topmost = !Topmost;
+    #endregion
 
-    private void CommonClear_OnSelected(object sender, RoutedEventArgs e) =>
-        MainFrame.Content = Pages["CleanPage"];
 
-    private void ContextMenuManagement_OnSelected(object sender, RoutedEventArgs e) =>
-        MainFrame.Content = Pages["ContextMenuManagementPage"];
+    #region switch page
+    private Dictionary<string, Page> Pages { get; } = new()
+    {
+        ["Clean"] = new CleanPage(),
+        ["ContextMenu"] = new ContextMenuPage(),
+        ["Info"] = new InfoPage()
+    };
+    
 
-    private void SystemInfo_OnSelected(object sender, RoutedEventArgs e) =>
-        MainFrame.Content = Pages["SystemInfoPage"];
+    private void CleanMenuItem_OnSelected(object sender, RoutedEventArgs e) =>
+        MainFrame.Content = Pages["Clean"];
+
+    private void ContextMenuMenuItem_OnSelected(object sender, RoutedEventArgs e) =>
+        MainFrame.Content = Pages["ContextMenu"];
+
+    private void InfoMenuMenuItem_OnSelected(object sender, RoutedEventArgs e) =>
+        MainFrame.Content = Pages["Info"];
+    #endregion
+
+
+    private void CpuUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        new Thread(_ =>
+        {
+            PerformanceCounter cpuUsage = new ("Processor", "% Processor Time", "_Total");
+            Thread.Sleep(1000);
+            float firstCall = cpuUsage.NextValue();
+            
+            while (true)
+            {
+                Thread.Sleep(1000);
+                CpuUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        var usage = cpuUsage.NextValue();
+                        if (usage>100) usage = 100; else if (usage<0) usage = 0;
+
+                        CpuUsageProgressBar.Value = usage;
+                        CpuUsageTextBlock.Text = $"CPU Usage: {usage:F2}%";
+                        CpuUsageProgressBar.Foreground = usage < 50 
+                            ? new SolidColorBrush(Color.FromRgb((byte)(usage/50*255), 255, 0)) 
+                            : new SolidColorBrush(Color.FromRgb(255, (byte)((100-usage)/50*255), 0));
+                    })
+                );
+            }
+        }){ Name = "CPU Usage listener"} .Start();
+    }
+
+    private void RamUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        new Thread(_ =>
+        {
+            var hardwareInfo = new HardwareInfo();
+            hardwareInfo.RefreshMemoryStatus();
+            
+            while (true)
+            {
+                RamUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        hardwareInfo.RefreshMemoryStatus();
+                        float total = hardwareInfo.MemoryStatus.TotalPhysical;
+                        float used = hardwareInfo.MemoryStatus.TotalPhysical-hardwareInfo.MemoryStatus.AvailablePhysical;
+                        float usage =  used*100/total;
+                        if (usage>100) usage = 100;
+
+                        RamUsageProgressBar.Value = usage;
+                        RamUsageTextBlock.Text = $"RAM Usage: {usage:F2}%";
+                        RamUsageProgressBar.Foreground = usage < 50
+                            ? new SolidColorBrush(Color.FromRgb((byte)(usage/50*255), 255, 0)) 
+                            : new SolidColorBrush(Color.FromRgb(255, (byte)((100-usage)/50*255), 0));
+                    })
+                );
+            }
+        }){ Name = "RAM Usage listener"} .Start();
+    }
+
+    private void PerformancePanel_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        ProcessStartInfo startInfo = new () { FileName = "taskmgr.exe", };
+        Process.Start(startInfo);
+    }
 }

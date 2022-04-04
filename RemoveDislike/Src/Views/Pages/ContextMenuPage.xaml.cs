@@ -4,11 +4,11 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using RemoveDislike.Views.Models.ContextMenu;
 
-namespace RemoveDislike.Views.Pages.ContextMenu;
+namespace RemoveDislike.Views.Pages;
 
-public partial class ContextMenuManagementPage
+public partial class ContextMenuPage
 {
-    public ContextMenuManagementPage() => InitializeComponent();
+    public ContextMenuPage() => InitializeComponent();
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "IdentifierTypo")]

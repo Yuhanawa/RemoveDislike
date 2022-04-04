@@ -71,6 +71,7 @@
 
     <ItemGroup>
         <PackageReference Include="fastJSON" Version="2.4.0.4" />
+        <PackageReference Include="Hardware.Info" Version="10.0.0" />
         <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha" />
     </ItemGroup>
 
@@ -85,6 +86,8 @@
         <Resource Include="Resources\Img\dll.png" />
         <Resource Include="Resources\Ico\128x_black.ico" />
         <Resource Include="Resources\Lang\zh-CN.lang" />
+        <None Remove="Resources\Img\Icon_pink.png" />
+        <Resource Include="Resources\Img\Icon_pink.png" />
     </ItemGroup>
 
     <ItemGroup>

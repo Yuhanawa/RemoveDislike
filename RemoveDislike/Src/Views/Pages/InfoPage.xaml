@@ -1,0 +1,18 @@
+<Page x:Class="RemoveDislike.Views.Pages.InfoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
+      mc:Ignorable="d"
+      Title="InfoPage" Height="450" Width="800">
+      
+      <TabControl>
+            <TabItem Header="{l:Lang Overview}" />
+            <TabItem Header="{l:Lang 1}" />
+            <TabItem Header="{l:Lang 2}" />
+            <TabItem Header="{l:Lang 3}" />
+            <TabItem Header="{l:Lang 4}" />
+      </TabControl>
+      
+</Page>
