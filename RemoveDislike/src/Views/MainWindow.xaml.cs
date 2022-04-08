@@ -17,13 +17,13 @@ namespace RemoveDislike.Views;
 public partial class MainWindow
 {
     #region window
-        public MainWindow()
-        {
-            InitializeComponent();
-            Interface = this;
+    public MainWindow()
+    {
+        InitializeComponent();
+        Interface = this;
 
-            Thread.CurrentThread.Name = "MainThread";
-        }
+        Thread.CurrentThread.Name = "MainThread";
+    }
     public static MainWindow Interface { get; private set; }
 
     private void PinButtonOnClick(object sender, RoutedEventArgs e) => Topmost = !Topmost;
@@ -58,7 +58,7 @@ public partial class MainWindow
             Thread.Sleep(1000);
             float firstCall = cpuUsage.NextValue();
             
-            while (true)
+            while (!App.WillClose)
             {
                 Thread.Sleep(1000);
                 CpuUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
@@ -85,7 +85,7 @@ public partial class MainWindow
             var hardwareInfo = new HardwareInfo();
             hardwareInfo.RefreshMemoryStatus();
             
-            while (true)
+            while (!App.WillClose)
             {
                 RamUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
                     new Action(() =>

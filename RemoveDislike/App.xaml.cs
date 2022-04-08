@@ -14,6 +14,8 @@ namespace RemoveDislike;
 /// </summary>
 public partial class App
 {
+    public static bool WillClose { get; set; }
+
     protected App()
     {
         Info("Output system information");
@@ -23,6 +25,18 @@ public partial class App
 
         Info("Application started");
         InitializeComponent();
+        
+        App.Current.Exit += (_, _) =>
+        {
+            if (!WillClose)
+            {
+                WillClose = true;
+                Info("Application will close");
+                return;
+            }
+
+            Info("Application closed");
+        };
     }
 
     private static void OutputSystemInfo()
