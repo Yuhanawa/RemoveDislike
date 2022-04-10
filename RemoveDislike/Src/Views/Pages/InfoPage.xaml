@@ -18,10 +18,14 @@
                         
                         <GroupBox Grid.Row="0"  Header="{l:Lang Software}">
                               <StackPanel Name="SummarySoftwarePanel" HorizontalAlignment="Left" Margin="20,0,0,0" Initialized="SummarySoftwarePanel_OnInitialized">
-                                    <models:InfoTab TitleText="Test" ValueText="Test" Width="600"/>
+                                    <models:InfoTab TitleText=" " ValueText=" " Width="800"/>
                               </StackPanel>
                         </GroupBox>
-                        <GroupBox Grid.Row="1"  Header="{l:Lang Hardware}" />
+                        <GroupBox Grid.Row="1"  Header="{l:Lang Hardware}" >
+                              <StackPanel Name="SummaryHardwarePanel" HorizontalAlignment="Left" Margin="20,0,0,0" Initialized="SummaryHardwarePanel_OnInitialized">
+                                    <models:InfoTab TitleText=" " ValueText=" " Width="800"/>
+                              </StackPanel>
+                        </GroupBox>
                   </Grid>
             </TabItem>
             <TabItem Header="{l:Lang Hardware}">

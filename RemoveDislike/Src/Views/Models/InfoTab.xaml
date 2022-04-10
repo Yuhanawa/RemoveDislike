@@ -19,7 +19,7 @@
         <TextBlock Grid.Column="0" Name="TitleTextBlock" x:FieldModifier="public" TextAlignment="Left"
                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=TitleText}" />
-        <TextBlock Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left"
+        <TextBlock Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left" TextWrapping="WrapWithOverflow"
                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=ValueText}" />
     </Grid>
