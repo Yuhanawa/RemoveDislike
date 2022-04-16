@@ -4,50 +4,104 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
-      xmlns:models="clr-namespace:RemoveDislike.Views.Models"
       mc:Ignorable="d"
       Title="InfoPage" d:DesignHeight="450" d:DesignWidth="800">
-      
-      <TabControl>
-            <TabItem Header="{l:Lang Summary}">
-                  <Grid>
-                        <Grid.RowDefinitions>
-                              <RowDefinition/>
-                              <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        
-                        <GroupBox Grid.Row="0"  Header="{l:Lang Software}">
-                              <StackPanel Name="SummarySoftwarePanel" HorizontalAlignment="Left" Margin="20,0,0,0" Initialized="SummarySoftwarePanel_OnInitialized">
-                                    <models:InfoTab TitleText=" " ValueText=" " Width="800"/>
-                              </StackPanel>
-                        </GroupBox>
-                        <GroupBox Grid.Row="1"  Header="{l:Lang Hardware}" >
-                              <StackPanel Name="SummaryHardwarePanel" HorizontalAlignment="Left" Margin="20,0,0,0" Initialized="SummaryHardwarePanel_OnInitialized">
-                                    <models:InfoTab TitleText=" " ValueText=" " Width="800"/>
-                              </StackPanel>
-                        </GroupBox>
-                  </Grid>
-            </TabItem>
-            <TabItem Header="{l:Lang Hardware}">
-                  <TabControl>
-                        <TabItem Header="{l:Lang CPU}"/>
-                        <TabItem Header="{l:Lang RAM}"/>
-                        <TabItem Header="{l:Lang Motherboard}"/>
-                        <TabItem Header="{l:Lang BIOS}"/>
-                        <TabItem Header="{l:Lang Display}"/>
-                        <TabItem Header="{l:Lang Storage}"/>
-                        <TabItem Header="{l:Lang Network}"/>
-                        <TabItem Header="{l:Lang Battery}"/>
-                        <TabItem Header="{l:Lang Printer}"/>
-                        <TabItem Header="{l:Lang Other}"/>
-                  </TabControl>
-            </TabItem>
-            <TabItem Header="{l:Lang Software}" >
-                  <TabControl>
-                        <TabItem Header="{l:Lang System}"/>
-                        <TabItem Header="{l:Lang Programs}"/>
-                  </TabControl>
-            </TabItem>
-      </TabControl>
-      
+
+    <TabControl>
+        <TabItem Header="{l:Lang Summary}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" Header="{l:Lang Software}">
+                    <StackPanel Name="SummarySoftwarePanel" Margin="20,0,0,0"
+                                Initialized="SummarySoftwarePanel_OnInitialized" />
+                </GroupBox>
+                <GroupBox Grid.Row="1" Header="{l:Lang Hardware}">
+                    <StackPanel Name="SummaryHardwarePanel" Margin="20,0,0,0"
+                                Initialized="SummaryHardwarePanel_OnInitialized" />
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="{l:Lang Hardware}">
+            <TabControl>
+                <TabItem Header="{l:Lang CPU}">
+                    <ScrollViewer>
+                        <!-- ReSharper disable once InconsistentNaming -->
+                        <StackPanel Name="CPUPanel" Margin="20,0,0,0" Initialized="CPUPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang RAM}">
+                    <ScrollViewer>
+                        <!-- ReSharper disable once InconsistentNaming -->
+                        <StackPanel Name="RAMPanel" Margin="20,0,0,0" Initialized="RAMPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Motherboard}">
+                    <StackPanel Name="MotherboardPanel" Margin="20,0,0,0" Initialized="MotherboardPanel_OnInitialized" />
+                </TabItem>
+                <TabItem Header="{l:Lang BIOS}">
+                    <ScrollViewer>
+                        <!-- ReSharper disable once InconsistentNaming -->
+                        <StackPanel Name="BIOSPanel" Margin="20,0,0,0" Initialized="BIOSPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Display}">
+                    <ScrollViewer>
+                        <StackPanel Name="DisplayPanel" Margin="20,0,0,0" Initialized="DisplayPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Storage}">
+                    <ScrollViewer>
+                        <StackPanel Name="StoragePanel" Margin="20,0,0,0" Initialized="StoragePanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Network}">
+                    <ScrollViewer>
+                        <StackPanel Name="NetworkPanel" Margin="20,0,0,0" Initialized="NetworkPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Battery}">
+                    <ScrollViewer>
+                        <StackPanel Name="BatteryPanel" Margin="20,0,0,0" Initialized="BatteryPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Printer}">
+                    <ScrollViewer>
+                        <StackPanel Name="PrinterPanel" Margin="20,0,0,0" Initialized="PrinterPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang SoundDevice}">
+                    <ScrollViewer>
+                        <StackPanel Name="SoundDevicePanel" Margin="20,0,0,0"
+                                    Initialized="SoundDevicePanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Monitor}">
+                    <ScrollViewer>
+                        <StackPanel Name="MonitorPanel" Margin="20,0,0,0" Initialized="MonitorPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Input}">
+                    <ScrollViewer>
+                        <StackPanel Name="InputPanel" Margin="20,0,0,0" Initialized="InputPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{l:Lang Other}">
+                    <ScrollViewer>
+                        <StackPanel Name="OtherPanel" Margin="20,0,0,0" Initialized="OtherPanel_OnInitialized" />
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </TabItem>
+        <TabItem Header="{l:Lang Software}">
+            <TabControl>
+                <TabItem Header="{l:Lang System}" />
+                <TabItem Header="{l:Lang Programs}" />
+            </TabControl>
+        </TabItem>
+    </TabControl>
+
 </Page>

@@ -5,6 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RemoveDislike.Views.Models"
              mc:Ignorable="d"
+             Padding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                        Path=Padding}"
+             Margin="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                        Path=Margin}"
              Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                         Path=Width}"
              Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
@@ -13,14 +17,17 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="0" Name="TitleTextBlock" x:FieldModifier="public" TextAlignment="Left"
-                   Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+        <TextBox Grid.Column="0" Name="TitleTextBlock" x:FieldModifier="public" TextAlignment="Left" IsReadOnly="True"
+                 BorderThickness="0,0,0,1" Padding="0,2,0,0"
+                 Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=TitleText}" />
-        <TextBlock Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left" TextWrapping="WrapWithOverflow"
-                   Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+        <TextBox Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left" IsReadOnly="True"
+                 TextWrapping="WrapWithOverflow"
+                 BorderThickness="0,0,0,1" Padding="0,2,0,0"
+                 Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=ValueText}" />
     </Grid>
 </UserControl>
