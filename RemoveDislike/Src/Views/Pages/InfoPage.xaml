@@ -98,15 +98,14 @@
         </TabItem>
         <TabItem Header="{l:Lang Software}">
             <TabControl>
-                <TabItem Header="{l:Lang System}" >
+                <TabItem Header="{l:Lang System}">
                     <ScrollViewer>
                         <StackPanel Name="SystemPanel" Margin="20,0,0,0" Initialized="SystemPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="{l:Lang Programs}" >
-                    <!-- <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" > -->
-                        <DataGrid Name="ProgramsPanel" Margin="0" Padding="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Initialized="ProgramsPanel_OnInitialized"/>
-                    <!-- </ScrollViewer>                        -->
+                <TabItem Header="{l:Lang Programs}">
+                    <DataGrid Name="ProgramsPanel" Margin="0" Padding="0" HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto" Initialized="ProgramsPanel_OnInitialized" />
                 </TabItem>
             </TabControl>
         </TabItem>

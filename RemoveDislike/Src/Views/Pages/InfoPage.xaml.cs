@@ -40,7 +40,7 @@ public partial class InfoPage
         PutInfoTab((Panel)sender, "Computer Name", Environment.MachineName);
         PutInfoTab((Panel)sender, "User Name", Environment.UserName);
         PutInfoTab((Panel)sender, "DomainName", Environment.UserDomainName);
-        PutInfoTab((Panel)sender, "UpTime",GetSystemUpTime());
+        PutInfoTab((Panel)sender, "UpTime", GetSystemUpTime());
         PutInfoTab((Panel)sender, "TickCount", Environment.TickCount / 1000 + "s");
         PutInfoTab((Panel)sender, "SystemPageSize", Environment.SystemPageSize / 1024 + "KB");
     }
@@ -296,6 +296,101 @@ public partial class InfoPage
         }
     }
 
+    private void SystemPanel_OnInitialized(object sender, EventArgs e)
+    {
+        ManagementObjectCollection moc = new ManagementClass("Win32_ComputerSystemProduct").GetInstances();
+        foreach (ManagementBaseObject o in moc)
+        foreach (PropertyData item in o.Properties)
+            PutInfoTab((Panel)sender, item.Name, item.Value?.ToString());
+    }
+
+    private void ProgramsPanel_OnInitialized(object sender, EventArgs e) =>
+        ((DataGrid)sender).ItemsSource =
+        Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\")?
+            .GetSubKeyNames().ToList().Select(x => new Program(x)).Where(x => x.DisplayName != "");
+
+
+    #region MyRegion
+
+    private class Program
+    {
+        private readonly RegistryKey _key;
+        public Program(string keyName) => _key =
+            Registry.LocalMachine.OpenSubKey(@$"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{keyName}");
+
+        /// <summary> ProductName property </summary>
+        public string DisplayName => _key.GetValue("DisplayName")?.ToString() ?? "";
+
+        /// <summary> Derived from ProductVersion property </summary>
+        public string DisplayVersion => _key.GetValue("DisplayVersion")?.ToString() ?? "";
+
+        /// <summary> Manufacturer property </summary>
+        public string Publisher => _key.GetValue("Publisher")?.ToString() ?? "";
+
+        /// <summary> Derived from ProductVersion property </summary>
+        public string VersionMinor => _key.GetValue("VersionMinor")?.ToString() ?? "";
+
+        /// <summary> Derived from ProductVersion property </summary>
+        public string VersionMajor => _key.GetValue("VersionMajor")?.ToString() ?? "";
+
+        /// <summary> Derived from ProductVersion property </summary>
+        public string Version => _key.GetValue("Version")?.ToString() ?? "";
+
+        /// <summary> ARPHELPLINK property </summary>
+        public string HelpLink => _key.GetValue("HelpLink")?.ToString() ?? "";
+
+        /// <summary> ARPHELPTELEPHONE property </summary>
+        public string HelpTelephone => _key.GetValue("HelpTelephone")?.ToString() ?? "";
+
+        /// <summary>
+        ///     The last time this product received service. The value of this property is replaced each time a patch is
+        ///     applied or removed from the product or the /v Command-Line Option is used to repair the product. If the product has
+        ///     received no repairs or patches this property contains the time this product was installed on this computer.
+        /// </summary>
+        public string InstallDate => _key.GetValue("InstallDate")?.ToString() ?? "";
+
+        /// <summary> ARPINSTALLLOCATION property </summary>
+        public string InstallLocation => _key.GetValue("InstallLocation")?.ToString() ?? "";
+
+        /// <summary> SourceDir property </summary>
+        public string InstallSource => _key.GetValue("InstallSource")?.ToString() ?? "";
+
+        /// <summary> ARPURLINFOABOUT property </summary>
+        public string URLInfoAbout => _key.GetValue("URLInfoAbout")?.ToString() ?? "";
+
+        /// <summary> ARPURLUPDATEINFO property </summary>
+        public string URLUpdateInfo => _key.GetValue("URLUpdateInfo")?.ToString() ?? "";
+
+        /// <summary> ARPAUTHORIZEDCDFPREFIX property </summary>
+        public string AuthorizedCDFPrefix => _key.GetValue("AuthorizedCDFPrefix")?.ToString() ?? "";
+
+        /// <summary> ARPCOMMENTS property Comments provided to the Add or Remove Programs control panel. </summary>
+        public string Comments => _key.GetValue("Comments")?.ToString() ?? "";
+
+        /// <summary> ARPCONTACT property Contact provided to the Add or Remove Programs control panel. </summary>
+        public string Contact => _key.GetValue("Contact")?.ToString() ?? "";
+
+        /// <summary> Determined and set by the Windows Installer. </summary>
+        public string EstimatedSize => _key.GetValue("EstimatedSize")?.ToString() ?? "";
+
+        /// <summary> ProductLanguage property </summary>
+        public string Language => _key.GetValue("Language")?.ToString() ?? "";
+
+        /// <summary> Determined and set by the Windows Installer. </summary>
+        public string ModifyPath => _key.GetValue("ModifyPath")?.ToString() ?? "";
+
+        /// <summary> ARPREADME property Readme provided to the Add or Remove Programs control panel. </summary>
+        public string Readme => _key.GetValue("Readme")?.ToString() ?? "";
+
+        /// <summary> Determined and set by Windows Installer. </summary>
+        public string UninstallString => _key.GetValue("UninstallString")?.ToString() ?? "";
+
+        /// <summary> MSIARPSETTINGSIDENTIFIER property </summary>
+        public string SettingsIdentifier => _key.GetValue("MSIARPSETTINGSIDENTIFIER")?.ToString() ?? "";
+    }
+
+    #endregion
+
     #region tools
 
     private static string GetSystemUpTime()
@@ -318,7 +413,7 @@ public partial class InfoPage
         try
         {
             DateTime date = Directory.GetCreationTime(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-            
+
             return
                 $"{date.Year}-{date.Month}-{date.Day} {date.Hour}h:{date.Minute}m:{date.Second}s:{date.Millisecond}ms";
         }
@@ -329,74 +424,4 @@ public partial class InfoPage
     }
 
     #endregion
-
-    private void SystemPanel_OnInitialized(object sender, EventArgs e)
-    {
-        ManagementObjectCollection moc = new ManagementClass("Win32_ComputerSystemProduct").GetInstances();
-        foreach (ManagementBaseObject o in moc)
-        foreach (PropertyData item in o.Properties)
-                PutInfoTab(((Panel)sender), item.Name, item.Value?.ToString());
-    }
-
-    private void ProgramsPanel_OnInitialized(object sender, EventArgs e) =>
-        // HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
-        ((DataGrid)sender).ItemsSource =
-        Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\")?
-            .GetSubKeyNames().ToList().Select(x => new Program(x)).Where(x => x.DisplayName != "");
-    
-
-    #region MyRegion
-    private class Program
-    {
-        public Program(RegistryKey key) => _key = key;
-        public Program(string keyName) => _key = Registry.LocalMachine.OpenSubKey(@$"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{keyName}");
-        private readonly RegistryKey _key;
-        /// <summary> ProductName property </summary>
-        public string DisplayName => _key.GetValue("DisplayName")?.ToString() ?? "";
-        /// <summary> Derived from ProductVersion property </summary>
-        public string DisplayVersion => _key.GetValue("DisplayVersion")?.ToString() ?? "";
-        /// <summary> Manufacturer property </summary>
-        public string Publisher => _key.GetValue("Publisher")?.ToString() ?? "";
-        /// <summary> Derived from ProductVersion property </summary>
-        public string VersionMinor => _key.GetValue("VersionMinor")?.ToString() ?? "";
-        /// <summary> Derived from ProductVersion property </summary>
-        public string VersionMajor => _key.GetValue("VersionMajor")?.ToString() ?? "";
-        /// <summary> Derived from ProductVersion property </summary>
-        public string Version => _key.GetValue("Version")?.ToString() ?? "";
-        /// <summary> ARPHELPLINK property </summary>
-        public string HelpLink => _key.GetValue("HelpLink")?.ToString() ?? "";
-        /// <summary> ARPHELPTELEPHONE property </summary>
-        public string HelpTelephone => _key.GetValue("HelpTelephone")?.ToString() ?? "";
-        /// <summary> The last time this product received service. The value of this property is replaced each time a patch is applied or removed from the product or the /v Command-Line Option is used to repair the product. If the product has received no repairs or patches this property contains the time this product was installed on this computer. </summary>
-        public string InstallDate => _key.GetValue("InstallDate")?.ToString()?? "";
-        /// <summary> ARPINSTALLLOCATION property </summary>
-        public string InstallLocation => _key.GetValue("InstallLocation")?.ToString() ?? "";
-        /// <summary> SourceDir property </summary>
-        public string InstallSource => _key.GetValue("InstallSource")?.ToString() ?? "";
-        /// <summary> ARPURLINFOABOUT property </summary>
-        public string URLInfoAbout => _key.GetValue("URLInfoAbout")?.ToString() ?? "";
-        /// <summary> ARPURLUPDATEINFO property </summary>
-        public string URLUpdateInfo => _key.GetValue("URLUpdateInfo")?.ToString() ?? "";
-        /// <summary> ARPAUTHORIZEDCDFPREFIX property </summary>
-        public string AuthorizedCDFPrefix => _key.GetValue("AuthorizedCDFPrefix")?.ToString() ?? "";
-        /// <summary> ARPCOMMENTS property Comments provided to the Add or Remove Programs control panel. </summary>
-        public string Comments => _key.GetValue("Comments")?.ToString() ?? "";
-        /// <summary> ARPCONTACT property Contact provided to the Add or Remove Programs control panel. </summary>
-        public string Contact => _key.GetValue("Contact")?.ToString() ?? "";
-        /// <summary> Determined and set by the Windows Installer. </summary>
-        public string EstimatedSize => _key.GetValue("EstimatedSize")?.ToString() ?? "";
-        /// <summary> ProductLanguage property </summary>
-        public string Language => _key.GetValue("Language")?.ToString() ?? "";
-        /// <summary> Determined and set by the Windows Installer. </summary>
-        public string ModifyPath => _key.GetValue("ModifyPath")?.ToString() ?? "";
-        /// <summary> ARPREADME property Readme provided to the Add or Remove Programs control panel. </summary>
-        public string Readme => _key.GetValue("Readme")?.ToString() ?? "";
-        /// <summary> Determined and set by Windows Installer. </summary>
-        public string UninstallString => _key.GetValue("UninstallString")?.ToString() ?? "";
-        /// <summary> MSIARPSETTINGSIDENTIFIER property </summary>
-        public string SettingsIdentifier => _key.GetValue("MSIARPSETTINGSIDENTIFIER")?.ToString() ?? "";
-    }
-
-    #endregion
-    
 }
