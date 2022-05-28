@@ -339,8 +339,8 @@ public partial class InfoPage
         /// <summary> ARPHELPLINK property </summary>
         public string HelpLink => _key.GetValue("HelpLink")?.ToString() ?? "";
 
-        /// <summary> ARPHELPTELEPHONE property </summary>
-        public string HelpTelephone => _key.GetValue("HelpTelephone")?.ToString() ?? "";
+        // /// <summary> ARPHELPTELEPHONE property </summary>
+        // public string HelpTelephone => _key.GetValue("HelpTelephone")?.ToString() ?? "";
 
         /// <summary>
         ///     The last time this product received service. The value of this property is replaced each time a patch is
