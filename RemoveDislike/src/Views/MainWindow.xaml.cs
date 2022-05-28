@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Hardware.Info;
 using RemoveDislike.Views.Pages;
+using RemoveDislike.Views.Utils;
 
 namespace RemoveDislike.Views;
 
@@ -50,8 +51,7 @@ public partial class MainWindow
     #endregion
 
 
-    private void CpuUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e)
-    {
+    private void CpuUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e) =>
         new Thread(_ =>
         {
             PerformanceCounter cpuUsage = new ("Processor", "% Processor Time", "_Total");
@@ -64,19 +64,18 @@ public partial class MainWindow
                 CpuUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
                     new Action(() =>
                     {
-                        var usage = cpuUsage.NextValue();
+                        float usage = cpuUsage.NextValue();
                         if (usage>100) usage = 100; else if (usage<0) usage = 0;
 
                         CpuUsageProgressBar.Value = usage;
-                        CpuUsageTextBlock.Text = $"CPU Usage: {usage:F2}%";
+                        CpuUsageTextBlock.Text = $"{LangUtils.Get("CPU Usage")}: {usage:F2}%";
                         CpuUsageProgressBar.Foreground = usage < 50 
                             ? new SolidColorBrush(Color.FromRgb((byte)(usage/50*255), 255, 0)) 
                             : new SolidColorBrush(Color.FromRgb(255, (byte)((100-usage)/50*255), 0));
                     })
                 );
             }
-        }){ Name = "CPU Usage listener"} .Start();
-    }
+        }){ Name = "CPU Usage listener"}.Start();
 
     private void RamUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e)
     {
@@ -97,7 +96,7 @@ public partial class MainWindow
                         if (usage>100) usage = 100;
 
                         RamUsageProgressBar.Value = usage;
-                        RamUsageTextBlock.Text = $"RAM Usage: {usage:F2}%";
+                        RamUsageTextBlock.Text = $"{LangUtils.Get("RAM Usage")}: {usage:F2}%";
                         RamUsageProgressBar.Foreground = usage < 50
                             ? new SolidColorBrush(Color.FromRgb((byte)(usage/50*255), 255, 0)) 
                             : new SolidColorBrush(Color.FromRgb(255, (byte)((100-usage)/50*255), 0));
