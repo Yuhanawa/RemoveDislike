@@ -1,25 +1,35 @@
-about=关于
-add=添加
-title=标题
-description=描述
-tags=标签
-cancel=取消
-submit=提交
-remove=删除
-edit=编辑
-save=保存
-delete=删除
-update=更新
-create=创建
-back=返回
-close=关闭
-open=开启
-yes=是
-no=否
-or=或
-and=与
-on=开启
-off=关闭
-enable=启用
-disable=禁用
+# 中文翻译
 
+# 通用
+Delete = 删除
+Info = 信息
+Clean = 清理
+Context Menu = 右键菜单
+
+# 信息
+Summary = 摘要
+Software = 软件
+Hardware = 硬件
+CPU = CPU
+RAM = 内存
+Motherboard = 主板
+BIOS = BIOS
+Display = 显示
+Storage = 存储
+Network = 网络
+Battery = 电池
+Printer = 打印机
+SoundDevice = 声音设备
+Monitor = 显示器
+Input = 输入设备
+Other = 其他
+System = 系统
+Programs = 程序
+
+# 清理
+Status: uncleaned = 状态: 未清理
+
+# 右键菜单
+ChangeIcon = 修稿图标
+OpenReg = 打开注册表
+Confused and needs to be improved = 混乱且需要改进
