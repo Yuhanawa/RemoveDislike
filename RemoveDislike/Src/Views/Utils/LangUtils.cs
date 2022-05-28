@@ -17,10 +17,15 @@ public class LangUtils : MarkupExtension
     public string Key { get; set; }
 
 
-    public static string Get(string key) => Lang.ContainsKey(key) ? Lang[key] : key;
+    public static string Get(string key)
+    {
+        if (!Lang.ContainsKey(key))
+            Warn("missing translation：" + key);
+        
+        return Lang.ContainsKey(key) ? Lang[key] : key;
+    }
 
-    public override object ProvideValue(IServiceProvider serviceProvider) =>
-        Lang.ContainsKey(Key) ? Lang[Key] : Key;
+    public override object ProvideValue(IServiceProvider serviceProvider) => Get(Key);
 
     public static void FromFile(string path)
     {
@@ -43,6 +48,7 @@ public class LangUtils : MarkupExtension
     {
         foreach (string line in lines)
         {
+            if (line.StartsWith('#')) continue;
             string[] split = line.Split('=');
             if (split.Length != 2) continue;
             Lang.Add(split[0].Trim(), split[1].Trim());
