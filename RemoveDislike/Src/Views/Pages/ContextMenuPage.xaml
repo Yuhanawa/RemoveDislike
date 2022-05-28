@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
       mc:Ignorable="d"
       Title="ContextMenuPage"
       d:DesignHeight="450"
@@ -33,10 +34,11 @@
         </Style>
         <Style x:Key="MenuStyle" TargetType="TabItem"
                BasedOn="{StaticResource {x:Type TabItem}}">
-            <Setter Property="Background" Value="DimGray" />
+            <Setter Property="pu:TabItemHelper.HoverBackground" Value="#2D2D2D" />
         </Style>
         <Style x:Key="TabControlStyle" TargetType="TabControl"
                BasedOn="{StaticResource TabControlStyle}">
+            <Setter Property="Foreground" Value="#57FFFFFF" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="#3F413E" />
@@ -60,7 +62,7 @@
                 <ColumnDefinition Width="6" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-                       Text="The 'netherworld' color scheme will be removed when the UI is complete!"
+                       Text="{l:Lang Confused and needs to be improved}"
                        TextAlignment="Left"
                        VerticalAlignment="Center"
                        Foreground="#57FFFFFF" />
