@@ -5,11 +5,14 @@
         <security>
             <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
                 <!-- UAC
-        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
-        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
-        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
-        -->
-                <requestedExecutionLevel level="highestAvailable" uiAccess="false"/>
+                <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+                <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+                <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+                -->
+
+                <!--  For ease of debugging, only enabled at release time  -->
+                <!--    <requestedExecutionLevel level="highestAvailable" uiAccess="false"/>-->
+
             </requestedPrivileges>
         </security>
     </trustInfo>
