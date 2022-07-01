@@ -38,21 +38,28 @@ public partial class ContextMenuPage
 
     private void LoadList(string keyStr, StackPanel panel, bool isEx = false)
     {
-        RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyStr, true);
+        try
+        {
+            RegistryKey key = Registry.ClassesRoot.OpenSubKey(keyStr, true);
 
-        if (key == null) return;
-        foreach (string subKeyName in key.GetSubKeyNames())
-            try
-            {
-                if (subKeyName.StartsWith('{') && subKeyName.EndsWith('}')) continue;
-                panel.Children.Add(
-                    new ContextMenuInfoTab(key.OpenSubKey(subKeyName, true), subKeyName, isEx)
-                );
-            }
-            catch (Exception exception)
-            {
-                Err($"RegistryKey: {subKeyName} Can't be opened.\n", exception);
-            }
+            if (key == null) return;
+            foreach (string subKeyName in key.GetSubKeyNames())
+                try
+                {
+                    if (subKeyName.StartsWith('{') && subKeyName.EndsWith('}')) continue;
+                    panel.Children.Add(
+                        new ContextMenuInfoTab(key.OpenSubKey(subKeyName, true), subKeyName, isEx)
+                    );
+                }
+                catch (Exception exception)
+                {
+                    Err($"RegistryKey: {subKeyName} Can't be opened.\n", exception);
+                }
+        }
+        catch (Exception exception)
+        {
+            Err($"RegistryKey: {keyStr} Can't be opened.\n", exception);
+        }
     }
 
     private void FolderList_OnInitialized(object sender, EventArgs e)

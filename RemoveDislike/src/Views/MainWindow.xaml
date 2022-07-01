@@ -144,6 +144,16 @@
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="ContextMenuMenuItem_OnSelected"
                                   Style="{StaticResource MenuItemStyle}" />
+                    <TreeViewItem Name="SystemAdjustmentMenuItem"
+                                  Header="{l:Lang System Adjustment}"
+                                  pu:TreeViewItemHelper.Icon="&#xf17a;"
+                                  Selected="SystemAdjustmentMenuItem_OnSelected"
+                                  Style="{StaticResource MenuItemStyle}" />
+                    <TreeViewItem Name="ModuleMenuItem"
+                                  Header="{l:Lang Module}"
+                                  pu:TreeViewItemHelper.Icon="&#xf17a;"
+                                  Selected="ModuleMenuItem_OnSelected"
+                                  Style="{StaticResource MenuItemStyle}" />                   
                 </TreeView>
             </Grid>
         </Border>

@@ -36,7 +36,9 @@ public partial class MainWindow
     {
         ["Clean"] = new CleanPage(),
         ["ContextMenu"] = new ContextMenuPage(),
-        ["Info"] = new InfoPage()
+        ["Info"] = new InfoPage(),
+        ["System Adjustment"] = new AdjustmentPage(),
+        ["Module"] = new ModulePage(),
     };
     
 
@@ -48,6 +50,13 @@ public partial class MainWindow
 
     private void InfoMenuMenuItem_OnSelected(object sender, RoutedEventArgs e) =>
         MainFrame.Content = Pages["Info"];
+    
+    
+    private void SystemAdjustmentMenuItem_OnSelected(object sender, RoutedEventArgs e)=>
+        MainFrame.Content = Pages["System Adjustment"];
+
+    private void ModuleMenuItem_OnSelected(object sender, RoutedEventArgs e)=>
+        MainFrame.Content = Pages["Module"];
     #endregion
 
 
