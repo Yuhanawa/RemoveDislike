@@ -52,6 +52,12 @@ public partial class MainWindow
 
 
     private void CpuUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e) =>
+        /*
+         * ! TODO
+         * ! Help needed
+         * ! There is Inaccurate in getting the value of the CPU usage
+         * ！How to get the value of the CPU usage?
+         */
         new Thread(_ =>
         {
             PerformanceCounter cpuUsage = new ("Processor", "% Processor Time", "_Total");
@@ -72,7 +78,7 @@ public partial class MainWindow
                         CpuUsageProgressBar.Foreground = usage < 50 
                             ? new SolidColorBrush(Color.FromRgb((byte)(usage/50*255), 255, 0)) 
                             : new SolidColorBrush(Color.FromRgb(255, (byte)((100-usage)/50*255), 0));
-                    })
+                    })           
                 );
             }
         }){ Name = "CPU Usage listener"}.Start();
