@@ -92,8 +92,7 @@ public partial class MainWindow
             }
         }){ Name = "CPU Usage listener"}.Start();
 
-    private void RamUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e)
-    {
+    private void RamUsageProgressBar_OnLoaded(object sender, RoutedEventArgs e) =>
         new Thread(_ =>
         {
             var hardwareInfo = new HardwareInfo();
@@ -101,6 +100,7 @@ public partial class MainWindow
             
             while (!App.WillClose)
             {
+                Thread.Sleep(50);
                 RamUsageProgressBar.Dispatcher.Invoke(DispatcherPriority.Background,
                     new Action(() =>
                     {
@@ -119,7 +119,6 @@ public partial class MainWindow
                 );
             }
         }){ Name = "RAM Usage listener"} .Start();
-    }
 
     private void PerformancePanel_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
