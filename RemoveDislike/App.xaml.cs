@@ -24,9 +24,10 @@ public partial class App
         Init();
 
         Info("Application started");
+        Info($"Version: {ResourceAssembly.GetName().Version.ToString()}");
         InitializeComponent();
         
-        App.Current.Exit += (_, _) =>
+        Current.Exit += (_, _) =>
         {
             if (!WillClose)
             {
