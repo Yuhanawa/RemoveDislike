@@ -72,7 +72,7 @@
     <ItemGroup>
         <PackageReference Include="fastJSON" Version="2.4.0.4" />
         <PackageReference Include="Hardware.Info" Version="10.0.0" />
-        <PackageReference Include="Panuon.UI.Silver" Version="2.2.15.1-alpha" />
+        <PackageReference Include="Panuon.UI.Silver" Version="2.2.20" />
     </ItemGroup>
 
     <ItemGroup>
