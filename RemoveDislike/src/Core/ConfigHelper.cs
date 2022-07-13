@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using fastJSON;
 
@@ -9,6 +11,24 @@ public static class ConfigHelper
     public static readonly string ConfigPath = @$"{EnvironmentUtils.Get("APPData")}\RemoveDislike";
     public static readonly string ConfigFile = @$"{EnvironmentUtils.Get("APPData")}\RemoveDislike\Config.json";
     public static readonly string RuleBase = @$"{ConfigPath}\Rules";
+    public static readonly string ModulesPath = @$"{ConfigPath}\Modules";
+    public static readonly string LauncherConfigPath = @$"{ModulesPath}\Launcher.config";
+
+    #region LauncherConfig
+
+    public static List<string> _LauncherConfig
+    {
+        get => File.ReadAllText(LauncherConfigPath).Split('\n').ToList();
+        set => File.WriteAllText(LauncherConfigPath, string.Join('\n', value));
+    }
+
+    public static List<string> LauncherConfig = _LauncherConfig;
+
+    public static void ReloadLauncherConfig() => LauncherConfig = _LauncherConfig;
+    public static void SaveLauncherConfig() => _LauncherConfig = LauncherConfig;
+
+    #endregion
+
 
     private static readonly JSONParameters JsonParameters = new()
         { UseExtensions = false, UseEscapedUnicode = false };
