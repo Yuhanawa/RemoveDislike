@@ -3,9 +3,20 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:models="clr-namespace:RemoveDislike.Views.Models"
+      xmlns:utils="clr-namespace:RemoveDislike.Views.Utils"
       mc:Ignorable="d"
       Title="Module"
       d:DesignHeight="450"
       d:DesignWidth="800">
-    <Grid />
+    <Page.Resources>
+        <Style x:Key="ModuleStyle" TargetType="models:Module">
+            <Setter Property="Margin" Value="36"/> 
+        </Style>    
+    </Page.Resources>
+    
+    <WrapPanel Margin="45">
+        <models:Module Text="{utils:Lang Module}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
+        <models:Module Key="%AppData%//RemoveDislike//Modules//WindowTopmostModule.exe" Text="{utils:Lang Window Topmost}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
+    </WrapPanel>
 </Page>
