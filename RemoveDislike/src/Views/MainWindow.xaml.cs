@@ -120,9 +120,5 @@ public partial class MainWindow
             }
         }){ Name = "RAM Usage listener"} .Start();
 
-    private void PerformancePanel_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        ProcessStartInfo startInfo = new () { FileName = "taskmgr.exe", };
-        Process.Start(startInfo);
-    }
+    private void PerformancePanel_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ProcessUtils.TryStart("taskmgr.exe");
 }
