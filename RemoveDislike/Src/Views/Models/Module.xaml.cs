@@ -1,30 +1,41 @@
+using System.IO;
 using System.Windows;
+using Microsoft.Win32;
 using RemoveDislike.Views.Utils;
 
 namespace RemoveDislike.Views.Models;
 
 public partial class Module
 {
-    public Window Window { get; set; }
-
-
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string),
         typeof(Module), new PropertyMetadata(default(string)));
 
-    public string Key
+    public static readonly DependencyProperty KeyProperty =
+        DependencyProperty.Register(nameof(Key), typeof(string), typeof(Module), new PropertyMetadata(string.Empty));
+
+    public string ConfigPath
     {
-        get => (string)GetValue(KeyProperty);
-        set => SetValue(KeyProperty, value);
+        get => (string)GetValue(ConfigPathProperty);
+        set => SetValue(ConfigPathProperty, value);
     }
 
-    public static readonly DependencyProperty KeyProperty =
-        DependencyProperty.Register("Key", typeof(string), typeof(Module), new PropertyMetadata(string.Empty));
-
+    public static readonly DependencyProperty ConfigPathProperty =
+        DependencyProperty.Register(nameof(ConfigPath), typeof(string), typeof(Module), new PropertyMetadata(string.Empty));
+    
+    
     public Module()
     {
         InitializeComponent();
         Width = 100.0;
         Height = 120.0;
+    }
+
+    public Window Window { get; set; }
+
+    public string Key
+    {
+        get => (string)GetValue(KeyProperty);
+        set => SetValue(KeyProperty, value);
     }
 
     public string Text
@@ -33,13 +44,26 @@ public partial class Module
         set => SetValue(TextProperty, value);
     }
 
-    private void SettingButton_OnClick(object sender, RoutedEventArgs e) => Window?.Show();
+    private void SettingButton_OnClick(object sender, RoutedEventArgs e) => ProcessUtils.TryStart("notepad.exe", Path.Combine(ConfigHelper.ModulesPath,ConfigPath));
 
     private void StateButton_OnClick(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(Key))
         {
-            // TODO : Key is empty
+            try
+            {
+                RegistryKey key =
+                    Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                if ((string)key!.GetValue("RemoveDislike") ==
+                    AppDomain.CurrentDomain.BaseDirectory + "modules_launcher.exe") key.DeleteValue("RemoveDislike");
+                else key.SetValue("RemoveDislike", AppDomain.CurrentDomain.BaseDirectory + "modules_launcher.exe");
+                key.Close();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+                Err(exception.Message, exception);
+            }
         }
         else
         {
@@ -48,23 +72,22 @@ public partial class Module
             else ConfigHelper.LauncherConfig.Add(Key);
 
             ConfigHelper.SaveLauncherConfig();
-            Load();
         }
+        Load();
     }
 
     private void StateButton_OnLoaded(object sender, RoutedEventArgs e) => Load();
 
     private void Load()
     {
-        if (ConfigHelper.LauncherConfig.Contains(Key))
+        if (string.IsNullOrEmpty(Key))
         {
-            StateButton.IsChecked = true;
-            StateButton.Content = LangUtils.Get("Enabled");
+            StateButton.IsChecked =
+                (string)Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run")
+                    ?.GetValue("RemoveDislike") == AppDomain.CurrentDomain.BaseDirectory + "modules_launcher.exe";
         }
-        else
-        {
-            StateButton.IsChecked = false;
-            StateButton.Content = LangUtils.Get("Disabled");
-        }
+        else StateButton.IsChecked = ConfigHelper.LauncherConfig.Contains(Key);
+
+        StateButton.Content = LangUtils.Get(StateButton.IsChecked.Value ? "Enabled" : "Disabled");
     }
 }

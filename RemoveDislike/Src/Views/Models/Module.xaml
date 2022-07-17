@@ -23,7 +23,7 @@
                             Path=Text}"
                        TextAlignment="Center" TextTrimming="WordEllipsis" TextWrapping="Wrap"
                        FontSize="16" VerticalAlignment="Stretch" />
-            <Button Margin="0" Padding="0" BorderThickness="0" Grid.Row="1" Height="24" Content="{l:Lang Setting}"
+            <Button Margin="0" Padding="0" BorderThickness="0" Grid.Row="1" Height="24" Content="{l:Lang Config}"
                     Click="SettingButton_OnClick" />
             <ToggleButton Name="StateButton" Margin="0" Padding="0" BorderThickness="0" Grid.Row="2" Height="24" Content="{l:Lang State}"
                            Click="StateButton_OnClick" Loaded="StateButton_OnLoaded"/>
