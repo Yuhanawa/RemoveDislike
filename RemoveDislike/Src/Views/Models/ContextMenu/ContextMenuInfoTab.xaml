@@ -32,9 +32,9 @@
                     <ColumnDefinition Width="124" />
                     <ColumnDefinition Width="124" />
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"
-                       Source="{Binding Mode=OneWay,Path=Icon}"
-                       PreviewDragEnter="EIcon_OnPreviewDragEnter" />
+                <Image Grid.Column="0" AllowDrop="True"
+                       DragEnter="EIcon_OnDragEnter" Drop="EIcon_OnDrop" PreviewMouseLeftButtonUp="EIcon_OnPreviewMouseLeftButtonUp"
+                       Source="{Binding Mode=OneWay,Path=Icon}" />
 
                 <TextBlock Grid.Column="1"
                            Foreground="#bfbfbf"
@@ -48,17 +48,12 @@
                            IsChecked="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=Enabled}" />
             </Grid>
 
-            <Grid Name="MenuGrid" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Content="{l:Lang ChangeIcon}" />
-                <Button Grid.Column="1" Content="{l:Lang OpenReg}" />
-                <Button Grid.Column="2" Content="{l:Lang Delete}" />
-            </Grid>
+            <StackPanel Name="SubMenu" Visibility="Collapsed" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button Name="ChangeIconButton" Content="{l:Lang ChangeIcon}" PreviewMouseLeftButtonUp="ChangeIconButton_OnPreviewMouseLeftButtonUp"/>
+                <Button Name="DeleteIconButton" Content="{l:Lang DeleteIcon}" PreviewMouseLeftButtonUp="DeleteIconButton_OnPreviewMouseLeftButtonUp"/>
+                <Button Name="OpenRegButton" Content="{l:Lang OpenReg}" PreviewMouseLeftButtonUp="OpenRegButton_OnPreviewMouseLeftButtonUp"/>
+                <Button Name="DeleteButton" Content="{l:Lang Delete}" PreviewMouseLeftButtonUp="DeleteButton_OnPreviewMouseLeftButtonUp"/>
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -5,13 +5,14 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using RemoveDislike.Views.Utils;
 
 namespace RemoveDislike.Views.Models.ContextMenu;
 
 public partial class ContextMenuInfoTab
 {
     public static readonly DependencyProperty KeyNameProperty =
-        DependencyProperty.Register("KeyName", typeof(string), typeof(ContextMenuInfoTab));
+        DependencyProperty.Register(nameof(KeyName), typeof(string), typeof(ContextMenuInfoTab));
 
     public ContextMenuInfoTab(RegistryKey registryKey, string keyName, bool isEx = false)
     {
@@ -107,7 +108,7 @@ public partial class ContextMenuInfoTab
             if (string.IsNullOrEmpty(path)) return DefaultIcon;
 
             if (path.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase) ||
-                path.Contains(".exe", StringComparison.CurrentCultureIgnoreCase) && path.Contains(','))
+                (path.Contains(".exe", StringComparison.CurrentCultureIgnoreCase) && path.Contains(',')))
             {
                 var icon = System.Drawing.Icon.ExtractAssociatedIcon(path.Split(',')[0]);
 
@@ -137,32 +138,73 @@ public partial class ContextMenuInfoTab
         }
     }
 
-    #region Event
-
-    private void EIcon_OnPreviewDragEnter(object sender, DragEventArgs e)
+    private void SelectIcon()
     {
-        //仅支持文件的拖放
-        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-
-        //获取拖拽的文件
-        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-        if (files == null || files.Length == 0) return;
-
-        foreach (string file in files)
-            try
-            {
-                // TODO add support for .ico, .png, .jpg, .bmp, .gif
-            }
-            catch (Exception ex)
-            {
-                Err("Err", ex);
-                return;
-            }
+        OpenFileDialog opd = new()
+        {
+            Multiselect = false,
+            FilterIndex = 1,
+            Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
+            Title = LangUtils.Get("Select an image")
+        };
+        if (opd.ShowDialog() == true) RegistryKey.SetValue("Icon", opd.FileName);
     }
 
+    #region Event
+
+    private void EIcon_OnDragEnter(object sender, DragEventArgs e) =>
+        e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Link : DragDropEffects.None;
+
+    private void EIcon_OnDrop(object sender, DragEventArgs e)
+    {
+        try
+        {
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
+            RegistryKey.SetValue("Icon", ((string[])e.Data.GetData(DataFormats.FileDrop))!.GetValue(0).ToString());
+        }
+        catch (Exception ex)
+        {
+            Err("Err", ex);
+        }
+    }
+
+    private void EIcon_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) => SelectIcon();
+
     private void ControlOnMouseRightDown(object sender, MouseButtonEventArgs e) =>
-        MenuGrid.Visibility = MenuGrid.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        SubMenu.Visibility = SubMenu.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+
+
+    #region Menu
+
+    private void ChangeIconButton_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) => SelectIcon();
+
+    private void DeleteIconButton_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (MessageBox.Show(LangUtils.Get("Are you sure you want to delete the icon?"),
+                LangUtils.Get("Delete icon"), MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            RegistryKey.SetValue("Icon", "");
+    }
+
+    // TODO: HELP NEEDED RegJump
+    private void OpenRegButton_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) =>
+        MessageBox.Show("RegJump \"{RegistryKey}\"", "I can not do it", MessageBoxButton.OK,
+            MessageBoxImage.Information);
+
+    private void DeleteButton_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (MessageBox.Show(LangUtils.Get("Are you sure you want to delete the icon?"),
+                LangUtils.Get("Delete icon"), MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
+            MessageBoxResult.Yes) return;
+
+        RegistryKey.DeleteValue("");
+        RegistryKey.Close();
+        Visibility = Visibility.Collapsed;
+        IsEnabled = false;
+        GC.Collect();
+    }
+
+    #endregion
 
     #endregion Event
 }
