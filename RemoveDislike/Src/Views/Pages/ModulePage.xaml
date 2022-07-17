@@ -16,7 +16,7 @@
     </Page.Resources>
     
     <WrapPanel Margin="45">
-        <models:Module Text="{utils:Lang Module}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
-        <models:Module Key="%AppData%//RemoveDislike//Modules//WindowTopmostModule.exe" Text="{utils:Lang Window Topmost}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
+        <models:Module ConfigPath="Launcher.config" Text="{utils:Lang Module}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
+        <models:Module ConfigPath="WindowTopmost.json" Key="WindowTopmostModule.exe" Text="{utils:Lang Window Topmost}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
     </WrapPanel>
 </Page>
