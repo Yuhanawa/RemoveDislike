@@ -84,6 +84,32 @@ public static class ConfigHelper
             Save();
         }
 
+        Info("[Modules][Config] Loading...");
+        if (!File.Exists(Path.Combine(ModulesPath, "Launcher.config")))
+            File.Create(Path.Combine(ModulesPath, "Launcher.config"));
+
+        if (!File.Exists(Path.Combine(ModulesPath, "WindowTopmost.json")))
+        {
+            File.Create(Path.Combine(ModulesPath, "WindowTopmost.json"));        
+            File.WriteAllText(Path.Combine(ModulesPath, "WindowTopmost.json"),@"
+[
+    {
+        'Key': 'D',
+        'ModifierKeys': [
+            'Control',
+            'Alt'
+        ]
+    },
+    {
+        'Key': 'T',
+        'ModifierKeys': [
+            'Alt'
+        ]
+    }
+]
+".Replace("'","\""));
+        }
+        
         _isInit = true;
     }
 
