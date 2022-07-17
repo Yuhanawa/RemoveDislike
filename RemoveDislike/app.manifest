@@ -10,9 +10,7 @@
                 <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
                 -->
 
-                <!--  For ease of debugging, only enabled at release time  -->
-                <!--    <requestedExecutionLevel level="highestAvailable" uiAccess="false"/>-->
-
+                <requestedExecutionLevel level="highestAvailable" uiAccess="false"/>
             </requestedPrivileges>
         </security>
     </trustInfo>
