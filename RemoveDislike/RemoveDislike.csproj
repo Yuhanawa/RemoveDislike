@@ -16,7 +16,7 @@
         <RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <Version>1.1.6</Version>
+        <Version>1.1.7</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
