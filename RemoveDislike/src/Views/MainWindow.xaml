@@ -11,10 +11,10 @@
             Height="614" Width="1024"
             MinHeight="614" MinWidth="1024"
             BorderThickness="0"
-            pu:WindowXCaption.Background="#323333"
-            pu:WindowXCaption.Foreground="#8c8c8c"
+            pu:WindowXCaption.Background="{DynamicResource BackgroundColor-2}"
+            pu:WindowXCaption.Foreground="{DynamicResource TextColor-1}"
             pu:WindowXCaption.Height="32"
-            Background="#323333"
+            Background="{DynamicResource BackgroundColor-2}"
             FontSize="16">
 
     <pu:WindowXCaption.MinimizeButtonStyle>
@@ -22,7 +22,7 @@
             BasedOn="{StaticResource {ComponentResourceKey ResourceId=MinimizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#8c8c8c" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowBarButtonForegroundColor}" />
             <Setter Property="pu:ButtonHelper.HoverBackground" Value="#06FFFFFF" />
         </Style>
     </pu:WindowXCaption.MinimizeButtonStyle>
@@ -31,7 +31,7 @@
             BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaximizeButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="11" />
-            <Setter Property="Foreground" Value="#8c8c8c" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowBarButtonForegroundColor}" />
             <Setter Property="pu:ButtonHelper.HoverBackground" Value="#06FFFFFF" />
         </Style>
     </pu:WindowXCaption.MaximizeButtonStyle>
@@ -40,7 +40,7 @@
             BasedOn="{StaticResource {ComponentResourceKey ResourceId=CloseButtonStyle, TypeInTargetAssembly={x:Type pu:WindowXCaption}}}"
             TargetType="Button">
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#8c8c8c" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowBarButtonForegroundColor}" />
             <Setter Property="pu:ButtonHelper.HoverBackground" Value="#88FF4C4C" />
         </Style>
     </pu:WindowXCaption.CloseButtonStyle>
@@ -51,7 +51,7 @@
             Content="&#xf08d;"
             Margin="-1,0,1,0"
             Background="Transparent"
-            Foreground="#8c8c8c"
+            Foreground="{DynamicResource WindowBarButtonForegroundColor}"
             pu:ToggleButtonHelper.HoverForeground="#E6DEDEDE"
             pu:ToggleButtonHelper.CheckedForeground="#F5F5FFFA"
             FontFamily="{StaticResource FontAwesome}" />
@@ -63,11 +63,11 @@
             <Setter Property="pu:IconHelper.FontFamily" Value="{StaticResource FontAwesome}" />
             <Setter Property="pu:TreeViewHelper.ItemsBorderBrush" Value="Transparent" />
             <Setter Property="pu:TreeViewHelper.ItemsHoverBorderBrush" Value="#26FFFFFF" />
-            <Setter Property="pu:TreeViewHelper.ItemsSelectedBorderBrush" Value="#58FFFFFF" />
+            <Setter Property="pu:TreeViewHelper.ItemsSelectedBorderBrush" Value="#50FFFFFF" />
             <Setter Property="pu:TreeViewHelper.ItemsHoverBackground" Value="#22FFFFFF" />
-            <Setter Property="pu:TreeViewHelper.ItemsSelectedBackground" Value="#36FFFFFF" />
-            <Setter Property="pu:TreeViewHelper.ItemsSelectedForeground" Value="#D2FFFFFF" />
-            <Setter Property="Foreground" Value="#82FFFFFF" />
+            <Setter Property="pu:TreeViewHelper.ItemsSelectedBackground" Value="#1EFFFFFF" />
+            <Setter Property="pu:TreeViewHelper.ItemsSelectedForeground" Value="{StaticResource TextColor-1}" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor-2}" />
 
             <Setter Property="pu:TreeViewHelper.ItemsBorderThickness" Value="3,0,0,0" />
             <Setter Property="pu:TreeViewHelper.ItemsPadding" Value="0" />
@@ -99,9 +99,9 @@
         </Border>
 
         <Border Grid.Column="0"
-                Background="#313131"
+                Background="{StaticResource BackgroundColor-1}"
                 BorderThickness="0,0,1,0"
-                BorderBrush="#2c2c2c">
+                BorderBrush="{StaticResource BorderColor-1}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -112,16 +112,14 @@
                     <Grid Margin="2">
                         <ProgressBar Name="CpuUsageProgressBar" Loaded="CpuUsageProgressBar_OnLoaded"
                             Height="12" Width="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Grid},AncestorLevel=1},Path=ActualWidth}"
-                            Minimum="0" Maximum="100" Value="50"
-                            Background="#9A9A9A" Foreground="#39F14A" />
-                        <TextBlock Name="CpuUsageTextBlock" Foreground="Black" TextAlignment="Center" FontSize="12" Text="CpuUsageTextBlock"/>
+                            Minimum="0" Maximum="100" Background="{StaticResource BackgroundColor-3}"/>
+                        <TextBlock Name="CpuUsageTextBlock" Foreground="{StaticResource TextColor-Black}" TextAlignment="Center" FontSize="12" Text="CpuUsage-Waiting..."/>
                     </Grid>
                     <Grid Margin="2">
                         <ProgressBar Name="RamUsageProgressBar" Loaded="RamUsageProgressBar_OnLoaded"
                             Height="12" Width="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Grid},AncestorLevel=1},Path=ActualWidth}"
-                            Minimum="0" Maximum="100" Value="50"
-                            Background="#9A9A9A" Foreground="#39F14A" />
-                        <TextBlock Name="RamUsageTextBlock" Foreground="Black" TextAlignment="Center" FontSize="12" Text="RamUsageTextBlock"/>
+                            Minimum="0" Maximum="100" Background="{StaticResource BackgroundColor-3}" />
+                        <TextBlock Name="RamUsageTextBlock" Foreground="{StaticResource TextColor-Black}" TextAlignment="Center" FontSize="12" Text="RamUsage-Waiting..."/>
                     </Grid>
                 </StackPanel>
 
@@ -145,7 +143,7 @@
                                   Selected="ContextMenuMenuItem_OnSelected"
                                   Style="{StaticResource MenuItemStyle}" />
                     <TreeViewItem Name="SystemAdjustmentMenuItem"
-                                  Header="{l:Lang System Adjustment}"
+                                  Header="{l:Lang Adjustment}"
                                   pu:TreeViewItemHelper.Icon="&#xf17a;"
                                   Selected="SystemAdjustmentMenuItem_OnSelected"
                                   Style="{StaticResource MenuItemStyle}" />
