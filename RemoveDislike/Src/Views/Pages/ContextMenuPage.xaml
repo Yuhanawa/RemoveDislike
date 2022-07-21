@@ -28,7 +28,7 @@
         </Style>
         <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer"
                BasedOn="{StaticResource {x:Type ScrollViewer}}">
-            <Setter Property="Background" Value="#323333" />
+            <Setter Property="Background" Value="{StaticResource BackgroundColor-2}" />
             <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="HorizontalScrollBarVisibility" Value="disabled" />
         </Style>
