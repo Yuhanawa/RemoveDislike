@@ -21,9 +21,27 @@ public partial class InfoPage
         DataContext = this;
     }
 
-    private static void PutInfoTab(Panel target, string title, string value = "") =>
-        target.Children.Add(new InfoTab(title, value) { Margin = new Thickness(2) });
+    private static readonly ResourceDictionary ResourceDictionary = new()
+    {
+        Source = new Uri("pack://application:,,,/RemoveDislike;component/src/ColorScheme.xaml")
+    };
 
+    private static void PutInfoTab(Panel target, string title, string value = "") =>
+        target.Children.Add(new InfoTab(title, value)
+        {
+            Margin = new Thickness(0),
+            Padding = new Thickness(5),
+            CornerRadius = new CornerRadius(3),
+            BackgroundColor = ResourceDictionary["HighlightColor"] as System.Windows.Media.Brush,
+            Foreground = ResourceDictionary["TextColor-2"] as System.Windows.Media.Brush
+        });
+
+    private static StackPanel GetPanel(dynamic sender)
+    {
+        StackPanel panel = new();
+        sender.Children.Add(new Border {  Child = panel,Padding = new Thickness(0,8,0,0)});
+        return panel;
+    }
 
     private void SummarySoftwarePanel_OnInitialized(object sender, EventArgs e)
     {
@@ -63,8 +81,7 @@ public partial class InfoPage
     {
         foreach (CPU cpu in Info.CpuList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", cpu.Caption);
             PutInfoTab(panel, "Description", cpu.Description);
             PutInfoTab(panel, "Manufacturer", cpu.Manufacturer);
@@ -90,8 +107,7 @@ public partial class InfoPage
     {
         foreach (Memory ram in Info.MemoryList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "BankLabel", ram.BankLabel);
             PutInfoTab(panel, "Capacity", ram.Capacity.ToString());
             PutInfoTab(panel, "FormFactor", ram.FormFactor.ToString());
@@ -108,8 +124,7 @@ public partial class InfoPage
     {
         foreach (Motherboard mb in Info.MotherboardList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Manufacturer", mb.Manufacturer);
             PutInfoTab(panel, "Product", mb.Product);
             PutInfoTab(panel, "SerialNumber", mb.SerialNumber);
@@ -120,8 +135,7 @@ public partial class InfoPage
     {
         foreach (BIOS bios in Info.BiosList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", bios.Caption);
             PutInfoTab(panel, "Description", bios.Description);
             PutInfoTab(panel, "Manufacturer", bios.Manufacturer);
@@ -142,8 +156,7 @@ public partial class InfoPage
     {
         foreach (Printer pt in Info.PrinterList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", pt.Caption);
             PutInfoTab(panel, "Description", pt.Description);
             PutInfoTab(panel, "HorizontalResolution", pt.HorizontalResolution.ToString());
@@ -159,8 +172,7 @@ public partial class InfoPage
     {
         foreach (Battery bt in Info.BatteryList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", bt.FullChargeCapacity.ToString());
             PutInfoTab(panel, "DesignCapacity", bt.DesignCapacity.ToString());
             PutInfoTab(panel, "BatteryStatus", bt.BatteryStatus.ToString());
@@ -178,8 +190,7 @@ public partial class InfoPage
     {
         foreach (VideoController vc in Info.VideoControllerList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "AdapterRAM", vc.AdapterRAM.ToString());
             PutInfoTab(panel, "Caption", vc.Caption);
             PutInfoTab(panel, "CurrentBitsPerPixel", vc.CurrentBitsPerPixel.ToString());
@@ -203,8 +214,7 @@ public partial class InfoPage
     {
         foreach (Drive drive in Info.DriveList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", drive.Caption);
             PutInfoTab(panel, "Description", drive.Description);
             PutInfoTab(panel, "FirmwareRevision", drive.FirmwareRevision);
@@ -223,8 +233,7 @@ public partial class InfoPage
     {
         foreach (NetworkAdapter na in Info.NetworkAdapterList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "AdapterType", na.AdapterType);
             PutInfoTab(panel, "Caption", na.Caption);
             PutInfoTab(panel, "Description", na.Description);
@@ -250,8 +259,7 @@ public partial class InfoPage
     {
         foreach (SoundDevice sd in Info.SoundDeviceList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", sd.Caption);
             PutInfoTab(panel, "Description", sd.Description);
             PutInfoTab(panel, "Manufacturer", sd.Manufacturer);
@@ -264,8 +272,7 @@ public partial class InfoPage
     {
         foreach (Motherboard mb in Info.MotherboardList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Manufacturer", mb.Manufacturer);
             PutInfoTab(panel, "Product", mb.Product);
             PutInfoTab(panel, "SerialNumber", mb.SerialNumber);
@@ -276,8 +283,7 @@ public partial class InfoPage
     {
         foreach (Keyboard keyboard in Info.KeyboardList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", keyboard.Caption);
             PutInfoTab(panel, "Description", keyboard.Description);
             PutInfoTab(panel, "Name", keyboard.Name);
@@ -286,8 +292,7 @@ public partial class InfoPage
 
         foreach (Mouse mouse in Info.MouseList)
         {
-            StackPanel panel = new();
-            ((Panel)sender).Children.Add(new GroupBox { Content = panel });
+            StackPanel panel = GetPanel(sender);
             PutInfoTab(panel, "Caption", mouse.Caption);
             PutInfoTab(panel, "Description", mouse.Description);
             PutInfoTab(panel, "Manufacturer", mouse.Manufacturer);
@@ -298,10 +303,11 @@ public partial class InfoPage
 
     private void SystemPanel_OnInitialized(object sender, EventArgs e)
     {
+        Panel panel = GetPanel(sender);
         ManagementObjectCollection moc = new ManagementClass("Win32_ComputerSystemProduct").GetInstances();
         foreach (ManagementBaseObject o in moc)
         foreach (PropertyData item in o.Properties)
-            PutInfoTab((Panel)sender, item.Name, item.Value?.ToString());
+            PutInfoTab(panel, item.Name, item.Value?.ToString());
     }
 
     private void ProgramsPanel_OnInitialized(object sender, EventArgs e) =>

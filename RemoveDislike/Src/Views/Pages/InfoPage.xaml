@@ -4,10 +4,48 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
       mc:Ignorable="d"
+      Foreground="{StaticResource TextColor-1}"
+      Background="Transparent"
       Title="InfoPage" d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Page.Resources>
+        <Style x:Key="TabControlStyle" TargetType="TabControl"  BasedOn="{StaticResource {x:Type TabControl}}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor-2}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="pu:TabControlHelper.ItemsSelectedBackground" Value="{StaticResource BackgroundColor-1}"/>
+            <Setter Property="pu:TabControlHelper.ItemsSelectedForeground" Value="{StaticResource TextColor-1}"/>
+            <Setter Property="pu:TabControlHelper.ItemsHoverBackground" Value="{StaticResource BackgroundColor-1}"/>
+            <Setter Property="pu:TabControlHelper.ItemsHoverForeground" Value="{StaticResource TextColor-1}"/>
+            <Setter Property="pu:TabControlHelper.ItemsBackground" Value="{StaticResource BackgroundColor-2}"/>
+            <Setter Property="pu:TabControlHelper.ItemsForeground" Value="{StaticResource TextColor-2}"/>
+            <Setter Property="pu:TabControlHelper.ItemsBorderBrush" Value="Transparent"/>
 
-    <TabControl>
+        </Style>
+        
+        <Style x:Key="GroupBoxStyle" TargetType="GroupBox"  BasedOn="{StaticResource {x:Type GroupBox}}">
+            <Setter Property="Margin" Value="2,-1.2"/>
+            <Setter Property="Padding" Value="-0.2,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor-1}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor-2}"/>                            
+        </Style>
+        
+        <Style x:Key="StackPanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        
+        <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+            <Setter Property="pu:ScrollBarHelper.ThumbBackground" Value="{StaticResource TextColor-3}"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>        
+    </Page.Resources>
+    
+
+    <TabControl Style="{StaticResource TabControlStyle}">        
         <TabItem Header="{l:Lang Summary}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -15,97 +53,132 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <GroupBox Grid.Row="0" Header="{l:Lang Software}">
-                    <StackPanel Name="SummarySoftwarePanel" Margin="20,0,0,0"
-                                Initialized="SummarySoftwarePanel_OnInitialized" />
+                <GroupBox Grid.Row="0" Header="{l:Lang Software}" Style="{StaticResource GroupBoxStyle}">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                         <StackPanel Name="SummarySoftwarePanel" Style="{StaticResource StackPanelStyle}"
+                                     Initialized="SummarySoftwarePanel_OnInitialized" />                       
+                    </ScrollViewer>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Header="{l:Lang Hardware}">
-                    <StackPanel Name="SummaryHardwarePanel" Margin="20,0,0,0"
-                                Initialized="SummaryHardwarePanel_OnInitialized" />
+                <GroupBox Grid.Row="1" Header="{l:Lang Hardware}" Style="{StaticResource GroupBoxStyle}">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="SummaryHardwarePanel" Style="{StaticResource StackPanelStyle}"
+                                    Initialized="SummaryHardwarePanel_OnInitialized" />
+                    </ScrollViewer>
                 </GroupBox>
             </Grid>
         </TabItem>
         <TabItem Header="{l:Lang Hardware}">
-            <TabControl>
+            <TabControl Style="{StaticResource TabControlStyle}">
                 <TabItem Header="{l:Lang CPU}">
-                    <ScrollViewer>
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <!-- ReSharper disable once InconsistentNaming -->
-                        <StackPanel Name="CPUPanel" Margin="20,0,0,0" Initialized="CPUPanel_OnInitialized" />
+                        <StackPanel Name="CPUPanel" Style="{StaticResource StackPanelStyle}" Initialized="CPUPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang RAM}">
-                    <ScrollViewer>
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <!-- ReSharper disable once InconsistentNaming -->
-                        <StackPanel Name="RAMPanel" Margin="20,0,0,0" Initialized="RAMPanel_OnInitialized" />
+                        <StackPanel Name="RAMPanel" Style="{StaticResource StackPanelStyle}" Initialized="RAMPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Motherboard}">
-                    <StackPanel Name="MotherboardPanel" Margin="20,0,0,0" Initialized="MotherboardPanel_OnInitialized" />
+                    <StackPanel Name="MotherboardPanel" Style="{StaticResource StackPanelStyle}" Initialized="MotherboardPanel_OnInitialized" />
                 </TabItem>
                 <TabItem Header="{l:Lang BIOS}">
-                    <ScrollViewer>
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                         <!-- ReSharper disable once InconsistentNaming -->
-                        <StackPanel Name="BIOSPanel" Margin="20,0,0,0" Initialized="BIOSPanel_OnInitialized" />
+                        <StackPanel Name="BIOSPanel" Style="{StaticResource StackPanelStyle}" Initialized="BIOSPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Display}">
-                    <ScrollViewer>
-                        <StackPanel Name="DisplayPanel" Margin="20,0,0,0" Initialized="DisplayPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="DisplayPanel" Style="{StaticResource StackPanelStyle}" Initialized="DisplayPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Storage}">
-                    <ScrollViewer>
-                        <StackPanel Name="StoragePanel" Margin="20,0,0,0" Initialized="StoragePanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="StoragePanel" Style="{StaticResource StackPanelStyle}" Initialized="StoragePanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Network}">
-                    <ScrollViewer>
-                        <StackPanel Name="NetworkPanel" Margin="20,0,0,0" Initialized="NetworkPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="NetworkPanel" Style="{StaticResource StackPanelStyle}" Initialized="NetworkPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Battery}">
-                    <ScrollViewer>
-                        <StackPanel Name="BatteryPanel" Margin="20,0,0,0" Initialized="BatteryPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="BatteryPanel" Style="{StaticResource StackPanelStyle}" Initialized="BatteryPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Printer}">
-                    <ScrollViewer>
-                        <StackPanel Name="PrinterPanel" Margin="20,0,0,0" Initialized="PrinterPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="PrinterPanel" Style="{StaticResource StackPanelStyle}" Initialized="PrinterPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang SoundDevice}">
-                    <ScrollViewer>
-                        <StackPanel Name="SoundDevicePanel" Margin="20,0,0,0"
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="SoundDevicePanel" Style="{StaticResource StackPanelStyle}"
                                     Initialized="SoundDevicePanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Monitor}">
-                    <ScrollViewer>
-                        <StackPanel Name="MonitorPanel" Margin="20,0,0,0" Initialized="MonitorPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="MonitorPanel" Style="{StaticResource StackPanelStyle}" Initialized="MonitorPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Input}">
-                    <ScrollViewer>
-                        <StackPanel Name="InputPanel" Margin="20,0,0,0" Initialized="InputPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="InputPanel" Style="{StaticResource StackPanelStyle}" Initialized="InputPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Other}">
-                    <ScrollViewer>
-                        <StackPanel Name="OtherPanel" Margin="20,0,0,0" Initialized="OtherPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="OtherPanel" Style="{StaticResource StackPanelStyle}" Initialized="OtherPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
             </TabControl>
         </TabItem>
         <TabItem Header="{l:Lang Software}">
-            <TabControl>
+            <TabControl Style="{StaticResource TabControlStyle}">
                 <TabItem Header="{l:Lang System}">
-                    <ScrollViewer>
-                        <StackPanel Name="SystemPanel" Margin="20,0,0,0" Initialized="SystemPanel_OnInitialized" />
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <StackPanel Name="SystemPanel" Style="{StaticResource StackPanelStyle}" Initialized="SystemPanel_OnInitialized" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="{l:Lang Programs}">
-                    <DataGrid Name="ProgramsPanel" Margin="0" Padding="0" HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Auto" Initialized="ProgramsPanel_OnInitialized" />
+                    <DataGrid Name="ProgramsPanel"
+                              Margin="0" Padding="0" 
+                              BorderThickness="0" BorderBrush="Transparent" 
+                              Background="{StaticResource BackgroundColor-2}"
+                              Foreground="{StaticResource TextColor-2}"
+                              pu:DataGridHelper.ColumnHeaderBackground="{StaticResource BackgroundColor-2}"
+                              pu:DataGridHelper.RowHeaderBackground="Transparent"
+                              pu:DataGridHelper.UnitHoverBackground="{StaticResource HighlightColor}"
+                              pu:DataGridHelper.UnitSelectedBackground="{StaticResource HighlightColor}"
+                              
+                              pu:DataGridHelper.RowHeaderBorderThickness="0"
+                              pu:DataGridHelper.ColumnHeaderPanelBorderThickness="0"
+                              pu:DataGridHelper.RowHeaderHoverBorderThickness="0"
+                              pu:DataGridHelper.CellFocusedBorderThickness="0"
+                              pu:DataGridHelper.CellReadOnlyBorderThickness="0"
+                              pu:DataGridHelper.RowHeaderClickBorderThickness="0"
+                              pu:DataGridHelper.ResizeThumbThickness="0"
+                              
+                              pu:DataGridHelper.RowHeaderBorderBrush="Transparent"
+                              pu:DataGridHelper.ColumnHeaderPanelBorderBrush="Transparent"
+                              pu:DataGridHelper.RowHeaderHoverBorderBrush="Transparent"
+                              pu:DataGridHelper.CellFocusedBorderBrush="Transparent"
+                              pu:DataGridHelper.CellReadOnlyBorderBrush="Transparent"
+                              pu:DataGridHelper.RowHeaderClickBorderBrush="Transparent"
+                              
+                              pu:DataGridHelper.RowHeaderHoverBackground="{StaticResource BackgroundColor-1}"
+                              pu:DataGridHelper.ColumnHeaderHoverBackground="{StaticResource BackgroundColor-1}"
+                              pu:DataGridHelper.RowHeaderClickBackground="{StaticResource BackgroundColor-1}"
+                              pu:DataGridHelper.ColumnHeaderClickBackground="{StaticResource BackgroundColor-1}"                              
+                              
+                              
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  
+                              Initialized="ProgramsPanel_OnInitialized" />
                 </TabItem>
             </TabControl>
         </TabItem>
