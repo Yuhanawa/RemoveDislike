@@ -5,29 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RemoveDislike.Views.Models"
              mc:Ignorable="d"
-             Padding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                        Path=Padding}"
-             Margin="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                        Path=Margin}"
-             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                        Path=Width}"
-             Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
-                        Path=Height}"
+             Background="Transparent"
              d:DesignHeight="50" d:DesignWidth="300">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <TextBox Grid.Column="0" Name="TitleTextBlock" x:FieldModifier="public" TextAlignment="Left" IsReadOnly="True"
-                 BorderThickness="0,0,0,1" Padding="0,2,0,0"
-                 Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+ 
+ 
+ <Border Name="MainBorder" 
+         Padding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                     Path=Padding}"
+         CornerRadius="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=CornerRadius}"
+         BorderBrush="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=BorderBrush}"
+         Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=BackgroundColor}">
+     
+     <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+     
+       <TextBox Grid.Column="0" Name="TitleTextBlock" x:FieldModifier="public" TextAlignment="Left"
+                IsReadOnly="True"
+                BorderThickness="0,0,0,0"
+                Padding="0"
+                Background="Transparent"
+                Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=Foreground}"
+                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=TitleText}" />
-        <TextBox Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left" IsReadOnly="True"
-                 TextWrapping="WrapWithOverflow"
-                 BorderThickness="0,0,0,1" Padding="0,2,0,0"
-                 Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+     
+       <TextBox Grid.Column="1" Name="ValueTextBlock" x:FieldModifier="public" TextAlignment="Left"
+                IsReadOnly="True"
+                TextWrapping="WrapWithOverflow"
+                Background="Transparent"
+                Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
+                    Path=Foreground}"
+                BorderThickness="0,0,0,0"
+                Padding="0"
+                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:InfoTab},
                                             Path=ValueText}" />
-    </Grid>
+        </Grid>
+     
+     
+    </Border>
+
 </UserControl>
