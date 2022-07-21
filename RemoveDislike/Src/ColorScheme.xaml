@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Brush x:Key="TextColor-1">#FAFAFAFA</Brush>
+    <Brush x:Key="TextColor-2">#8EEEEEEE</Brush>
+    <Brush x:Key="TextColor-3">#48BDBDBD</Brush>
+    
+    <Brush x:Key="TextColor-Black">#CC000000</Brush>
+    
+    <Brush x:Key="HighlightColor">#22FFFFFF</Brush>
+    <Brush x:Key="WindowBarButtonForegroundColor">#8c8c8c</Brush>
+    
+    <Brush x:Key="BackgroundColor-1">#2D2D2D</Brush>
+    <Brush x:Key="BackgroundColor-2">#333333</Brush>
+    <Brush x:Key="BackgroundColor-3">#999999</Brush>
+    
+    <Brush x:Key="BorderColor-1">#2B2B2B</Brush>
+    <Brush x:Key="BorderColor-2">#2F2F2F</Brush>
+
+    <!-- <Color x:Key=""></Color> -->
+    <!-- <Color x:Key=""></Color> -->
+</ResourceDictionary>

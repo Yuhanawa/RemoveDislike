@@ -9,6 +9,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+                <ResourceDictionary Source="/src/ColorScheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <FontFamily x:Key="FontAwesome">Resources/Fonts/#FontAwesome</FontFamily>
