@@ -117,12 +117,13 @@ public class RuleModule
     public RuleModule(string path)
     {
         Path = path;
-        var json = JSON.ToObject<Dictionary<string, Dictionary<string, object>>>(File.ReadAllText(path));
-        
-        Name = FileName.Split("@").Length<=1? FileName: FileName.Split("@")[0];
-        Author = FileName.Split("@").Length<=1?"unknown": FileName.Split("@")[1];
-        Description = (json.TryGet("header", "description") ?? "").ToString()??"";
-        Danger = (json.TryGet("header", "danger") ?? false) as bool? ?? false;
+        var json = JSON.ToObject<Dictionary<string, Dictionary<string, object>>>(
+            new Regex("//.*").Replace(File.ReadAllText(path), ""));
+
+        Name = FileName.Split("@").Length <= 1 ? FileName.Replace(".json", "") : FileName.Split("@")[0];
+        Author = FileName.Split("@").Length<=1?"unknown": FileName.Split("@")[1].Replace(".json", "");
+        Description = (json.TryGet("description") ?? "").ToString()??"";
+        Danger = (json.TryGet("danger") ?? false) as bool? ?? false;
 
         foreach (string str in json["rules"].Keys.ToList())
         {
