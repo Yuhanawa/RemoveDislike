@@ -22,7 +22,7 @@ public static class ConfigHelper
     };
 
 
-    public static List<string> LauncherConfig = _LauncherConfig;
+    public static List<string> LauncherConfig;
 
     private static readonly JSONParameters JsonParameters = new()
         { UseExtensions = false, UseEscapedUnicode = false };
@@ -41,7 +41,7 @@ public static class ConfigHelper
 
     public static void Load()
     {
-        if (_isInit) return;
+         if (_isInit) return;
 
         Info("[Config] Loading...");
         if (Exists())
@@ -104,12 +104,13 @@ public static class ConfigHelper
         }
 
         Info("[Modules][Config] Loading...");
+        if (!Directory.Exists(ModulesPath)) Directory.CreateDirectory(ModulesPath);
         if (!File.Exists(Path.Combine(ModulesPath, "Launcher.config")))
-            File.Create(Path.Combine(ModulesPath, "Launcher.config"));
+            File.Create(Path.Combine(ModulesPath, "Launcher.config")).Close();
 
         if (!File.Exists(Path.Combine(ModulesPath, "WindowTopmost.json")))
         {
-            File.Create(Path.Combine(ModulesPath, "WindowTopmost.json"));
+            File.Create(Path.Combine(ModulesPath, "WindowTopmost.json")).Close();
             File.WriteAllText(Path.Combine(ModulesPath, "WindowTopmost.json"), @"
 [
     {
@@ -128,6 +129,8 @@ public static class ConfigHelper
 ]
 ".Replace("'", "\""));
         }
+
+        ReloadLauncherConfig();
 
         GC.Collect();
         _isInit = true;
@@ -154,6 +157,7 @@ public static class ConfigHelper
 
         _isInit = false;
         Load();
+        ReloadLauncherConfig();
     }
 
     #region Class
