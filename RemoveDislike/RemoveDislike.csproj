@@ -16,7 +16,7 @@
         <RepositoryUrl>Github.com/Yuhanawa/RemoveDislike</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <Version>1.1.7</Version>
+        <Version>1.1.8</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -71,37 +71,23 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="fastJSON" Version="2.4.0.4" />
-        <PackageReference Include="Hardware.Info" Version="10.0.0" />
-        <PackageReference Include="Panuon.UI.Silver" Version="2.2.20" />
+        <PackageReference Include="fastJSON" Version="2.4.0.4"/>
+        <PackageReference Include="Hardware.Info" Version="10.0.0"/>
+        <PackageReference Include="Panuon.UI.Silver" Version="2.2.20"/>
     </ItemGroup>
 
     <ItemGroup>
-
-        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf" />
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf" />
-        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf" />
-        <Resource Include="Resources\Fonts\FontAwesome.otf" />
-        <Resource Include="Resources\Img\Icon.png" />
-        <Resource Include="Resources\Img\default.png" />
-        <Resource Include="Resources\Img\dll.png" />
-        <Resource Include="Resources\Ico\128x_black.ico" />
-        <Resource Include="Resources\Lang\zh-CN.lang" />
-        <None Remove="Resources\Img\Icon_pink.png" />
-        <Resource Include="Resources\Img\Icon_pink.png" />
+        <Resource Include="Resources\Fonts\Font Awesome 5 Brands-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Regular-400.otf"/>
+        <Resource Include="Resources\Fonts\Font Awesome 5 Free-Solid-900.otf"/>
+        <Resource Include="Resources\Fonts\FontAwesome.otf"/>
+        <Resource Include="Resources\Img\Icon.png"/>
+        <Resource Include="Resources\Img\default.png"/>
+        <Resource Include="Resources\Img\dll.png"/>
+        <Resource Include="Resources\Ico\128x_black.ico"/>
+        <Resource Include="Resources\Lang\zh-CN.lang"/>
+        <None Remove="Resources\Img\Icon_pink.png"/>
+        <Resource Include="Resources\Img\Icon_pink.png"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <Page Update="src\Views\Models\Clean\CleanInfoTabItem.xaml">
-            <SubType>Designer</SubType>
-        </Page>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="src\Views\Models\Clean\CleanInfoTabItem.xaml.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Remove="AssemblyInfo.cs" />
-    </ItemGroup>
-
+    
 </Project>
