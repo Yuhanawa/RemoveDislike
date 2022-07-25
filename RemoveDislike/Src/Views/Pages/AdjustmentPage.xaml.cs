@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace RemoveDislike.Views.Pages;
@@ -8,18 +10,24 @@ public partial class AdjustmentPage
 {
     public AdjustmentPage() => InitializeComponent();
 
+    [Obsolete]
     private static bool? RegValueEq(string key, string value, string target) => Registry.GetValue(
         key, value, null).ObjToStrEqRtBoolOrNull(target);
-    
+
+    private static bool? RegValueEq(string key, string value, int target)
+    {
+        var i = (int?)Registry.GetValue(key, value, null);
+        return i == null ? null : i.Value == target;
+    }
+
     private void Panel_OnInitialized(object sender, EventArgs e)
     {
-
         /*---------- Notifications ----------*/
         Put("Notifications",
-            GRB("Disable",
-                () => Registry.GetValue(
+            Grb("Disable",
+                () => RegValueEq(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
-                    "ToastEnabled", null).ObjToStrEqRtBoolOrNull("00000000"),
+                    "ToastEnabled", 0),
                 () =>
                 {
                     Registry.SetValue(
@@ -32,10 +40,10 @@ public partial class AdjustmentPage
                         CreateNoWindow = true
                     });
                 }, true),
-            GRB("Enable",
-                () => Registry.GetValue(
+            Grb("Enable",
+                () => RegValueEq(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
-                    "ToastEnabled", null).ObjToStrEqRtBoolOrNull("00000001"),
+                    "ToastEnabled", 1),
                 () =>
                 {
                     Registry.SetValue(
@@ -50,43 +58,42 @@ public partial class AdjustmentPage
                 })
         );
 
-
-        //Offer Suggestions
         Put("Offer Suggestions",
-            GRB("Disable", () =>
-                Registry.GetValue(
-                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
-                    "ScoobeSystemSettingEnabled", null).ObjToStrEqRtBoolOrNull("00000000")
+            Grb("Disable", () =>
+                    RegValueEq(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
+                        "ScoobeSystemSettingEnabled", 0)
                 , () =>
-            {
-                Registry.SetValue(
-                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
-                    "ScoobeSystemSettingEnabled", "00000000", RegistryValueKind.DWord);
-            }),
-            GRB("Enable", () =>
+                {
+                    Registry.SetValue(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
+                        "ScoobeSystemSettingEnabled", "00000000", RegistryValueKind.DWord);
+                }),
+            Grb("Enable", () =>
                     RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
-                                               "ScoobeSystemSettingEnabled", "00000001")
-            , () =>
-            {
-                Registry.SetValue(
-                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
-                    "ScoobeSystemSettingEnabled", "00000001", RegistryValueKind.DWord);
-            })
+                        "ScoobeSystemSettingEnabled", 1)
+                , () =>
+                {
+                    Registry.SetValue(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
+                        "ScoobeSystemSettingEnabled", "00000001", RegistryValueKind.DWord);
+                })
         );
 
 
-        //Get Windows Tips
         Put("Get Windows Tips",
-            GRB("Disable", 
-                () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
-                                                                "SubscribedContent-338389Enabled", "00000000"), () =>
-            {
-                Registry.SetValue(
+            Grb("Disable",
+                () => RegValueEq(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled", "00000000", RegistryValueKind.DWord);
-            }),
-            GRB("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
-                                                               "SubscribedContent-338389Enabled", "00000001"), () =>
+                    "SubscribedContent-338389Enabled", 0), () =>
+                {
+                    Registry.SetValue(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                        "SubscribedContent-338389Enabled", "00000000", RegistryValueKind.DWord);
+                }),
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
@@ -95,18 +102,20 @@ public partial class AdjustmentPage
         );
 
         /*---------- Storage ----------*/
-
-        //Storage Sense
         Put("Storage Sense",
-            GRB("Disable", () => RegValueEq( "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
-                                                                "01", "00000000"), () =>
+            Grb("Disable", () =>
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+                    "01", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
                     "01", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () =>RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
-                                                              "01", "00000001"), () =>
+            Grb("Enable", () =>
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
+                    "01", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy",
@@ -116,18 +125,18 @@ public partial class AdjustmentPage
 
 
         /*---------- Clipboard ----------*/
-        //Clipboard History
-
         Put("Clipboard History",
-            GRB("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard", "EnableClipboardHistory",
-                                                                "00000000"), () =>
+            Grb("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard",
+                "EnableClipboardHistory",
+                0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard", "EnableClipboardHistory",
                     "00000000",
                     RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard", "EnableClipboardHistory",
-                                                               "00000001"), () =>
+            Grb("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard",
+                "EnableClipboardHistory",
+                1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Clipboard", "EnableClipboardHistory",
                     "00000001",
@@ -136,17 +145,18 @@ public partial class AdjustmentPage
         );
 
         /*---------- Colors ----------*/
-        // //Windows Theme
         Put("Windows Theme",
-            GRB("Dark", () => RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                             "SystemUsesLightTheme", "00000000"), () =>
+            Grb("Dark", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "SystemUsesLightTheme", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
                     "SystemUsesLightTheme", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Light", () => RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                              "SystemUsesLightTheme", "00000001"), () =>
+            Grb("Light", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "SystemUsesLightTheme", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -154,18 +164,18 @@ public partial class AdjustmentPage
             })
         );
 
-        // //Application Theme
-
         Put("Application Theme",
-            GRB("Dark", () => RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                             "AppsUseLightTheme", "00000000"), () =>
+            Grb("Dark", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "AppsUseLightTheme", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
                     "AppsUseLightTheme", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Light", () => RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                              "AppsUseLightTheme", "00000001"), () =>
+            Grb("Light", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "AppsUseLightTheme", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -173,18 +183,18 @@ public partial class AdjustmentPage
             })
         );
 
-        // //Transparency Effects
-
         Put("Transparency Effects",
-            GRB("Disable", () => RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                                "EnableTransparency", "00000000"), () =>
+            Grb("Disable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "EnableTransparency", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
                     "EnableTransparency", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () =>RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                                                              "EnableTransparency", "00000001"), () =>
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    "EnableTransparency", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -193,17 +203,17 @@ public partial class AdjustmentPage
         );
 
         /*---------- Start ----------*/
-        //Show Recently Opened Items
-
         Put("Show Recently Opened Items",
-            GRB("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-                                                                "Start_TrackDocs", "00000000"), () =>
+            Grb("Disable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                    "Start_TrackDocs", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
                     "Start_TrackDocs", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-                                                               "Start_TrackDocs", "00000001"), () =>
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                    "Start_TrackDocs", 1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
                     "Start_TrackDocs", "00000001", RegistryValueKind.DWord);
@@ -211,27 +221,33 @@ public partial class AdjustmentPage
         );
 
         /*---------- Gaming ----------*/
-
         Put("Game Mode",
-            GRB("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", "00000000"), () =>
-            {
-                Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", "00000000",
-                    RegistryValueKind.DWord);
-            }),
-            GRB("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", "00000001"), () =>
-            {
-                Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", "00000001",
-                    RegistryValueKind.DWord);
-            })
+            Grb("Disable",
+                () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", 0),
+                () =>
+                {
+                    Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled",
+                        "00000000",
+                        RegistryValueKind.DWord);
+                }),
+            Grb("Enable",
+                () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled", 1),
+                () =>
+                {
+                    Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\GameBar", "AutoGameModeEnabled",
+                        "00000001",
+                        RegistryValueKind.DWord);
+                })
         );
 
         // /*---------- General ----------*/
-        // //Let Apps Show Personalized Ads
-
         Put("Let Apps Show Personalized Ads",
-            GRB("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
-                                                                "Enabled", "00000000").Value&&RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
-                                                                                                                       "Value", "00000000").Value, () =>
+            Grb("Disable", () =>
+                EqualsUtils.BoolAndBools(
+                    RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+                        "Enabled", 0), RegValueEq(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
+                        "Value", 0)), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
                     "Enabled", "00000000", RegistryValueKind.DWord);
@@ -239,73 +255,65 @@ public partial class AdjustmentPage
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
                     "Value", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
-            {
-                Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
-                    "Enabled", "00000001", RegistryValueKind.DWord);
-                Registry.SetValue(
-                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
-                    "Value", "00000001", RegistryValueKind.DWord);
-            })
+            Grb("Enable", () => EqualsUtils.BoolAndBools(
+                    RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+                        "Enabled", 1), RegValueEq(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
+                        "Value", 1))
+                , () =>
+                {
+                    Registry.SetValue(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+                        "Enabled", "00000001", RegistryValueKind.DWord);
+                    Registry.SetValue(
+                        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo",
+                        "Value", "00000001", RegistryValueKind.DWord);
+                })
         );
 
-        // //Allow Websites Access to Lnguage List
-        // if (LanguageList_Disable.IsChecked == true)
-        // {
-        //     Registry.SetValue("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
-        //         "HttpAcceptLanguageOptOut", "00000001", RegistryValueKind.DWord);
-        //
-        //     var delreg = new ProcessStartInfo("WT.exe");
-        //     delreg.UseShellExecute = true;
-        //     delreg.Arguments =
-        //         "REG DELETE \"HKCU\\Software\\Microsoft\\Internet Explorer\\International\" /v AcceptLanguage /f";
-        //     Process.Start(delreg);
-        // }
 
-        Put("Allow Websites Access to Lnguage List",
-            GRB("Disable", () => { return false; }, () =>
-            {
-                Registry.SetValue("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
-                    "HttpAcceptLanguageOptOut", "00000001", RegistryValueKind.DWord);
+        Put("Allow Websites Access to Language List",
+            Grb("Disable", () =>
+                    RegValueEq("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
+                        "HttpAcceptLanguageOptOut", 1)
+                , () =>
+                {
+                    Registry.SetValue("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
+                        "HttpAcceptLanguageOptOut", "00000001", RegistryValueKind.DWord);
 
-                var delreg = new ProcessStartInfo("WT.exe");
-                delreg.UseShellExecute = true;
-                delreg.Arguments =
-                    "REG DELETE \"HKCU\\Software\\Microsoft\\Internet Explorer\\International\" /v AcceptLanguage /f";
-                Process.Start(delreg);
-            }),
-            GRB("Enable", () => { return false; }, () =>
+                    Process.Start(new ProcessStartInfo("WT.exe")
+                    {
+                        UseShellExecute = true,
+                        Arguments =
+                            "REG DELETE \"HKCU\\Software\\Microsoft\\Internet Explorer\\International\" /v AcceptLanguage /f"
+                    });
+                }),
+            Grb("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
+                "HttpAcceptLanguageOptOut", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Control Panel\\International\\User Profile",
                     "HttpAcceptLanguageOptOut", "00000000", RegistryValueKind.DWord);
 
-                var delreg = new ProcessStartInfo("WT.exe");
-                delreg.UseShellExecute = true;
-                delreg.Arguments =
-                    "REG ADD \"HKCU\\Software\\Microsoft\\Internet Explorer\\International\" /v AcceptLanguage /t REG_SZ /d \"en-US,en;q=0.9\" /f";
-                Process.Start(delreg);
+                Process.Start(new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKCU\\Software\\Microsoft\\Internet Explorer\\International\" /v AcceptLanguage /t REG_SZ /d \"en-US,en;q=0.9\" /f"
+                });
             })
         );
 
-        // //Improve Search by Tracking App Launches
-        // if (ImproveSearch_Disable.IsChecked == true)
-        // {
-        //     Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-        //         "Start_TrackProgs", "00000000", RegistryValueKind.DWord);
-        // }
-        // else if (ImproveSearch_Enable.IsChecked == true)
-        // {
-        //     Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-        //         "Start_TrackProgs", "00000001", RegistryValueKind.DWord);
-        // }
-
         Put("Improve Search by Tracking App Launches",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                    "Start_TrackProgs", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
                     "Start_TrackProgs", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                    "Start_TrackProgs", 1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
                     "Start_TrackProgs", "00000001", RegistryValueKind.DWord);
@@ -334,7 +342,14 @@ public partial class AdjustmentPage
         //
 
         Put("Show Suggest Content in Settings",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => EqualsUtils.BoolAndBools(
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-353696Enabled", 0), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-353694Enabled", 0), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled", 0)
+            ), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
@@ -346,7 +361,14 @@ public partial class AdjustmentPage
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
                     "SubscribedContent-338393Enabled", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => EqualsUtils.BoolAndBools(
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-353696Enabled", 1), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-353694Enabled", 1), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled", 1)
+            ), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
@@ -361,26 +383,19 @@ public partial class AdjustmentPage
         );
 
         /*---------- Speech ----------*/
-        //Online Speech Recognition
-        //     if (SpeechRecognition_Disable.IsChecked == true)
-        //     {
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
-        //             "HasAccepted", "00000000", RegistryValueKind.DWord);
-        //     }
-        //     else if (SpeechRecognition_Enable.IsChecked == true)
-        //     {
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
-        //             "HasAccepted", "00000001", RegistryValueKind.DWord);
-        //     }
 
         Put("Online Speech Recognition",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
+                    "HasAccepted", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
                     "HasAccepted", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
+                    "HasAccepted", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
@@ -388,39 +403,20 @@ public partial class AdjustmentPage
             })
         );
 
-        //     /*---------- Inking and Typing ----------*/
-        //     //Personal Inking and Typing Dictionary
-        //     if (Dictionary_Disable.IsChecked == true)
-        //     {
-        //         Registry.SetValue(
-        //             "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
-        //             "Value", "00000000", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
-        //             "RestrictImplicitInkCollection", "00000001", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
-        //             "RestrictImplicitTextCollection", "00000001", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Personalization\\Settings",
-        //             "AcceptedPrivacyPolicy", "00000000", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
-        //             "HarvestContacts", "0000000", RegistryValueKind.DWord);
-        //     }
-        //     else if (Dictionary_Enable.IsChecked == true)
-        //     {
-        //         Registry.SetValue(
-        //             "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
-        //             "Value", "00000001", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
-        //             "RestrictImplicitInkCollection", "00000000", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
-        //             "RestrictImplicitTextCollection", "00000000", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Personalization\\Settings",
-        //             "AcceptedPrivacyPolicy", "00000001", RegistryValueKind.DWord);
-        //         Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
-        //             "HarvestContacts", "0000001", RegistryValueKind.DWord);
-        //     }
+        /*---------- Inking and Typing ----------*/
 
         Put("Personal Inking and Typing Dictionary",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => EqualsUtils.BoolAndBools(
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
+                    "Value", 0),
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
+                    "RestrictImplicitInkCollection", 1), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
+                    "RestrictImplicitTextCollection", 1), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
+                    "HarvestContacts", 0)
+            ), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
@@ -434,7 +430,16 @@ public partial class AdjustmentPage
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
                     "HarvestContacts", "0000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => EqualsUtils.BoolAndBools(
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
+                    "Value", 1), RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
+                    "RestrictImplicitInkCollection", 0),
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization",
+                    "RestrictImplicitTextCollection", 0), RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
+                    "HarvestContacts", 1)
+            ), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization",
@@ -484,34 +489,42 @@ public partial class AdjustmentPage
         //     }
 
         Put("Send Optional Diagnostic Data",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var P1 = new ProcessStartInfo("WT.exe");
-                P1.UseShellExecute = true;
-                P1.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v AllowTelemetry /t REG_DWORD /d \"00000001\" /f";
-                Process.Start(P1);
-                var P2 = new ProcessStartInfo("WT.exe");
-                P2.UseShellExecute = true;
-                P2.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v MaxTelemetryAllowed /t REG_DWORD /d \"00000001\" /f";
-                Process.Start(P2);
+                var p1 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v AllowTelemetry /t REG_DWORD /d \"00000001\" /f"
+                };
+                Process.Start(p1);
+                var p2 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v MaxTelemetryAllowed /t REG_DWORD /d \"00000001\" /f"
+                };
+                Process.Start(p2);
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack",
                     "ShowedToastAtLevel", "00000001", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var P1 = new ProcessStartInfo("WT.exe");
-                P1.UseShellExecute = true;
-                P1.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v AllowTelemetry /t REG_DWORD /d \"00000003\" /f";
-                Process.Start(P1);
-                var P2 = new ProcessStartInfo("WT.exe");
-                P2.UseShellExecute = true;
-                P2.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v MaxTelemetryAllowed /t REG_DWORD /d \"00000003\" /f";
-                Process.Start(P2);
+                var p1 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v AllowTelemetry /t REG_DWORD /d \"00000003\" /f"
+                };
+                Process.Start(p1);
+                var p2 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection\" /v MaxTelemetryAllowed /t REG_DWORD /d \"00000003\" /f"
+                };
+                Process.Start(p2);
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack",
                     "ShowedToastAtLevel", "00000003", RegistryValueKind.DWord);
@@ -536,7 +549,12 @@ public partial class AdjustmentPage
         //     }
 
         Put("Send Inking and Typing Data",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => EqualsUtils.BoolAndBools(
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Input\\TIPC", "Enabled", 0),
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\ImproveInkingAndTyping",
+                    "Value", 0)
+            ), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Input\\TIPC", "Enabled", "00000000",
                     RegistryValueKind.DWord);
@@ -544,7 +562,11 @@ public partial class AdjustmentPage
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\ImproveInkingAndTyping",
                     "Value", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => EqualsUtils.BoolAndBools(
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Input\\TIPC", "Enabled", 1),
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\ImproveInkingAndTyping",
+                    "Value", 1)), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Input\\TIPC", "Enabled", "00000001",
                     RegistryValueKind.DWord);
@@ -566,12 +588,14 @@ public partial class AdjustmentPage
         //     }
 
         Put("Tailored Experience",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+                "TailoredExperiencesWithDiagnosticDataEnabled", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
                     "TailoredExperiencesWithDiagnosticDataEnabled", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+                "TailoredExperiencesWithDiagnosticDataEnabled", 1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
                     "TailoredExperiencesWithDiagnosticDataEnabled", "00000001", RegistryValueKind.DWord);
@@ -628,30 +652,36 @@ public partial class AdjustmentPage
         //     }
 
         Put("Feedback Frequency",
-            GRB("Auto", () => { return false; }, () =>
+            Grb("Auto", () => { return false; }, () =>
             {
-                var delreg = new ProcessStartInfo("WT.exe");
-                delreg.UseShellExecute = true;
-                delreg.Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v NumberOfSIUFInPeriod  /f";
+                var delreg = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v NumberOfSIUFInPeriod  /f"
+                };
                 Process.Start(delreg);
 
-                var delreg1 = new ProcessStartInfo("WT.exe");
-                delreg1.UseShellExecute = true;
-                delreg1.Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v PeriodInNanoSeconds /f";
+                var delreg1 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v PeriodInNanoSeconds /f"
+                };
                 Process.Start(delreg1);
             }),
-            GRB("Always", () => { return false; }, () =>
+            Grb("Always", () => { return false; }, () =>
             {
-                var delreg = new ProcessStartInfo("WT.exe");
-                delreg.UseShellExecute = true;
-                delreg.Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v NumberOfSIUFInPeriod  /f";
+                var delreg = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v NumberOfSIUFInPeriod  /f"
+                };
                 Process.Start(delreg);
 
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "PeriodInNanoSeconds",
                     "100000000",
                     RegistryValueKind.QWord);
             }),
-            GRB("Daily", () => { return false; }, () =>
+            Grb("Daily", () => { return false; }, () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "NumberOfSIUFInPeriod", "1",
                     RegistryValueKind.DWord);
@@ -659,7 +689,7 @@ public partial class AdjustmentPage
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "PeriodInNanoSeconds",
                     "864000000000", RegistryValueKind.QWord);
             }),
-            GRB("Weekly", () => { return false; }, () =>
+            Grb("Weekly", () => { return false; }, () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "NumberOfSIUFInPeriod", "1",
                     RegistryValueKind.DWord);
@@ -667,15 +697,17 @@ public partial class AdjustmentPage
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "PeriodInNanoSeconds",
                     "6048000000000", RegistryValueKind.QWord);
             }),
-            GRB("Never", () => { return false; }, () =>
+            Grb("Never", () => { return false; }, () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Siuf\\Rules", "NumberOfSIUFInPeriod", "0",
                     RegistryValueKind.DWord);
 
-                var delreg1 = new ProcessStartInfo("WT.exe");
-                delreg1.UseShellExecute = true;
-                delreg1.Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v PeriodInNanoSeconds /f";
-                Process.Start(delreg1);
+                var delreg = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments = "REG DELETE \"HKCU\\Software\\Microsoft\\Siuf\\Rules\" /v PeriodInNanoSeconds /f"
+                };
+                Process.Start(delreg);
             }));
 
 
@@ -698,17 +730,23 @@ public partial class AdjustmentPage
         //     }
 
         Put("Search Permissions",
-            GRB("Strict", () => { return false; }, () =>
+            Grb("Strict", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+                    "SafeSearchMode", 2), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
                     "SafeSearchMode", "00000002", RegistryValueKind.DWord);
             }),
-            GRB("Moderate", () => { return false; }, () =>
+            Grb("Moderate", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+                    "SafeSearchMode", 1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
                     "SafeSearchMode", "00000001", RegistryValueKind.DWord);
             }),
-            GRB("Off", () => { return false; }, () =>
+            Grb("Off", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+                    "SafeSearchMode", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
                     "SafeSearchMode", "00000000", RegistryValueKind.DWord);
@@ -728,12 +766,16 @@ public partial class AdjustmentPage
         //
 
         Put("Store Search History",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+                    "IsDeviceSearchHistoryEnabled", 0), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
                     "IsDeviceSearchHistoryEnabled", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () =>
+                RegValueEq("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+                    "IsDeviceSearchHistoryEnabled", 1), () =>
             {
                 Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
                     "IsDeviceSearchHistoryEnabled", "00000001", RegistryValueKind.DWord);
@@ -769,31 +811,39 @@ public partial class AdjustmentPage
         //     }
 
         Put("Location Services",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var P1 = new ProcessStartInfo("WT.exe");
-                P1.UseShellExecute = true;
-                P1.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\" /v Value /t REG_SZ /d \"Deny\" /f";
-                Process.Start(P1);
-                var P2 = new ProcessStartInfo("WT.exe");
-                P2.UseShellExecute = true;
-                P2.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}\" /v SensorPermissionState /t REG_DWORD /d \"00000000\" /f";
-                Process.Start(P2);
+                var p1 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
+                Process.Start(p1);
+                var p2 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}\" /v SensorPermissionState /t REG_DWORD /d \"00000000\" /f"
+                };
+                Process.Start(p2);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var P1 = new ProcessStartInfo("WT.exe");
-                P1.UseShellExecute = true;
-                P1.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\" /v Value /t REG_SZ /d \"Allow\" /f";
-                Process.Start(P1);
-                var P2 = new ProcessStartInfo("WT.exe");
-                P2.UseShellExecute = true;
-                P2.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}\" /v SensorPermissionState /t REG_DWORD /d \"00000001\" /f";
-                Process.Start(P2);
+                var p1 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
+                Process.Start(p1);
+                var p2 = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}\" /v SensorPermissionState /t REG_DWORD /d \"00000001\" /f"
+                };
+                Process.Start(p2);
             }));
 
         //     //Camera Access
@@ -815,20 +865,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Camera Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var camera = new ProcessStartInfo("WT.exe");
-                camera.UseShellExecute = true;
-                camera.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var camera = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(camera);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var camera = new ProcessStartInfo("WT.exe");
-                camera.UseShellExecute = true;
-                camera.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var camera = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(camera);
             }));
 
@@ -851,20 +905,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Microphone Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var mic = new ProcessStartInfo("WT.exe");
-                mic.UseShellExecute = true;
-                mic.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var mic = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(mic);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var mic = new ProcessStartInfo("WT.exe");
-                mic.UseShellExecute = true;
-                mic.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var mic = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(mic);
             }));
 
@@ -883,13 +941,19 @@ public partial class AdjustmentPage
         //     }
 
         Put("Voice Activation",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () =>
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps",
+                    "AgentActivationEnabled", 0), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps",
                     "AgentActivationEnabled", "00000000", RegistryValueKind.DWord);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () =>
+                RegValueEq(
+                    "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps",
+                    "AgentActivationEnabled", 1), () =>
             {
                 Registry.SetValue(
                     "HKEY_CURRENT_USER\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps",
@@ -915,20 +979,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Notifications Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var notif = new ProcessStartInfo("WT.exe");
-                notif.UseShellExecute = true;
-                notif.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var notif = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(notif);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var notif = new ProcessStartInfo("WT.exe");
-                notif.UseShellExecute = true;
-                notif.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var notif = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(notif);
             }));
 
@@ -951,20 +1019,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Account Information Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var account = new ProcessStartInfo("WT.exe");
-                account.UseShellExecute = true;
-                account.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var account = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(account);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var account = new ProcessStartInfo("WT.exe");
-                account.UseShellExecute = true;
-                account.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var account = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(account);
             }));
 
@@ -987,20 +1059,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Contacts Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var contacts = new ProcessStartInfo("WT.exe");
-                contacts.UseShellExecute = true;
-                contacts.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var contacts = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(contacts);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var contacts = new ProcessStartInfo("WT.exe");
-                contacts.UseShellExecute = true;
-                contacts.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var contacts = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(contacts);
             }));
 
@@ -1023,20 +1099,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Calendar Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var calendar = new ProcessStartInfo("WT.exe");
-                calendar.UseShellExecute = true;
-                calendar.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var calendar = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(calendar);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var calendar = new ProcessStartInfo("WT.exe");
-                calendar.UseShellExecute = true;
-                calendar.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var calendar = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(calendar);
             }));
 
@@ -1059,20 +1139,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Phone Call Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var phonecall = new ProcessStartInfo("WT.exe");
-                phonecall.UseShellExecute = true;
-                phonecall.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var phonecall = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(phonecall);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var phonecall = new ProcessStartInfo("WT.exe");
-                phonecall.UseShellExecute = true;
-                phonecall.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var phonecall = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(phonecall);
             }));
 
@@ -1095,20 +1179,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Call History Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var phonehistory = new ProcessStartInfo("WT.exe");
-                phonehistory.UseShellExecute = true;
-                phonehistory.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var phonehistory = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(phonehistory);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var phonehistory = new ProcessStartInfo("WT.exe");
-                phonehistory.UseShellExecute = true;
-                phonehistory.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var phonehistory = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(phonehistory);
             }));
 
@@ -1131,20 +1219,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Email Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var phonehistory = new ProcessStartInfo("WT.exe");
-                phonehistory.UseShellExecute = true;
-                phonehistory.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var phonehistory = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(phonehistory);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var phonehistory = new ProcessStartInfo("WT.exe");
-                phonehistory.UseShellExecute = true;
-                phonehistory.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var phonehistory = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(phonehistory);
             }));
 
@@ -1167,20 +1259,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Tasks Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var tasks = new ProcessStartInfo("WT.exe");
-                tasks.UseShellExecute = true;
-                tasks.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var tasks = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(tasks);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var tasks = new ProcessStartInfo("WT.exe");
-                tasks.UseShellExecute = true;
-                tasks.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var tasks = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(tasks);
             }));
 
@@ -1203,20 +1299,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Messaging Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var chat = new ProcessStartInfo("WT.exe");
-                chat.UseShellExecute = true;
-                chat.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var chat = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(chat);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var chat = new ProcessStartInfo("WT.exe");
-                chat.UseShellExecute = true;
-                chat.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var chat = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(chat);
             }));
 
@@ -1239,20 +1339,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Radio Control Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var radios = new ProcessStartInfo("WT.exe");
-                radios.UseShellExecute = true;
-                radios.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var radios = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(radios);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var radios = new ProcessStartInfo("WT.exe");
-                radios.UseShellExecute = true;
-                radios.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var radios = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(radios);
             }));
 
@@ -1275,20 +1379,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Communicate with Unpaired Devices",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var bsync = new ProcessStartInfo("WT.exe");
-                bsync.UseShellExecute = true;
-                bsync.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var bsync = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(bsync);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var bsync = new ProcessStartInfo("WT.exe");
-                bsync.UseShellExecute = true;
-                bsync.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var bsync = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(bsync);
             }));
 
@@ -1311,20 +1419,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("App Diagnostics Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var diag = new ProcessStartInfo("WT.exe");
-                diag.UseShellExecute = true;
-                diag.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var diag = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(diag);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var diag = new ProcessStartInfo("WT.exe");
-                diag.UseShellExecute = true;
-                diag.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var diag = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(diag);
             }));
 
@@ -1347,20 +1459,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Documents Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var documents = new ProcessStartInfo("WT.exe");
-                documents.UseShellExecute = true;
-                documents.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var documents = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(documents);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var documents = new ProcessStartInfo("WT.exe");
-                documents.UseShellExecute = true;
-                documents.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var documents = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(documents);
             }));
 
@@ -1383,20 +1499,24 @@ public partial class AdjustmentPage
         //     }
 
         Put("Downloads Folder Access",
-            GRB("Disable", () => { return false; }, () =>
+            Grb("Disable", () => { return false; }, () =>
             {
-                var downloads = new ProcessStartInfo("WT.exe");
-                downloads.UseShellExecute = true;
-                downloads.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder\" /v Value /t REG_SZ /d \"Deny\" /f";
+                var downloads = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder\" /v Value /t REG_SZ /d \"Deny\" /f"
+                };
                 Process.Start(downloads);
             }),
-            GRB("Enable", () => { return false; }, () =>
+            Grb("Enable", () => { return false; }, () =>
             {
-                var downloads = new ProcessStartInfo("WT.exe");
-                downloads.UseShellExecute = true;
-                downloads.Arguments =
-                    "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder\" /v Value /t REG_SZ /d \"Allow\" /f";
+                var downloads = new ProcessStartInfo("WT.exe")
+                {
+                    UseShellExecute = true,
+                    Arguments =
+                        "REG ADD \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder\" /v Value /t REG_SZ /d \"Allow\" /f"
+                };
                 Process.Start(downloads);
             }));
     }
@@ -1404,7 +1524,12 @@ public partial class AdjustmentPage
     private void Put(string title, params RadioButton[] checkBoxes)
     {
         StackPanel p = new() { Orientation = Orientation.Horizontal };
-        Panel.Children.Add(new GroupBox { Header = title, Content = p });
+        Panel.Children.Add(new GroupBox
+        {
+            Header = title, Content = p,
+            Margin = new Thickness(4),
+            Background = Brushes.Transparent
+        });
         foreach (RadioButton c in checkBoxes)
         {
             c.GroupName = title;
@@ -1416,7 +1541,7 @@ public partial class AdjustmentPage
     ///     see private static CheckBox GetCheckBox(string title, Delegate getValue, Delegate setValue)
     /// </summary>
     /// <returns></returns>
-    private static RadioButton GRB(string title, BoolDelegate getValue, VoidDelegate setValue,
+    private static RadioButton Grb(string title, BoolDelegate getValue, VoidDelegate setValue,
         bool isDefault = false) =>
         GetCheckBox(title, getValue, setValue, isDefault);
 
@@ -1426,10 +1551,15 @@ public partial class AdjustmentPage
         RadioButton c = new()
         {
             Content = title,
-            IsChecked = getValue.Invoke() ?? isDefault
+            IsChecked = getValue.Invoke() ?? isDefault,
+            Background = Brushes.Transparent,
+            Foreground = ConfigHelper.ColorScheme["TextColor-2"] as Brush,
+            Margin = new Thickness(4)
         };
         c.Checked += (_, _) =>
         {
+            if (!c.IsLoaded) return;
+
             setValue.Invoke();
             c.IsChecked = getValue.Invoke();
         };
