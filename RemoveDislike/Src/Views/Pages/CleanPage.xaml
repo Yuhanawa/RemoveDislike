@@ -3,28 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
       xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
       mc:Ignorable="d"
       Title="CleanPage"
       PreviewDragEnter="CleanPage_OnPreviewDragEnter"
       d:DesignHeight="450"
       d:DesignWidth="800">
-
-    <Page.Resources>
-        <Style x:Key="LittleButtonStyle" TargetType="Button"
-               BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Margin" Value="2" />
-            <Setter Property="Height" Value="24" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
-            <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
-            <Setter Property="pu:ButtonHelper.HoverBackground" Value="#5AEAEAEA" />
-            <Setter Property="pu:ButtonHelper.ClickBackground" Value="#5AEAEAEA" />
-            <Setter Property="Foreground" Value="#57FFFFFF" />
-        </Style>
-    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
