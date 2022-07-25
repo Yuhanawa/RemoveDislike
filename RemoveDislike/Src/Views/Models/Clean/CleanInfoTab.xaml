@@ -36,7 +36,7 @@
                                VerticalAlignment="Center"
                                Text="{Binding Name}" />
                     <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Center" Visibility="Collapsed"
                                Text="{Binding Author}" />
                     <TextBlock Grid.Column="2"
                                Name="SizeBlock"
