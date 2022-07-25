@@ -19,7 +19,6 @@ public partial class App
     protected App()
     {
         Info("Output system information");
-        OutputSystemInfo();
 
         Init();
 
@@ -38,17 +37,6 @@ public partial class App
 
             Info("Application closed");
         };
-    }
-
-    private static void OutputSystemInfo()
-    {
-        Log(">>> OutputSystemInfo : \n");
-        SystemInfoUtils.LogInfo();
-        Log("\n------------------------\n");
-        SystemInfoUtils.LogInfo1();
-        Log("\n------------------------\n");
-        SystemInfoUtils.LogInfo2();
-        Log("\n------------------------\n");
     }
 
     private static void Init()
