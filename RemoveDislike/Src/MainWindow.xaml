@@ -127,6 +127,7 @@
                 <TreeView Grid.Row="1"
                           Style="{StaticResource MenuTreeViewStyle}">
                     <TreeViewItem Name="InfoMenuMenuItem"
+                                  IsSelected="True"
                                   Header="{utils:Lang Info}"
                                   pu:TreeViewItemHelper.Icon="&#xf014;"
                                   Selected="InfoMenuMenuItem_OnSelected"
@@ -135,7 +136,6 @@
                                   Header="{utils:Lang Clean}"
                                   pu:TreeViewItemHelper.Icon="&#xf039;"
                                   Style="{StaticResource MenuItemStyle}"
-                                  IsSelected="True"
                                   Selected="CleanMenuItem_OnSelected" />
                     <TreeViewItem Name="ContextMenuMenuItem"
                                   Header="{utils:Lang Context Menu}"
