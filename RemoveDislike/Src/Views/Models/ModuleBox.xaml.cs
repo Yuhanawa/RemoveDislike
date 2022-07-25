@@ -1,17 +1,17 @@
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
-using RemoveDislike.Views.Utils;
+using RemoveDislike.Utils;
 
 namespace RemoveDislike.Views.Models;
 
-public partial class Module
+public partial class ModuleBox
 {
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string),
-        typeof(Module), new PropertyMetadata(default(string)));
+        typeof(ModuleBox), new PropertyMetadata(default(string)));
 
     public static readonly DependencyProperty KeyProperty =
-        DependencyProperty.Register(nameof(Key), typeof(string), typeof(Module), new PropertyMetadata(string.Empty));
+        DependencyProperty.Register(nameof(Key), typeof(string), typeof(ModuleBox), new PropertyMetadata(string.Empty));
 
     public string ConfigPath
     {
@@ -20,10 +20,10 @@ public partial class Module
     }
 
     public static readonly DependencyProperty ConfigPathProperty =
-        DependencyProperty.Register(nameof(ConfigPath), typeof(string), typeof(Module), new PropertyMetadata(string.Empty));
+        DependencyProperty.Register(nameof(ConfigPath), typeof(string), typeof(ModuleBox), new PropertyMetadata(string.Empty));
     
     
-    public Module()
+    public ModuleBox()
     {
         InitializeComponent();
         Width = 100.0;

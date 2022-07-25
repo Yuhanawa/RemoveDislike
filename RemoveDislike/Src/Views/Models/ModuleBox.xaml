@@ -1,14 +1,14 @@
-<UserControl x:Class="RemoveDislike.Views.Models.Module"
+<UserControl x:Class="RemoveDislike.Views.Models.ModuleBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RemoveDislike.Views.Models"
-             xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
+             xmlns:utils="clr-namespace:RemoveDislike.Utils"
              mc:Ignorable="d" d:DesignHeight="120" d:DesignWidth="100"
-             Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:Module},
+             Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ModuleBox},
                                               Path=Height}"
-             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:Module},
+             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ModuleBox},
                                               Path=Width}">
     
     <Border Background="#313131" BorderBrush="#9a9a9a" BorderThickness="1">
@@ -19,13 +19,13 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
-                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:Module},
+                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:ModuleBox},
                             Path=Text}"
                        TextAlignment="Center" TextTrimming="WordEllipsis" TextWrapping="Wrap"
                        FontSize="16" VerticalAlignment="Stretch" />
-            <Button Margin="0" Padding="0" BorderThickness="0" Grid.Row="1" Height="24" Content="{l:Lang Config}"
+            <Button Margin="0" Padding="0" BorderThickness="0" Grid.Row="1" Height="24" Content="{utils:Lang Config}"
                     Click="SettingButton_OnClick" />
-            <ToggleButton Name="StateButton" Margin="0" Padding="0" BorderThickness="0" Grid.Row="2" Height="24" Content="{l:Lang State}"
+            <ToggleButton Name="StateButton" Margin="0" Padding="0" BorderThickness="0" Grid.Row="2" Height="24" Content="{utils:Lang State}"
                            Click="StateButton_OnClick" Loaded="StateButton_OnLoaded"/>
         </Grid>
     </Border>

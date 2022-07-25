@@ -5,16 +5,16 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-using RemoveDislike.Views.Utils;
+using RemoveDislike.Utils;
 
-namespace RemoveDislike.Views.Models.ContextMenu;
+namespace RemoveDislike.Views.Models;
 
-public partial class ContextMenuInfoTab
+public partial class ContextMenuModel
 {
     public static readonly DependencyProperty KeyNameProperty =
-        DependencyProperty.Register(nameof(KeyName), typeof(string), typeof(ContextMenuInfoTab));
+        DependencyProperty.Register(nameof(KeyName), typeof(string), typeof(ContextMenuModel));
 
-    public ContextMenuInfoTab(RegistryKey registryKey, string keyName, bool isEx = false)
+    public ContextMenuModel(RegistryKey registryKey, string keyName, bool isEx = false)
     {
         InitializeComponent();
 

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Resources;
 
-namespace RemoveDislike.Views.Utils;
+namespace RemoveDislike.Utils;
 
 /// <summary>
 ///     LangUtils
@@ -21,7 +21,7 @@ public class LangUtils : MarkupExtension
     {
         if (!Lang.ContainsKey(key))
             Warn("missing translation：" + key);
-        
+
         return Lang.ContainsKey(key) ? Lang[key] : key;
     }
 

@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using RemoveDislike.Views.Models.ContextMenu;
+using RemoveDislike.Views.Models;
 
 namespace RemoveDislike.Views.Pages;
 
@@ -48,7 +48,7 @@ public partial class ContextMenuPage
                 {
                     if (subKeyName.StartsWith('{') && subKeyName.EndsWith('}')) continue;
                     panel.Children.Add(
-                        new ContextMenuInfoTab(key.OpenSubKey(subKeyName, true), subKeyName, isEx)
+                        new ContextMenuModel(key.OpenSubKey(subKeyName, true), subKeyName, isEx)
                     );
                 }
                 catch (Exception exception)

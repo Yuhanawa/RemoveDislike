@@ -1,4 +1,4 @@
-namespace RemoveDislike.Core.Utils;
+namespace RemoveDislike.Utils;
 
 public static class SizeUtils
 {

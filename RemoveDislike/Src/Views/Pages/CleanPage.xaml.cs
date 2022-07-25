@@ -3,8 +3,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
-using RemoveDislike.Core.Module;
-using RemoveDislike.Views.Models.Clean;
+using RemoveDislike.Utils;
+using RemoveDislike.Views.Models;
 
 namespace RemoveDislike.Views.Pages;
 
@@ -18,14 +18,14 @@ public partial class CleanPage
     public void Refresh()
     {
         ItemPanel.Children.Clear();
-        CleanupModule.ReLoad();
+        CleanupUtils.ReLoad();
         LoadRuleItem();
     }
 
     private void LoadRuleItem()
     {
-        foreach (RuleModule value in CleanupModule.RulesFileList.Values)
-            ItemPanel.Children.Add(new CleanInfoTab(value)
+        foreach (RuleModule value in CleanupUtils.RulesFileList.Values)
+            ItemPanel.Children.Add(new CleanInfoModel(value)
             {
                 FontSize = 18,
                 Margin = new Thickness(4, 2, 4, 2),
@@ -70,7 +70,7 @@ public partial class CleanPage
 
     private void Play_OnClick(object sender, RoutedEventArgs e)
     {
-        foreach (CleanInfoTab child in ItemPanel.Children) child.Play();
+        foreach (CleanInfoModel child in ItemPanel.Children) child.Play();
     }
 
 

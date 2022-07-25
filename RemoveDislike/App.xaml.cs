@@ -1,11 +1,8 @@
 ﻿global using System;
-global using RemoveDislike.Core;
-global using RemoveDislike.Core.Utils;
-global using static RemoveDislike.Core.Utils.LogUtils;
+global using static RemoveDislike.Utils.LogUtils;
 using System.IO;
 using System.Threading;
-using RemoveDislike.Core.Module;
-using RemoveDislike.Views.Utils;
+using RemoveDislike.Utils;
 
 namespace RemoveDislike;
 
@@ -14,8 +11,6 @@ namespace RemoveDislike;
 /// </summary>
 public partial class App
 {
-    public static bool WillClose { get; set; }
-
     protected App()
     {
         Info("Output system information");
@@ -25,7 +20,7 @@ public partial class App
         Info("Application started");
         Info($"Version: {ResourceAssembly.GetName().Version.ToString()}");
         InitializeComponent();
-        
+
         Current.Exit += (_, _) =>
         {
             if (!WillClose)
@@ -38,6 +33,8 @@ public partial class App
             Info("Application closed");
         };
     }
+
+    public static bool WillClose { get; set; }
 
     private static void Init()
     {
@@ -58,6 +55,6 @@ public partial class App
 
         ConfigHelper.Load();
         LangUtils.Load(Thread.CurrentThread.CurrentCulture.Name);
-        CleanupModule.Load();
+        CleanupUtils.Load();
     }
 }

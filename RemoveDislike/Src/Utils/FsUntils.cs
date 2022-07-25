@@ -2,7 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace RemoveDislike.Core.Utils;
+namespace RemoveDislike.Utils;
 
 public static class FsUntils
 {

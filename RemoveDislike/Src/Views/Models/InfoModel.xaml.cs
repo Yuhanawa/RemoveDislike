@@ -4,19 +4,19 @@ using System.Windows.Media;
 
 namespace RemoveDislike.Views.Models;
 
-public partial class InfoTab
+public partial class InfoModel
 {
     public static readonly DependencyProperty TitleTextProperty = DependencyProperty.Register("TitleText",
-        typeof(string), typeof(InfoTab), new PropertyMetadata(default(string)));
+        typeof(string), typeof(InfoModel), new PropertyMetadata(default(string)));
 
     public static readonly DependencyProperty ValueTextProperty = DependencyProperty.Register("ValueText",
-        typeof(string), typeof(InfoTab), new PropertyMetadata(default(string)));
+        typeof(string), typeof(InfoModel), new PropertyMetadata(default(string)));
 
     public static readonly DependencyProperty BackgroundColorProperty =
-        DependencyProperty.Register(nameof(BackgroundColor), typeof(Brush), typeof(InfoTab), new PropertyMetadata(default(Brush)));
+        DependencyProperty.Register(nameof(BackgroundColor), typeof(Brush), typeof(InfoModel), new PropertyMetadata(default(Brush)));
 
-    public InfoTab() => InitializeComponent();
-    public InfoTab(string title, string value) {
+    public InfoModel() => InitializeComponent();
+    public InfoModel(string title, string value) {
         InitializeComponent();
         TitleText = title;
         ValueText = value;

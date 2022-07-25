@@ -4,19 +4,21 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:models="clr-namespace:RemoveDislike.Views.Models"
-      xmlns:utils="clr-namespace:RemoveDislike.Views.Utils"
+      xmlns:utils="clr-namespace:RemoveDislike.Utils"
       mc:Ignorable="d"
       Title="Module"
       d:DesignHeight="450"
       d:DesignWidth="800">
     <Page.Resources>
-        <Style x:Key="ModuleStyle" TargetType="models:Module">
-            <Setter Property="Margin" Value="36"/> 
-        </Style>    
+        <Style x:Key="ModuleStyle" TargetType="models:ModuleBox">
+            <Setter Property="Margin" Value="36" />
+        </Style>
     </Page.Resources>
-    
+
     <WrapPanel Margin="45">
-        <models:Module ConfigPath="Launcher.config" Text="{utils:Lang Module}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
-        <models:Module ConfigPath="WindowTopmost.json" Key="WindowTopmostModule.exe" Text="{utils:Lang Window Topmost}" Foreground="Azure" Style="{StaticResource ModuleStyle}"/>
+        <models:ModuleBox ConfigPath="Launcher.config" Text="{utils:Lang Module}" Foreground="Azure"
+                          Style="{StaticResource ModuleStyle}" />
+        <models:ModuleBox ConfigPath="WindowTopmost.json" Key="WindowTopmostModule.exe"
+                          Text="{utils:Lang Window Topmost}" Foreground="Azure" Style="{StaticResource ModuleStyle}" />
     </WrapPanel>
 </Page>

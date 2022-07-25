@@ -7,10 +7,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Hardware.Info;
+using RemoveDislike.Utils;
 using RemoveDislike.Views.Pages;
-using RemoveDislike.Views.Utils;
 
-namespace RemoveDislike.Views;
+namespace RemoveDislike;
 
 /// <summary>
 ///     Interaction logic for MainWindow.xaml

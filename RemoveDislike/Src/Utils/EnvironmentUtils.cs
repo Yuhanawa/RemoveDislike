@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RemoveDislike.Core.Utils;
+namespace RemoveDislike.Utils;
 
 public static class EnvironmentUtils
 {

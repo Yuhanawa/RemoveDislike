@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace RemoveDislike.Core.Utils;
+namespace RemoveDislike.Utils;
 
 public static class DirectoryInfoUtils
 {

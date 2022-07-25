@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
-      xmlns:l="clr-namespace:RemoveDislike.Views.Utils"
+      xmlns:utils="clr-namespace:RemoveDislike.Utils"
       mc:Ignorable="d"
       Title="ContextMenuPage"
       d:DesignHeight="450"
@@ -62,7 +62,7 @@
                 <ColumnDefinition Width="6" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-                       Text="{l:Lang Confused and needs to be improved}"
+                       Text="{utils:Lang Confused and needs to be improved}"
                        TextAlignment="Left"
                        VerticalAlignment="Center"
                        Foreground="#57FFFFFF" />

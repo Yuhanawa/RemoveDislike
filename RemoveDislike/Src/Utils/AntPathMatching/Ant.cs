@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace RemoveDislike.Core.Utils.AntPathMatching;
+namespace RemoveDislike.Utils.AntPathMatching;
 
 /// <summary>
 ///     Represents a class which matches paths using ant-style path matching.

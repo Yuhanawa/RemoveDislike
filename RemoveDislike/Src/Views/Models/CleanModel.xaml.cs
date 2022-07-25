@@ -3,19 +3,18 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using RemoveDislike.Core.Module;
-using RemoveDislike.Views.Utils;
+using RemoveDislike.Utils;
 
-namespace RemoveDislike.Views.Models.Clean;
+namespace RemoveDislike.Views.Models;
 
 /// <summary>
 /// </summary>
-public partial class CleanInfoTab
+public partial class CleanInfoModel
 {
     /// <summary>
     /// </summary>
     /// <param name="dataContext"></param>
-    public CleanInfoTab(object dataContext)
+    public CleanInfoModel(object dataContext)
     {
         DataContext = dataContext;
         InitializeComponent();
@@ -61,7 +60,7 @@ public partial class CleanInfoTab
     /// </summary>
     /// <returns></returns>
     public List<string> GetDisabledList() => Dispatcher.Invoke(
-        () => (from CleanInfoTabItem child in SubPanel.Children
+        () => (from CleanInfoModelItem child in SubPanel.Children
             where child.Tick.IsChecked.HasValue && !child.Tick.IsChecked.Value
             select child.SubRuleTextBlock.Text).ToList());
 
@@ -76,9 +75,9 @@ public partial class CleanInfoTab
                 LangUtils.Get("Are you sure you want to delete this file"),
                 LangUtils.Get("This function is not reversible!"),
                 MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            CleanupModule.RulesFileList.Remove(Rule.Name);
+            CleanupUtils.RulesFileList.Remove(Rule.Name);
 
-        ((CleanInfoTabItem)sender).Visibility = Visibility.Collapsed;
+        ((CleanInfoModelItem)sender).Visibility = Visibility.Collapsed;
         sender = null;
     }
 
@@ -104,7 +103,7 @@ public partial class CleanInfoTab
     private void SubPanel_OnInitialized(object sender, EventArgs e)
     {
         foreach (string sub in Rule.SubRules.Keys)
-            SubPanel.Children.Add(new CleanInfoTabItem(sub));
+            SubPanel.Children.Add(new CleanInfoModelItem(sub));
     }
 
     #region TickTgBtn onClick
@@ -116,7 +115,7 @@ public partial class CleanInfoTab
     /// <param name="e"></param>
     private void TickTgBtn_OnChecked(object sender, RoutedEventArgs e)
     {
-        foreach (CleanInfoTabItem child in SubPanel.Children) child.Tick.IsChecked = true;
+        foreach (CleanInfoModelItem child in SubPanel.Children) child.Tick.IsChecked = true;
     }
 
     /// <summary>
@@ -126,7 +125,7 @@ public partial class CleanInfoTab
     /// <param name="e"></param>
     private void TickTgBtn_OnUnchecked(object sender, RoutedEventArgs e)
     {
-        foreach (CleanInfoTabItem child in SubPanel.Children) child.Tick.IsChecked = false;
+        foreach (CleanInfoModelItem child in SubPanel.Children) child.Tick.IsChecked = false;
     }
 
     #endregion

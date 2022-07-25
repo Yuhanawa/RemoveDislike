@@ -3,8 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using fastJSON;
+using RemoveDislike.Utils;
 
-namespace RemoveDislike.Core;
+namespace RemoveDislike;
 
 public static class ConfigHelper
 {
@@ -13,27 +14,14 @@ public static class ConfigHelper
     public static readonly string RuleBase = @$"{ConfigPath}\Rules";
     public static readonly string ModulesPath = @$"{ConfigPath}\Modules";
     public static readonly string LauncherConfigPath = @$"{ModulesPath}\Launcher.config";
-    
+
     public static readonly ResourceDictionary ColorScheme = new()
     {
         Source = new Uri("pack://application:,,,/RemoveDislike;component/src/ColorScheme.xaml")
     };
 
-    #region LauncherConfig
-
-    private static List<string> _LauncherConfig
-    {
-        get => File.ReadAllText(LauncherConfigPath).Split('\n').ToList();
-        set => File.WriteAllText(LauncherConfigPath, string.Join('\n', value));
-    }
 
     public static List<string> LauncherConfig = _LauncherConfig;
-
-    public static void ReloadLauncherConfig() => LauncherConfig = _LauncherConfig;
-    public static void SaveLauncherConfig() => _LauncherConfig = LauncherConfig;
-
-    #endregion
-
 
     private static readonly JSONParameters JsonParameters = new()
         { UseExtensions = false, UseEscapedUnicode = false };
@@ -95,8 +83,8 @@ public static class ConfigHelper
 
         if (!File.Exists(Path.Combine(ModulesPath, "WindowTopmost.json")))
         {
-            File.Create(Path.Combine(ModulesPath, "WindowTopmost.json"));        
-            File.WriteAllText(Path.Combine(ModulesPath, "WindowTopmost.json"),@"
+            File.Create(Path.Combine(ModulesPath, "WindowTopmost.json"));
+            File.WriteAllText(Path.Combine(ModulesPath, "WindowTopmost.json"), @"
 [
     {
         'Key': 'D',
@@ -112,9 +100,9 @@ public static class ConfigHelper
         ]
     }
 ]
-".Replace("'","\""));
+".Replace("'", "\""));
         }
-        
+
         _isInit = true;
     }
 
@@ -143,4 +131,18 @@ public static class ConfigHelper
     {
         public bool AllowForce { get; set; } = false;
     }
+
+    #region LauncherConfig
+
+    private static List<string> _LauncherConfig
+    {
+        get => File.ReadAllText(LauncherConfigPath).Split('\n').ToList();
+        set => File.WriteAllText(LauncherConfigPath, string.Join('\n', value));
+    }
+
+
+    public static void ReloadLauncherConfig() => LauncherConfig = _LauncherConfig;
+    public static void SaveLauncherConfig() => _LauncherConfig = LauncherConfig;
+
+    #endregion
 }

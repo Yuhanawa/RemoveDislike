@@ -3,11 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using fastJSON;
-using RemoveDislike.Core.Utils.AntPathMatching;
+using RemoveDislike.Utils.AntPathMatching;
 
-namespace RemoveDislike.Core.Module;
+namespace RemoveDislike.Utils;
 
-public static class CleanupModule
+public static class CleanupUtils
 {
     public static Dictionary<string, RuleModule> RulesFileList { get; } = new();
 
@@ -49,7 +49,7 @@ public static class CleanupModule
                             {
                                 Info(path);
                                 Directory.Delete(path);
-                                if (emptyFolderRule!=null) emptyFolderRule.Size++;
+                                if (emptyFolderRule != null) emptyFolderRule.Size++;
                                 action(path);
                                 if (path.Length > 4 && string.IsNullOrEmpty(Directory.GetParent(path)?.FullName))
                                 {
@@ -61,9 +61,9 @@ public static class CleanupModule
                         }
                         catch (Exception e)
                         {
-                            Err("UnKnow",e);
-                            
+                            Err("UnKnow", e);
                         }
+
                         break;
                     }
                 }
@@ -78,10 +78,8 @@ public static class CleanupModule
         );
 
 
-
-
         RulesFileList.Add("Empty Folder", emptyFolderRule);
-                
+
         new DirectoryInfo(ConfigHelper.RuleBase)
             .GetFiles("*.json", SearchOption.AllDirectories)
             .ToList().ForEach(file =>
@@ -111,6 +109,7 @@ public class RuleModule
         Danger = danger;
         FeaturedRule = featuredRule;
     }
+
     public RuleModule(string path)
     {
         Path = path;
@@ -190,7 +189,7 @@ public class RuleModule
     {
         try
         {
-            if (FeaturedRule==null)
+            if (FeaturedRule == null)
                 _Run(disabledList, action);
             else
                 FeaturedRule.Invoke(disabledList, action);
@@ -209,8 +208,8 @@ public class RuleModule
     public bool Force { get; set; }
     public bool IgnoreCase { get; set; }
     public bool Danger { get; set; }
-    
-    public Action<ICollection<string>,Action<string>> FeaturedRule { get; set; }
+
+    public Action<ICollection<string>, Action<string>> FeaturedRule { get; set; }
 
     #endregion
 }

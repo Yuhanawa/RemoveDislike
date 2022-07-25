@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace RemoveDislike.Core.Utils;
+namespace RemoveDislike.Utils;
 
 public static class ProcessUtils
 {
@@ -12,9 +12,10 @@ public static class ProcessUtils
         }
         catch (Exception ex)
         {
-            Err($"Try to start process {fileName} with arguments {arguments} failed: {ex.Message}",ex);
+            Err($"Try to start process {fileName} with arguments {arguments} failed: {ex.Message}", ex);
         }
     }
+
     public static void TryStart(string fileName)
     {
         try
@@ -23,7 +24,7 @@ public static class ProcessUtils
         }
         catch (Exception ex)
         {
-            Err($"Try to start process {fileName} without arguments failed: {ex.Message}",ex);
+            Err($"Try to start process {fileName} without arguments failed: {ex.Message}", ex);
         }
-    }    
+    }
 }

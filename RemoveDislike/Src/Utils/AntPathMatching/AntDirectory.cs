@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace RemoveDislike.Core.Utils.AntPathMatching;
+namespace RemoveDislike.Utils.AntPathMatching;
 
 /// <summary>
 ///     Represents a class used to match files recusively with ant-style pattern.

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Management;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Hardware.Info;
 using Microsoft.Win32;
+using RemoveDislike.Utils;
 using RemoveDislike.Views.Models;
 
 namespace RemoveDislike.Views.Pages;
@@ -22,19 +24,19 @@ public partial class InfoPage
     }
 
     private static void PutInfoTab(Panel target, string title, string value = "") =>
-        target.Children.Add(new InfoTab(title, value)
+        target.Children.Add(new InfoModel(title, value)
         {
             Margin = new Thickness(0),
             Padding = new Thickness(5),
             CornerRadius = new CornerRadius(3),
-            BackgroundColor = ConfigHelper.ColorScheme["HighlightColor"] as System.Windows.Media.Brush,
-            Foreground = ConfigHelper.ColorScheme["TextColor-2"] as System.Windows.Media.Brush
+            BackgroundColor = ConfigHelper.ColorScheme["HighlightColor"] as Brush,
+            Foreground = ConfigHelper.ColorScheme["TextColor-2"] as Brush
         });
 
     private static StackPanel GetPanel(dynamic sender)
     {
         StackPanel panel = new();
-        sender.Children.Add(new Border {  Child = panel,Padding = new Thickness(0,8,0,0)});
+        sender.Children.Add(new Border { Child = panel, Padding = new Thickness(0, 8, 0, 0) });
         return panel;
     }
 
@@ -316,6 +318,7 @@ public partial class InfoPage
     private class Program
     {
         private readonly RegistryKey _key;
+
         public Program(string keyName) => _key =
             Registry.LocalMachine.OpenSubKey(@$"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{keyName}");
 
