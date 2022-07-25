@@ -78,7 +78,6 @@ public partial class CleanInfoModel
             CleanupUtils.RulesFileList.Remove(Rule.Name);
 
         ((CleanInfoModelItem)sender).Visibility = Visibility.Collapsed;
-        sender = null;
     }
 
     /// <summary>
@@ -102,10 +101,42 @@ public partial class CleanInfoModel
     /// <param name="e"></param>
     private void SubPanel_OnInitialized(object sender, EventArgs e)
     {
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         foreach (string sub in Rule.SubRules.Keys)
-            SubPanel.Children.Add(new CleanInfoModelItem(sub));
+        {
+            CleanInfoModelItem item = new (sub)
+            {
+                Tick = { IsChecked = !Rule.Danger&&!sub.StartsWith('!'), }
+            };
+            item.Tick.Checked += (_, _) => RefreshStatus();
+            item.Tick.Unchecked += (_, _) => RefreshStatus();
+            SubPanel.Children.Add(item);
+        }
+         
+        RefreshStatus();
     }
-
+    
+    private bool _passEvent;
+    private void RefreshStatus()
+    {
+        bool all = true, any = false;
+        foreach (CleanInfoModelItem child in SubPanel.Children)
+        {
+            if (any!=true&&child.Tick.IsChecked.HasValue && child.Tick.IsChecked.Value)
+                any = true;
+            if (all&&(!child.Tick.IsChecked.HasValue||!child.Tick.IsChecked.Value))
+                all = false;
+        }
+        
+        if (!_passEvent&&TickTgBtn.IsChecked!=(all||any))
+        {
+            _passEvent = true;
+            TickTgBtn.IsChecked = all||any;
+        }
+       
+        TickTgBtn.Content = all?"√":any?"?":"口";
+    }
+    
     #region TickTgBtn onClick
 
     /// <summary>
@@ -115,7 +146,13 @@ public partial class CleanInfoModel
     /// <param name="e"></param>
     private void TickTgBtn_OnChecked(object sender, RoutedEventArgs e)
     {
-        foreach (CleanInfoModelItem child in SubPanel.Children) child.Tick.IsChecked = true;
+        if (!_passEvent)
+        {
+            foreach (CleanInfoModelItem child in SubPanel.Children)
+            { _passEvent = true; child.Tick.IsChecked = true;}            
+        }
+
+        _passEvent = !_passEvent;
     }
 
     /// <summary>
@@ -125,7 +162,13 @@ public partial class CleanInfoModel
     /// <param name="e"></param>
     private void TickTgBtn_OnUnchecked(object sender, RoutedEventArgs e)
     {
-        foreach (CleanInfoModelItem child in SubPanel.Children) child.Tick.IsChecked = false;
+        if (!_passEvent)
+        {
+            foreach (CleanInfoModelItem child in SubPanel.Children)
+            { _passEvent = true; child.Tick.IsChecked = false;}
+        }
+        
+        _passEvent = !_passEvent;
     }
 
     #endregion
