@@ -21,19 +21,14 @@ public partial class InfoPage
         DataContext = this;
     }
 
-    private static readonly ResourceDictionary ResourceDictionary = new()
-    {
-        Source = new Uri("pack://application:,,,/RemoveDislike;component/src/ColorScheme.xaml")
-    };
-
     private static void PutInfoTab(Panel target, string title, string value = "") =>
         target.Children.Add(new InfoTab(title, value)
         {
             Margin = new Thickness(0),
             Padding = new Thickness(5),
             CornerRadius = new CornerRadius(3),
-            BackgroundColor = ResourceDictionary["HighlightColor"] as System.Windows.Media.Brush,
-            Foreground = ResourceDictionary["TextColor-2"] as System.Windows.Media.Brush
+            BackgroundColor = ConfigHelper.ColorScheme["HighlightColor"] as System.Windows.Media.Brush,
+            Foreground = ConfigHelper.ColorScheme["TextColor-2"] as System.Windows.Media.Brush
         });
 
     private static StackPanel GetPanel(dynamic sender)

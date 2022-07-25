@@ -13,10 +13,15 @@ public static class ConfigHelper
     public static readonly string RuleBase = @$"{ConfigPath}\Rules";
     public static readonly string ModulesPath = @$"{ConfigPath}\Modules";
     public static readonly string LauncherConfigPath = @$"{ModulesPath}\Launcher.config";
+    
+    public static readonly ResourceDictionary ColorScheme = new()
+    {
+        Source = new Uri("pack://application:,,,/RemoveDislike;component/src/ColorScheme.xaml")
+    };
 
     #region LauncherConfig
 
-    public static List<string> _LauncherConfig
+    private static List<string> _LauncherConfig
     {
         get => File.ReadAllText(LauncherConfigPath).Split('\n').ToList();
         set => File.WriteAllText(LauncherConfigPath, string.Join('\n', value));
