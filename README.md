@@ -1,75 +1,34 @@
 # RemoveDislike
 
-Remove Your Dislike Things
+Remove Your Dislike Things  [Releases](https://github.com/Yuhanawa/RemoveDislike/releases)
+Originally a junk cleaner, And now it's a less practical computer tool
+The software is almost complete and will continue to be updated if I have time.
+***Of course, PR is welcome!***
 
 ---
-
-Under development, slow development
-
-Basic functionality is about 15% complete
+##  Screenshots
+![info-1](./docs/1.png "info-1")
+![info-2](./docs/2.png "info-2")
+![clean](./docs/3.png "clean")
+![adjustment](./docs/4.png)
 
 ## External Rules
-
-The Rules folder directory :  %AppData%\RemoveDislike\Rules\
-
+The Rules base directory : ` %AppData%\RemoveDislike\Rules\` [Online Rules](https://gist.github.com/Yuhanawa/9e9a0e9f38e20710f68973daa2fe7418)
+File Name: `Rule Name @ Author.json` or `Rule Name.json`
 ```json
-
 {
-    "header": {
-        "name": "CleanTempFiles",
-        "author": "Yuhanawa",
-        "description": "Clean cache and temporary files of system and software",
-        "force": false
-    },
+    "description": "include logs, caches, temp and !BackupFiles",
+    "danger": false, // Support Comments
     "rules": {
-        "Logs:Windows Logs and User Log": {
-            "*": [
-                "%WINDIR%/Logs/",
-                "%WINDIR%/SoftwareDistribution/DataStore/Logs/",
-                "C:/ProgramData/Microsoft/Search/Data/Applications/Windows/GatherLogs/",
-                "%WINDIR%/System32/LogFiles/"
-            ],
-            "/**/*.{log,logs,Log,Logs,LOG,LOGS}": [
-                "%WINDIR%/",
-                "%APPDATA%/../Local/Microsoft/Windows/WebCache/",
-                "%APPDATA%/../../"
-            ],
-            "/**/{log,logs,Log,Logs,LOG,LOGS}": [
-                "%APPDATA%/../../"
-            ],
-            "/**/{log,logs,Log,Logs,LOG,LOGS}.{txt}": [
-                "%APPDATA%/../../"
-            ],
-            "/**/{log,logs,Log,Logs,LOG,LOGS}/**": [
-                "%APPDATA%/../../"
+        "Category name (starts with ! is danger and is not automatically selected)": {
+            "/**/{log,caches,tmp,temp}/**": [  // Ant-style path patterns
+                "%APPDATA%/../"  // Target path (environment variables supported)
             ]
         },
-        "Caches:Windows Cache and User Cache(or Temp)": {
-            "*": [
-                "%WINDIR%/Explorer/",
-                "%WINDIR%/Temp/",
-                "%APPDATA%/Microsoft/Windows/Recent",
-                "C:/$WinREAgent/",
-                "%WINDIR%/ServiceProfiles/LocalService/AppData/Local/FontCache/",
-                "%APPDATA%/../LocalLow/Microsoft/CryptnetUrlCache/Content/",
-                "%WINDIR%/SoftwareDistribution/Download/SharedFileCache/",
-                "%WINDIR%/Prefetch/",
-                "%WINDIR%/Fonts/Deleted/",
-                "%WINDIR%/ActionCenterCache/",
-                "%APPDATA%/../Local/CrashDumps/"
-            ],
-            "/**/*.{tmp,temp,Tmp,Temp}": [
-                "%APPDATA%/../../"
-            ],
-            "/**/{tmp,temp,Tmp,Temp}/**": [
-                "%APPDATA%/../../",
-                "%WINDIR%/"
-            ],
-            "/**/*.{cache,Cache}": [
-                "%APPDATA%/../../"
-            ],
-            "/**/{cache,Cache,GPUCache,Code Cache}/**": [
-                "%APPDATA%/../../"
+        "!danger": {
+            "/**/BackupFiles/**": [
+                "%APPDATA%/../Local/Microsoft/VisualStudio/",
+                "%APPDATA%/../Local/Microsoft/Blend/"
             ]
         }
     }
@@ -77,41 +36,3 @@ The Rules folder directory :  %AppData%\RemoveDislike\Rules\
 
 ```
 
-#### OLD
-
-```json5
-{
-    "header": {
-        "name": "Examples",
-        "author": "me",
-        "description": "This is an examples",
-        "force": false
-    },
-    "rules": {
-//      "name:description": {
-//        "Ant-Style: [
-//          "Here is path"
-//        ]
-//      },
-        "log:log file": {
-            "*.{log,logs}": [
-                "%APPDATA%/../../../"
-            ]
-        },
-        "tmp:temp file": {
-            "*": [
-                "%TMP%","C:$WinREAgent",
-				"%WINDIR%/ServiceProfiles/LocalService/AppData/Local/FontCache/",
-				"%WINDIR%/Explorer/",
-				"%WINDIR%/Prefetch/",
-				"%WINDIR%/Fonts/Deleted/",
-				"%WINDIR%/ActionCenterCache/"				
-            ],
-            "*.{tmp,temp}": [
-                "%APPDATA%/../../../"
-            ]
-        }
-    }
-}
-
-```
