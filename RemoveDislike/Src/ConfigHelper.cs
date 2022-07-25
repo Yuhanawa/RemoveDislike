@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using fastJSON;
 using RemoveDislike.Utils;
@@ -76,6 +77,31 @@ public static class ConfigHelper
             Warn("[Config] Not found Config, Will to regenerated");
             Save();
         }
+        
+        try
+        {
+#pragma warning disable SYSLIB0014
+            using var client = new WebClient();
+#pragma warning restore SYSLIB0014
+            // Download File From Gist Id 9e9a0e9f38e20710f68973daa2fe7418
+            client.Headers.Add("User-Agent", "RemoveDislike (Windows NT 10.0; Win64; x64)");
+                    
+                
+            var gist = JSON.ToObject<Gist>(client.DownloadString("https://api.github.com/gists/9e9a0e9f38e20710f68973daa2fe7418"));
+            if (gist.updated_at!=""&&gist.updated_at != Config.RulesUpdatedAt)
+            {
+                foreach ((string fileName, GistFile gistFile) in gist.files)
+                    File.WriteAllText(Path.Combine(RuleBase, fileName), gistFile.content);
+                Config.RulesUpdatedAt=gist.updated_at;
+            }
+
+            client.Dispose();
+            gist = null;
+        }
+        catch (Exception e)
+        {
+            Err(e.Message, e);
+        }
 
         Info("[Modules][Config] Loading...");
         if (!File.Exists(Path.Combine(ModulesPath, "Launcher.config")))
@@ -103,12 +129,15 @@ public static class ConfigHelper
 ".Replace("'", "\""));
         }
 
+        GC.Collect();
         _isInit = true;
     }
 
     public static void Save()
     {
         Info("[Config] Saving...");
+        Config ??= new ConfigModule();
+
         try
         {
             File.WriteAllText(ConfigFile, JSON.ToNiceJSON(Config));
@@ -127,13 +156,31 @@ public static class ConfigHelper
         Load();
     }
 
+    #region Class
     public class ConfigModule
     {
         public bool AllowForce { get; set; } = false;
+        public string RulesUpdatedAt { get; set; } = "114541";
+        
     }
+    public class Gist
+    {
+        // ReSharper disable once InconsistentNaming
+        public string updated_at { get; set; } = "";
+        // ReSharper disable once InconsistentNaming
+        public Dictionary<string, GistFile> files { get; set; } = null;
+    }    
+    public class GistFile
+    {
+        // ReSharper disable once InconsistentNaming
+        public string content { get; set; }
+    }        
+    #endregion
+
 
     #region LauncherConfig
 
+    // ReSharper disable once InconsistentNaming
     private static List<string> _LauncherConfig
     {
         get => File.ReadAllText(LauncherConfigPath).Split('\n').ToList();
